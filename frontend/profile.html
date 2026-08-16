@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hồ sơ của tôi | Định Hướng Nghề Nghiệp AI</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="site-logo" href="index.html">🧭 Định Hướng Nghề Nghiệp</a>
+      <nav class="site-nav">
+        <a href="index.html">Trang chủ</a>
+        <a href="assessments.html">Bài trắc nghiệm</a>
+        <a href="profile.html" class="active">Hồ sơ của tôi</a>
+        <a href="careers.html">Tra cứu ngành nghề</a>
+        <a href="chatbot.html">Hỏi đáp AI</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero container">
+      <h1>Hồ sơ năng lực của bạn</h1>
+      <p>Tổng hợp từ các bài trắc nghiệm bạn đã hoàn thành, lưu trên chính trình duyệt của bạn.</p>
+    </section>
+
+    <section class="container">
+      <div id="profile-status"></div>
+    </section>
+
+    <section class="container" id="profile-chart-section" style="display:none;">
+      <h2>Biểu đồ năng lực</h2>
+      <div class="radar-grid" id="radar-grid"></div>
+    </section>
+
+    <section class="container" id="profile-mbti-section" style="display:none;">
+      <h2>Tính cách MBTI</h2>
+      <div class="career-card" id="mbti-badge"></div>
+    </section>
+
+    <section class="container" id="profile-career-section" style="display:none;">
+      <h2>Gợi ý nhóm ngành nghề phù hợp</h2>
+      <p style="color:var(--color-text-muted);font-size:0.9rem;">
+        Gợi ý dựa trên luật đối chiếu đơn giản giữa nhóm sở thích Holland nổi bật và cơ sở dữ liệu ngành nghề —
+        chỉ mang tính tham khảo ban đầu, không thay thế tư vấn hướng nghiệp chuyên sâu.
+      </p>
+      <div id="career-match-list"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">Đề tài NCKH học sinh THPT — Hệ thống hỗ trợ tự nhận thức năng lực &amp; định hướng nghề nghiệp tích hợp AI.</div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <script src="js/quiz-engine.js"></script>
+  <script src="js/profile.js"></script>
+</body>
+</html>

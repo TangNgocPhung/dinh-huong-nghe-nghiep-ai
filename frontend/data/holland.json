@@ -1,0 +1,42 @@
+{
+  "id": "holland",
+  "title": "Trắc nghiệm Holland (RIASEC)",
+  "subtitle": "Khám phá nhóm sở thích nghề nghiệp của bạn",
+  "instructions": "Với mỗi hoạt động dưới đây, hãy cho biết mức độ bạn THÍCH làm việc đó (1 = Hoàn toàn không thích, 5 = Rất thích).",
+  "scaleType": "likert5",
+  "scaleLabels": ["Hoàn toàn không thích", "Không thích", "Bình thường", "Thích", "Rất thích"],
+  "dimensions": [
+    { "code": "R", "name": "Realistic (Kỹ thuật - Thực tế)", "desc": "Thích làm việc với máy móc, công cụ, hoạt động thể chất, ngoài trời." },
+    { "code": "I", "name": "Investigative (Nghiên cứu)", "desc": "Thích quan sát, phân tích, giải quyết vấn đề bằng tư duy logic." },
+    { "code": "A", "name": "Artistic (Nghệ thuật)", "desc": "Thích sáng tạo, thể hiện bản thân qua nghệ thuật, thiết kế, viết lách." },
+    { "code": "S", "name": "Social (Xã hội)", "desc": "Thích giúp đỡ, giảng dạy, chăm sóc, làm việc với con người." },
+    { "code": "E", "name": "Enterprising (Quản lý - Kinh doanh)", "desc": "Thích thuyết phục, lãnh đạo, khởi xướng, kinh doanh." },
+    { "code": "C", "name": "Conventional (Nghiệp vụ)", "desc": "Thích tổ chức, sắp xếp dữ liệu, làm việc theo quy trình rõ ràng." }
+  ],
+  "questions": [
+    { "id": "R1", "dimension": "R", "text": "Sửa chữa đồ điện, xe đạp hoặc thiết bị trong nhà." },
+    { "id": "R2", "dimension": "R", "text": "Lắp ráp mô hình, mạch điện tử hoặc đồ vật cơ khí." },
+    { "id": "R3", "dimension": "R", "text": "Trồng cây, chăm sóc vật nuôi hoặc làm vườn." },
+    { "id": "R4", "dimension": "R", "text": "Tham gia hoạt động thể thao, dã ngoại, rèn luyện thể chất." },
+    { "id": "I1", "dimension": "I", "text": "Tìm hiểu nguyên nhân của một hiện tượng khoa học." },
+    { "id": "I2", "dimension": "I", "text": "Giải các bài toán hoặc câu đố logic phức tạp." },
+    { "id": "I3", "dimension": "I", "text": "Đọc sách, bài báo khoa học để tìm hiểu sâu một chủ đề." },
+    { "id": "I4", "dimension": "I", "text": "Làm thí nghiệm để kiểm chứng một giả thuyết." },
+    { "id": "A1", "dimension": "A", "text": "Vẽ tranh, thiết kế hoặc sáng tác một tác phẩm nghệ thuật." },
+    { "id": "A2", "dimension": "A", "text": "Viết truyện, làm thơ hoặc quay dựng video sáng tạo." },
+    { "id": "A3", "dimension": "A", "text": "Chơi nhạc cụ, hát hoặc biểu diễn nghệ thuật." },
+    { "id": "A4", "dimension": "A", "text": "Trang trí không gian, phối màu, thiết kế thời trang." },
+    { "id": "S1", "dimension": "S", "text": "Giảng giải, hướng dẫn cho bạn bè hoặc em nhỏ." },
+    { "id": "S2", "dimension": "S", "text": "Lắng nghe và giúp đỡ người khác giải quyết vấn đề." },
+    { "id": "S3", "dimension": "S", "text": "Tham gia hoạt động tình nguyện, thiện nguyện." },
+    { "id": "S4", "dimension": "S", "text": "Làm việc nhóm, chăm sóc hoặc hỗ trợ người khác." },
+    { "id": "E1", "dimension": "E", "text": "Thuyết trình, thuyết phục người khác theo ý kiến của mình." },
+    { "id": "E2", "dimension": "E", "text": "Lên kế hoạch và điều hành một sự kiện hoặc dự án." },
+    { "id": "E3", "dimension": "E", "text": "Kinh doanh, buôn bán hoặc gây quỹ cho một hoạt động." },
+    { "id": "E4", "dimension": "E", "text": "Làm lãnh đạo nhóm, phân công và thúc đẩy công việc." },
+    { "id": "C1", "dimension": "C", "text": "Sắp xếp sổ sách, dữ liệu, số liệu một cách gọn gàng." },
+    { "id": "C2", "dimension": "C", "text": "Làm theo quy trình, biểu mẫu rõ ràng, có sẵn." },
+    { "id": "C3", "dimension": "C", "text": "Kiểm tra, rà soát lỗi trong văn bản hoặc bảng tính." },
+    { "id": "C4", "dimension": "C", "text": "Quản lý thời gian, lịch trình và ngân sách cá nhân." }
+  ]
+}

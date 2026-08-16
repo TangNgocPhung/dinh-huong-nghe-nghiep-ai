@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tra cứu ngành nghề | Định Hướng Nghề Nghiệp AI</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="site-logo" href="index.html">🧭 Định Hướng Nghề Nghiệp</a>
+      <nav class="site-nav">
+        <a href="index.html">Trang chủ</a>
+        <a href="assessments.html">Bài trắc nghiệm</a>
+        <a href="profile.html">Hồ sơ của tôi</a>
+        <a href="careers.html" class="active">Tra cứu ngành nghề</a>
+        <a href="chatbot.html">Hỏi đáp AI</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero container">
+      <h1>Tra cứu ngành nghề</h1>
+      <p>Khám phá các nhóm ngành nghề, tổ hợp môn và ngành học liên quan.</p>
+    </section>
+
+    <section class="container">
+      <div class="career-filters">
+        <input type="search" id="search-input" placeholder="Tìm theo tên nghề, ngành học..." />
+        <select id="holland-filter">
+          <option value="">Tất cả nhóm Holland</option>
+          <option value="R">R - Kỹ thuật/Thực tế</option>
+          <option value="I">I - Nghiên cứu</option>
+          <option value="A">A - Nghệ thuật</option>
+          <option value="S">S - Xã hội</option>
+          <option value="E">E - Quản lý/Kinh doanh</option>
+          <option value="C">C - Nghiệp vụ</option>
+        </select>
+      </div>
+      <div id="career-list"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">Đề tài NCKH học sinh THPT — Hệ thống hỗ trợ tự nhận thức năng lực &amp; định hướng nghề nghiệp tích hợp AI.</div>
+  </footer>
+
+  <script>
+    let allCareers = [];
+
+    function render() {
+      const search = document.getElementById("search-input").value.trim().toLowerCase();
+      const holland = document.getElementById("holland-filter").value;
+
+      const filtered = allCareers.filter((c) => {
+        const matchesSearch =
+          !search ||
+          c.name.toLowerCase().includes(search) ||
+          c.sample_majors.join(" ").toLowerCase().includes(search);
+        const matchesHolland = !holland || c.holland.includes(holland);
+        return matchesSearch && matchesHolland;
+      });
+
+      const list = document.getElementById("career-list");
+      if (filtered.length === 0) {
+        list.innerHTML = `<p>Không tìm thấy kết quả phù hợp.</p>`;
+        return;
+      }
+      list.innerHTML = filtered
+        .map(
+          (c) => `
+          <div class="career-card">
+            <h3>${c.name}</h3>
+            <p>${c.description}</p>
+            <p class="career-meta"><strong>Nhóm Holland:</strong> ${c.holland.join(", ")}</p>
+            <p class="career-meta"><strong>Tổ hợp môn tham khảo:</strong> ${c.subject_combinations.join(", ")}</p>
+            <p class="career-meta"><strong>Ngành học liên quan:</strong> ${c.sample_majors.join(", ")}</p>
+          </div>`
+        )
+        .join("");
+    }
+
+    async function main() {
+      const res = await fetch("data/careers.json");
+      const data = await res.json();
+      allCareers = data.careers;
+      render();
+      document.getElementById("search-input").addEventListener("input", render);
+      document.getElementById("holland-filter").addEventListener("change", render);
+    }
+    main();
+  </script>
+</body>
+</html>

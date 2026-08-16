@@ -1,0 +1,36 @@
+{
+  "id": "motivators",
+  "title": "Trắc nghiệm Động lực (Motivators)",
+  "subtitle": "Khám phá điều gì thực sự thúc đẩy bạn trong học tập và công việc",
+  "instructions": "Hãy cho biết mức độ QUAN TRỌNG của mỗi điều sau đây đối với bạn (1 = Hoàn toàn không quan trọng, 5 = Cực kỳ quan trọng).",
+  "scaleType": "likert5",
+  "scaleLabels": ["Hoàn toàn không quan trọng", "Ít quan trọng", "Bình thường", "Quan trọng", "Cực kỳ quan trọng"],
+  "dimensions": [
+    { "code": "ACHIEVE", "name": "Thành tựu", "desc": "Được công nhận, đạt thành tích, chinh phục mục tiêu cao." },
+    { "code": "SECURITY", "name": "Ổn định", "desc": "Công việc/cuộc sống an toàn, thu nhập và tương lai chắc chắn." },
+    { "code": "CREATE", "name": "Sáng tạo", "desc": "Được tự do sáng tạo, thử nghiệm ý tưởng mới." },
+    { "code": "SERVICE", "name": "Phục vụ cộng đồng", "desc": "Đóng góp, giúp ích cho người khác và xã hội." },
+    { "code": "INFLUENCE", "name": "Ảnh hưởng - Quyền lực", "desc": "Có tiếng nói, dẫn dắt, tạo ảnh hưởng đến người khác." },
+    { "code": "AUTONOMY", "name": "Tự do - Độc lập", "desc": "Được tự chủ, làm việc theo cách và nhịp độ của riêng mình." }
+  ],
+  "questions": [
+    { "id": "ACH1", "dimension": "ACHIEVE", "text": "Được khen thưởng, công nhận khi đạt kết quả tốt." },
+    { "id": "ACH2", "dimension": "ACHIEVE", "text": "Chinh phục những mục tiêu khó, thử thách bản thân." },
+    { "id": "ACH3", "dimension": "ACHIEVE", "text": "Trở thành người giỏi nhất/xuất sắc trong lĩnh vực của mình." },
+    { "id": "SEC1", "dimension": "SECURITY", "text": "Có một công việc ổn định, ít rủi ro bị mất việc." },
+    { "id": "SEC2", "dimension": "SECURITY", "text": "Thu nhập đều đặn, có thể dự đoán được." },
+    { "id": "SEC3", "dimension": "SECURITY", "text": "Cuộc sống có kế hoạch rõ ràng, ít biến động." },
+    { "id": "CRE1", "dimension": "CREATE", "text": "Được tự do đưa ra ý tưởng và cách làm mới." },
+    { "id": "CRE2", "dimension": "CREATE", "text": "Công việc cho phép tôi thể hiện sự sáng tạo cá nhân." },
+    { "id": "CRE3", "dimension": "CREATE", "text": "Được thử nghiệm, khám phá những điều chưa ai làm." },
+    { "id": "SER1", "dimension": "SERVICE", "text": "Công việc giúp ích trực tiếp cho cộng đồng, xã hội." },
+    { "id": "SER2", "dimension": "SERVICE", "text": "Được hỗ trợ, chăm sóc những người gặp khó khăn." },
+    { "id": "SER3", "dimension": "SERVICE", "text": "Đóng góp vào điều gì đó lớn hơn bản thân mình." },
+    { "id": "INF1", "dimension": "INFLUENCE", "text": "Có tiếng nói và được người khác lắng nghe." },
+    { "id": "INF2", "dimension": "INFLUENCE", "text": "Dẫn dắt, định hướng cho một nhóm hoặc tổ chức." },
+    { "id": "INF3", "dimension": "INFLUENCE", "text": "Tạo ảnh hưởng, truyền cảm hứng cho nhiều người." },
+    { "id": "AUT1", "dimension": "AUTONOMY", "text": "Được tự quyết định cách thức và thời gian làm việc." },
+    { "id": "AUT2", "dimension": "AUTONOMY", "text": "Không bị giám sát, kiểm soát chặt chẽ trong công việc." },
+    { "id": "AUT3", "dimension": "AUTONOMY", "text": "Tự làm chủ, không phụ thuộc vào người khác." }
+  ]
+}

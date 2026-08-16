@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bài trắc nghiệm | Định Hướng Nghề Nghiệp AI</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="site-logo" href="index.html">🧭 Định Hướng Nghề Nghiệp</a>
+      <nav class="site-nav">
+        <a href="index.html">Trang chủ</a>
+        <a href="assessments.html" class="active">Bài trắc nghiệm</a>
+        <a href="profile.html">Hồ sơ của tôi</a>
+        <a href="careers.html">Tra cứu ngành nghề</a>
+        <a href="chatbot.html">Hỏi đáp AI</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero container">
+      <h1>Các bài trắc nghiệm</h1>
+      <p>Hoàn thành từng bài để hệ thống tổng hợp hồ sơ năng lực cá nhân và gợi ý ngành nghề phù hợp.</p>
+    </section>
+
+    <section class="container">
+      <div class="card-grid" id="assessment-cards"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">Đề tài NCKH học sinh THPT — Hệ thống hỗ trợ tự nhận thức năng lực &amp; định hướng nghề nghiệp tích hợp AI.</div>
+  </footer>
+
+  <script src="js/quiz-engine.js"></script>
+  <script>
+    const TESTS = [
+      { id: "holland", name: "Trắc nghiệm Holland (RIASEC)", desc: "Khám phá nhóm sở thích nghề nghiệp.", count: 24 },
+      { id: "mi", name: "Đa trí thông minh (MI)", desc: "Khám phá thế mạnh nhận thức của bạn.", count: 24 },
+      { id: "mbti", name: "MBTI", desc: "Khám phá xu hướng tính cách.", count: 16 },
+      { id: "disc", name: "DISC", desc: "Khám phá phong cách hành vi, giao tiếp.", count: 16 },
+      { id: "motivators", name: "Động lực (Motivators)", desc: "Khám phá điều thực sự thúc đẩy bạn.", count: 18 },
+    ];
+
+    const grid = document.getElementById("assessment-cards");
+    grid.innerHTML = TESTS.map((t) => {
+      const done = QuizEngine.getResult(t.id);
+      return `
+        <div class="card">
+          <h3>${t.name}</h3>
+          <p>${t.desc}</p>
+          <p class="badge-count">${t.count} câu hỏi ${done ? "· <span style='color:#15803d'>Đã hoàn thành ✓</span>" : ""}</p>
+          <a href="quiz.html?test=${t.id}" class="btn ${done ? "btn-secondary" : "btn-primary"}">${done ? "Làm lại" : "Bắt đầu"}</a>
+        </div>`;
+    }).join("");
+  </script>
+</body>
+</html>

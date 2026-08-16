@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Làm trắc nghiệm | Định Hướng Nghề Nghiệp AI</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="site-logo" href="index.html">🧭 Định Hướng Nghề Nghiệp</a>
+      <nav class="site-nav">
+        <a href="index.html">Trang chủ</a>
+        <a href="assessments.html" class="active">Bài trắc nghiệm</a>
+        <a href="profile.html">Hồ sơ của tôi</a>
+        <a href="careers.html">Tra cứu ngành nghề</a>
+        <a href="chatbot.html">Hỏi đáp AI</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="container" id="quiz-container">
+      <p>Đang tải bài trắc nghiệm...</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">Đề tài NCKH học sinh THPT — Hệ thống hỗ trợ tự nhận thức năng lực &amp; định hướng nghề nghiệp tích hợp AI.</div>
+  </footer>
+
+  <script src="js/quiz-engine.js"></script>
+  <script>
+    async function main() {
+      const params = new URLSearchParams(window.location.search);
+      const testId = params.get("test");
+      const container = document.getElementById("quiz-container");
+
+      if (!testId) {
+        container.innerHTML = `<p>Thiếu tham số bài test. Hãy quay lại <a href="assessments.html">danh sách bài trắc nghiệm</a>.</p>`;
+        return;
+      }
+
+      let quiz;
+      try {
+        quiz = await QuizEngine.loadQuiz(testId);
+      } catch (err) {
+        container.innerHTML = `<p>Không tải được bài test "${testId}". Lưu ý: bạn cần chạy trang qua một máy chủ cục bộ (xem README.md) thay vì mở trực tiếp file, để trình duyệt cho phép tải dữ liệu JSON.</p>`;
+        return;
+      }
+
+      container.innerHTML = "";
+      const form = QuizEngine.renderQuiz(quiz, container);
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const answers = QuizEngine.collectAnswers(quiz, form);
+        const result = quiz.scaleType === "likert5" ? QuizEngine.scoreLikert(quiz, answers) : QuizEngine.scoreBinary(quiz, answers);
+        QuizEngine.saveResult(testId, result);
+        QuizEngine.renderResults(quiz, result, container);
+      });
+    }
+    main();
+  </script>
+</body>
+</html>

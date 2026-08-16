@@ -1,0 +1,32 @@
+{
+  "id": "disc",
+  "title": "Trắc nghiệm phong cách hành vi DISC",
+  "subtitle": "Khám phá phong cách hành vi và giao tiếp của bạn",
+  "instructions": "Hãy cho biết mức độ ĐÚNG với bản thân bạn ở mỗi câu (1 = Hoàn toàn không đúng, 5 = Hoàn toàn đúng). Đây là phiên bản tự đánh giá đơn giản hóa (Likert), không phải bản gốc forced-choice ipsative.",
+  "scaleType": "likert5",
+  "scaleLabels": ["Hoàn toàn không đúng", "Không đúng", "Bình thường", "Đúng", "Hoàn toàn đúng"],
+  "dimensions": [
+    { "code": "D", "name": "Dominance (Quyết đoán)", "desc": "Thích kiểm soát, ra quyết định nhanh, hướng đến kết quả, thử thách." },
+    { "code": "I", "name": "Influence (Ảnh hưởng)", "desc": "Cởi mở, nhiệt tình, giỏi thuyết phục và truyền cảm hứng cho người khác." },
+    { "code": "S", "name": "Steadiness (Kiên định)", "desc": "Điềm tĩnh, kiên nhẫn, thích sự ổn định và hỗ trợ người khác." },
+    { "code": "C", "name": "Conscientiousness (Cẩn trọng)", "desc": "Tỉ mỉ, chính xác, coi trọng chất lượng và quy trình chuẩn." }
+  ],
+  "questions": [
+    { "id": "D1", "dimension": "D", "text": "Tôi thích tự đưa ra quyết định nhanh chóng, dứt khoát." },
+    { "id": "D2", "dimension": "D", "text": "Tôi thích được giao thử thách và mục tiêu rõ ràng để chinh phục." },
+    { "id": "D3", "dimension": "D", "text": "Tôi thường là người chủ động dẫn dắt khi làm việc nhóm." },
+    { "id": "D4", "dimension": "D", "text": "Tôi tập trung vào kết quả hơn là quy trình chi tiết." },
+    { "id": "I1", "dimension": "I", "text": "Tôi dễ dàng tạo không khí vui vẻ, sôi nổi trong nhóm." },
+    { "id": "I2", "dimension": "I", "text": "Tôi thích trò chuyện, kết nối và truyền cảm hứng cho người khác." },
+    { "id": "I3", "dimension": "I", "text": "Tôi thường lạc quan và nhìn vào mặt tích cực của vấn đề." },
+    { "id": "I4", "dimension": "I", "text": "Tôi thoải mái khi phải nói trước đám đông hoặc thuyết trình." },
+    { "id": "S1", "dimension": "S", "text": "Tôi thích môi trường ổn định, ít thay đổi đột ngột." },
+    { "id": "S2", "dimension": "S", "text": "Tôi kiên nhẫn lắng nghe và hỗ trợ đồng đội khi cần." },
+    { "id": "S3", "dimension": "S", "text": "Tôi thích hoàn thành từng việc một cách chắc chắn, từ tốn." },
+    { "id": "S4", "dimension": "S", "text": "Tôi coi trọng sự tin cậy và lâu bền trong các mối quan hệ." },
+    { "id": "C1", "dimension": "C", "text": "Tôi kiểm tra kỹ lưỡng chi tiết trước khi hoàn thành công việc." },
+    { "id": "C2", "dimension": "C", "text": "Tôi thích làm việc theo quy trình, tiêu chuẩn rõ ràng." },
+    { "id": "C3", "dimension": "C", "text": "Tôi coi trọng độ chính xác hơn là tốc độ." },
+    { "id": "C4", "dimension": "C", "text": "Tôi cẩn thận cân nhắc rủi ro trước khi hành động." }
+  ]
+}

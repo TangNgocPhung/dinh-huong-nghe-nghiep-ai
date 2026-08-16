@@ -1,0 +1,31 @@
+{
+  "id": "mbti",
+  "title": "Trắc nghiệm tính cách MBTI",
+  "subtitle": "Khám phá xu hướng tính cách và cách bạn ra quyết định",
+  "instructions": "Ở mỗi câu, hãy chọn phương án MÔ TẢ ĐÚNG BẠN HƠN — không có đáp án đúng/sai.",
+  "scaleType": "binary_choice",
+  "axes": [
+    { "pair": ["E", "I"], "name": "Hướng ngoại (E) - Hướng nội (I)", "desc": "Bạn lấy năng lượng từ đâu: từ thế giới bên ngoài hay từ nội tâm." },
+    { "pair": ["S", "N"], "name": "Giác quan (S) - Trực giác (N)", "desc": "Bạn tiếp nhận thông tin qua chi tiết cụ thể hay qua bức tranh tổng thể/khả năng." },
+    { "pair": ["T", "F"], "name": "Lý trí (T) - Cảm xúc (F)", "desc": "Bạn ra quyết định dựa trên logic hay dựa trên giá trị/cảm xúc." },
+    { "pair": ["J", "P"], "name": "Nguyên tắc (J) - Linh hoạt (P)", "desc": "Bạn thích có kế hoạch rõ ràng hay thích linh hoạt, ứng biến." }
+  ],
+  "questions": [
+    { "id": "EI1", "axis": "EI", "optionA": { "letter": "E", "text": "Tôi thấy tràn đầy năng lượng khi ở giữa đám đông, nhiều hoạt động." }, "optionB": { "letter": "I", "text": "Tôi thấy thoải mái và nạp lại năng lượng khi ở một mình." } },
+    { "id": "EI2", "axis": "EI", "optionA": { "letter": "E", "text": "Tôi thích nói ra suy nghĩ ngay khi vừa nghĩ ra." }, "optionB": { "letter": "I", "text": "Tôi thích suy nghĩ kỹ trong đầu trước khi nói." } },
+    { "id": "EI3", "axis": "EI", "optionA": { "letter": "E", "text": "Tôi dễ dàng bắt chuyện với người lạ." }, "optionB": { "letter": "I", "text": "Tôi ngại bắt chuyện với người mới quen." } },
+    { "id": "EI4", "axis": "EI", "optionA": { "letter": "E", "text": "Tôi có nhiều bạn bè và thích các buổi tụ tập đông người." }, "optionB": { "letter": "I", "text": "Tôi thích có vài người bạn thân và các cuộc trò chuyện sâu." } },
+    { "id": "SN1", "axis": "SN", "optionA": { "letter": "S", "text": "Tôi chú trọng vào dữ kiện, chi tiết cụ thể, thực tế." }, "optionB": { "letter": "N", "text": "Tôi chú trọng vào ý tưởng, khả năng và bức tranh tổng thể." } },
+    { "id": "SN2", "axis": "SN", "optionA": { "letter": "S", "text": "Tôi tin vào kinh nghiệm đã được kiểm chứng." }, "optionB": { "letter": "N", "text": "Tôi thích thử những cách làm mới, chưa ai làm." } },
+    { "id": "SN3", "axis": "SN", "optionA": { "letter": "S", "text": "Tôi làm theo hướng dẫn từng bước một cách chính xác." }, "optionB": { "letter": "N", "text": "Tôi thích tự sáng tạo cách làm của riêng mình." } },
+    { "id": "SN4", "axis": "SN", "optionA": { "letter": "S", "text": "Tôi quan tâm đến hiện tại và những gì đang xảy ra." }, "optionB": { "letter": "N", "text": "Tôi hay nghĩ về tương lai và các khả năng có thể xảy ra." } },
+    { "id": "TF1", "axis": "TF", "optionA": { "letter": "T", "text": "Tôi ra quyết định dựa trên phân tích logic, khách quan." }, "optionB": { "letter": "F", "text": "Tôi ra quyết định dựa trên cảm xúc và ảnh hưởng đến mọi người." } },
+    { "id": "TF2", "axis": "TF", "optionA": { "letter": "T", "text": "Tôi thẳng thắn chỉ ra điểm sai, kể cả khi điều đó khiến ai đó buồn." }, "optionB": { "letter": "F", "text": "Tôi cân nhắc cảm xúc người khác trước khi góp ý." } },
+    { "id": "TF3", "axis": "TF", "optionA": { "letter": "T", "text": "Tôi coi trọng sự công bằng, đúng - sai rõ ràng." }, "optionB": { "letter": "F", "text": "Tôi coi trọng sự hài hòa, cảm thông giữa mọi người." } },
+    { "id": "TF4", "axis": "TF", "optionA": { "letter": "T", "text": "Tôi dễ dàng tách cảm xúc ra khỏi quyết định công việc." }, "optionB": { "letter": "F", "text": "Cảm xúc cá nhân ảnh hưởng nhiều đến quyết định của tôi." } },
+    { "id": "JP1", "axis": "JP", "optionA": { "letter": "J", "text": "Tôi thích lên kế hoạch rõ ràng và hoàn thành đúng hạn." }, "optionB": { "letter": "P", "text": "Tôi thích giữ mọi thứ mở, linh hoạt thay đổi khi cần." } },
+    { "id": "JP2", "axis": "JP", "optionA": { "letter": "J", "text": "Tôi thấy khó chịu khi kế hoạch bị thay đổi đột ngột." }, "optionB": { "letter": "P", "text": "Tôi thấy hào hứng khi có sự thay đổi bất ngờ." } },
+    { "id": "JP3", "axis": "JP", "optionA": { "letter": "J", "text": "Tôi thường hoàn thành bài tập/công việc sớm trước hạn." }, "optionB": { "letter": "P", "text": "Tôi thường làm việc sát giờ hạn chót mới xong." } },
+    { "id": "JP4", "axis": "JP", "optionA": { "letter": "J", "text": "Tôi thích không gian và lịch trình ngăn nắp, có tổ chức." }, "optionB": { "letter": "P", "text": "Tôi thoải mái với sự ngẫu hứng, không gò bó theo lịch trình." } }
+  ]
+}

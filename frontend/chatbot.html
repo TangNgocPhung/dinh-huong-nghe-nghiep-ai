@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hỏi đáp AI | Định Hướng Nghề Nghiệp AI</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="site-logo" href="index.html">🧭 Định Hướng Nghề Nghiệp</a>
+      <nav class="site-nav">
+        <a href="index.html">Trang chủ</a>
+        <a href="assessments.html">Bài trắc nghiệm</a>
+        <a href="profile.html">Hồ sơ của tôi</a>
+        <a href="careers.html">Tra cứu ngành nghề</a>
+        <a href="chatbot.html" class="active">Hỏi đáp AI</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero container">
+      <h1>Hỏi đáp cùng chatbot AI</h1>
+      <p>Hỏi về tổ hợp môn, ngành học, hoặc cách chọn nghề phù hợp với bản thân.</p>
+    </section>
+
+    <section class="container">
+      <div class="chat-window">
+        <div class="chat-messages" id="chat-messages"></div>
+        <form class="chat-form" id="chat-form">
+          <input type="text" id="chat-input" placeholder="Nhập câu hỏi của bạn..." autocomplete="off" required />
+          <button type="submit" class="btn btn-primary">Gửi</button>
+        </form>
+      </div>
+      <p style="color:var(--color-text-muted);font-size:0.85rem;margin-top:12px;">
+        Lưu ý: chatbot chỉ hỗ trợ thông tin tham khảo, không thay thế tư vấn tâm lý/hướng nghiệp chuyên nghiệp.
+      </p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">Đề tài NCKH học sinh THPT — Hệ thống hỗ trợ tự nhận thức năng lực &amp; định hướng nghề nghiệp tích hợp AI.</div>
+  </footer>
+
+  <script src="js/chatbot.js"></script>
+</body>
+</html>
