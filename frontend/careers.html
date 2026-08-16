@@ -83,12 +83,19 @@
     }
 
     async function main() {
-      const res = await fetch("data/careers.json");
-      const data = await res.json();
-      allCareers = data.careers;
-      render();
-      document.getElementById("search-input").addEventListener("input", render);
-      document.getElementById("holland-filter").addEventListener("change", render);
+      const list = document.getElementById("career-list");
+      try {
+        const res = await fetch("data/careers.json", { cache: "no-store" });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        allCareers = data.careers || [];
+        render();
+        document.getElementById("search-input").addEventListener("input", render);
+        document.getElementById("holland-filter").addEventListener("change", render);
+      } catch (error) {
+        console.error("Không tải được dữ liệu ngành nghề:", error);
+        list.textContent = "Chưa tải được dữ liệu ngành nghề. Vui lòng tải lại trang sau ít phút.";
+      }
     }
     main();
   </script>

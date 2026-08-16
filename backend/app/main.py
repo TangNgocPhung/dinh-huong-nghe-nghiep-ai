@@ -6,7 +6,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from google import genai
 from google.genai import types
 from pydantic import BaseModel, Field
@@ -84,6 +84,25 @@ def chat(req: ChatRequest):
     return ChatResponse(reply=response.text or "Xin lỗi, Gemini không trả về nội dung.")
 
 
-# Đặt sau các route /api để FastAPI phục vụ toàn bộ website trên cùng domain.
 FRONTEND_DIR = Path(__file__).resolve().parents[2] / "frontend"
-app.mount("/", StaticFiles(directory=FRONTEND_DIR, html=True), name="frontend")
+FRONTEND_ROOT = FRONTEND_DIR.resolve()
+
+
+def frontend_response(path: Path) -> FileResponse:
+    """Trả file frontend và tránh giữ cache 404 cũ sau mỗi lần deploy."""
+    response = FileResponse(path)
+    response.headers["Cache-Control"] = "no-cache"
+    return response
+
+
+@app.get("/", include_in_schema=False)
+def frontend_index():
+    return frontend_response(FRONTEND_ROOT / "index.html")
+
+
+@app.get("/{file_path:path}", include_in_schema=False)
+def frontend_file(file_path: str):
+    target = (FRONTEND_ROOT / file_path).resolve()
+    if FRONTEND_ROOT not in target.parents or not target.is_file():
+        raise HTTPException(status_code=404, detail="Không tìm thấy trang.")
+    return frontend_response(target)
