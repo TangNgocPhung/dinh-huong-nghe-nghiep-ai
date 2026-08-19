@@ -286,7 +286,6 @@ function bindProfileActions() {
 function renderLegacySections() {
   const chartSection = document.getElementById("profile-chart-section");
   const mbtiSection = document.getElementById("profile-mbti-section");
-  const careerSection = document.getElementById("profile-career-section");
   const likertResults = Object.entries(legacyResults).filter(([id, payload]) => id !== "mbti" && payload?.result?.dimensions);
 
   if (likertResults.length > 0 && typeof Chart !== "undefined") {
@@ -297,22 +296,6 @@ function renderLegacySections() {
     mbtiSection.style.display = "";
     renderMbtiBadge(legacyResults.mbti);
   }
-
-  const hollandTop = getHollandCodes();
-  if (hollandTop.length) {
-    careerSection.style.display = "";
-    renderCareerMatches(hollandTop, legacyResults).catch(() => {
-      document.getElementById("career-match-list").innerHTML = "<p>Chưa thể tải gợi ý nghề lúc này.</p>";
-    });
-  }
-}
-
-function getHollandCodes() {
-  if (legacyResults.holland?.result?.dimensions) {
-    return legacyResults.holland.result.dimensions.slice(0, 3).map((item) => item.code);
-  }
-  const matches = profileState.assessmentResults.holland.toUpperCase().match(/\b[RIASEC]\b/g) || [];
-  return [...new Set(matches)].slice(0, 3);
 }
 
 function renderRadarChart(likertResults) {
@@ -338,32 +321,6 @@ function renderMbtiBadge(payload) {
   const el = document.getElementById("mbti-badge");
   const breakdown = Array.isArray(payload.result.breakdown) ? payload.result.breakdown : [];
   el.innerHTML = `<div class="mbti-code">${escapeHtml(payload.result.code)}</div><div class="mbti-breakdown">${breakdown.map((item) => `<div>${escapeHtml(item.axis)}: <strong>${escapeHtml(item.result)}</strong></div>`).join("")}</div>`;
-}
-
-async function renderCareerMatches(hollandTop, results) {
-  const response = await fetch("data/careers.json");
-  const { careers } = await response.json();
-  const miTop = results.mi?.result?.dimensions ? results.mi.result.dimensions.slice(0, 3).map((item) => item.code) : [];
-  const scored = careers.map((career) => {
-    const hollandOverlap = career.holland.filter((code) => hollandTop.includes(code)).length;
-    const miOverlap = career.mi.filter((code) => miTop.includes(code)).length;
-    return { career, score: hollandOverlap * 2 + miOverlap, hollandOverlap, miOverlap };
-  }).sort((a, b) => b.score - a.score).filter((item) => item.score > 0).slice(0, 8);
-
-  const list = document.getElementById("career-match-list");
-  if (!scored.length) {
-    list.innerHTML = "<p>Chưa tìm thấy nhóm nghề phù hợp rõ rệt. Hãy nhập ba chữ cái Holland nổi bật, ví dụ R - I - A.</p>";
-    return;
-  }
-  list.innerHTML = scored.map(({ career, hollandOverlap, miOverlap }) => `
-    <div class="career-card">
-      <h3>${escapeHtml(career.name)}</h3>
-      <p>${escapeHtml(career.description)}</p>
-      <p class="career-meta"><strong>Nhóm Holland:</strong> ${escapeHtml(career.holland.join(", "))} ${hollandOverlap ? "✓ khớp" : ""}</p>
-      ${miOverlap ? `<p class="career-meta"><strong>Trí thông minh liên quan:</strong> ${escapeHtml(career.mi.join(", "))} ✓ khớp</p>` : ""}
-      <p class="career-meta"><strong>Tổ hợp môn tham khảo:</strong> ${escapeHtml(career.subject_combinations.join(", "))}</p>
-      <p class="career-meta"><strong>Ngành học liên quan:</strong> ${escapeHtml(career.sample_majors.join(", "))}</p>
-    </div>`).join("");
 }
 
 function initProfilePage() {
