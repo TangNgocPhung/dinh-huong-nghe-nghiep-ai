@@ -49,77 +49,47 @@
           </div>
 
           <div class="overview-tools" aria-label="Năm công cụ tự nhận thức">
-            <article class="overview-tool">
+            <a class="overview-tool overview-tool-link" href="quiz.html?test=holland" aria-label="Làm trắc nghiệm Holland">
               <span class="tool-mark">🧭</span>
               <div><strong>Holland</strong><small>Sở thích nghề nghiệp</small></div>
               <span class="tool-code">RIASEC</span>
-            </article>
-            <article class="overview-tool">
+              <span class="tool-action">Làm bài →</span>
+            </a>
+            <a class="overview-tool overview-tool-link" href="quiz.html?test=mi" aria-label="Làm trắc nghiệm Đa trí thông minh">
               <span class="tool-mark">🧠</span>
               <div><strong>Đa trí thông minh</strong><small>Thế mạnh nổi bật</small></div>
               <span class="tool-code">MI</span>
-            </article>
-            <article class="overview-tool">
+              <span class="tool-action">Làm bài →</span>
+            </a>
+            <a class="overview-tool overview-tool-link" href="quiz.html?test=mbti" aria-label="Làm trắc nghiệm MBTI">
               <span class="tool-mark">🧩</span>
               <div><strong>Tính cách</strong><small>Xu hướng tâm lý</small></div>
               <span class="tool-code">MBTI</span>
-            </article>
-            <article class="overview-tool">
+              <span class="tool-action">Làm bài →</span>
+            </a>
+            <a class="overview-tool overview-tool-link" href="quiz.html?test=disc" aria-label="Làm trắc nghiệm DISC">
               <span class="tool-mark">💬</span>
               <div><strong>Phong cách hành vi</strong><small>Cách bạn tương tác</small></div>
               <span class="tool-code">DISC</span>
-            </article>
-            <article class="overview-tool overview-tool-wide">
+              <span class="tool-action">Làm bài →</span>
+            </a>
+            <a class="overview-tool overview-tool-link overview-tool-wide" href="quiz.html?test=motivators" aria-label="Làm trắc nghiệm Động lực">
               <span class="tool-mark">⚡</span>
               <div><strong>Động lực</strong><small>Điều thúc đẩy bạn hành động</small></div>
               <span class="tool-code">Motivators</span>
-            </article>
+              <span class="tool-action">Làm bài →</span>
+            </a>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="container">
-      <div class="card-grid" id="assessment-cards"></div>
-    </section>
   </main>
 
   <footer class="site-footer">
     <div class="container">Đề tài NCKH học sinh THPT — Hệ thống hỗ trợ tự nhận thức năng lực &amp; định hướng nghề nghiệp tích hợp AI.</div>
   </footer>
 
-  <script src="js/quiz-engine.js"></script>
-  <script>
-    const TESTS = [
-      { id: "holland", name: "Trắc nghiệm Holland (RIASEC)", desc: "Khám phá nhóm sở thích nghề nghiệp theo lý thuyết John L. Holland.", countLabel: "Công cụ trực tuyến" },
-      { id: "mi", name: "Đa trí thông minh (MI)", desc: "Nhận diện 8 dạng trí thông minh theo lý thuyết Howard Gardner.", countLabel: "Công cụ trực tuyến" },
-      { id: "mbti", name: "MBTI", desc: "Khám phá 4 cặp xu hướng và 16 kiểu tính cách theo lý thuyết Carl Jung.", countLabel: "Công cụ trực tuyến" },
-      { id: "disc", name: "DISC", desc: "Khám phá 4 nhóm hành vi và phong cách giao tiếp theo William Moulton Marston.", countLabel: "Công cụ trực tuyến" },
-      { id: "motivators", name: "Động lực (Motivators)", desc: "Khám phá các yếu tố thúc đẩy bạn học tập, làm việc và theo đuổi mục tiêu.", countLabel: "Công cụ trực tuyến" },
-    ];
-
-    const EXTERNAL_NAMES = { holland: "Holland", mi: "MI", mbti: "MBTI", disc: "DISC", motivators: "Động lực" };
-    let SAVED_PROFILE_RESULTS = {};
-    try {
-      SAVED_PROFILE_RESULTS = JSON.parse(localStorage.getItem("dhnn_personal_profile_v1") || "{}").assessmentResults || {};
-    } catch {
-      SAVED_PROFILE_RESULTS = {};
-    }
-    const grid = document.getElementById("assessment-cards");
-    grid.innerHTML = TESTS.map((t) => {
-      const done = Boolean(QuizEngine.getResult(t.id) || String(SAVED_PROFILE_RESULTS[t.id] || "").trim());
-      const countLabel = t.countLabel || `${t.count} câu hỏi`;
-      const externalName = EXTERNAL_NAMES[t.id] || t.name;
-      const actionLabel = done ? "Làm lại" : (t.countLabel ? `Mở bài ${externalName}` : "Bắt đầu");
-      return `
-        <div class="card">
-          <h3>${t.name}</h3>
-          <p>${t.desc}</p>
-          <p class="badge-count">${countLabel} ${done ? "· <span style='color:#15803d'>Đã lưu kết quả ✓</span>" : ""}</p>
-          <a href="quiz.html?test=${t.id}" class="btn ${done ? "btn-secondary" : "btn-primary"}">${actionLabel}</a>
-        </div>`;
-    }).join("");
-  </script>
   <script src="js/site.js"></script>
 </body>
 </html>
