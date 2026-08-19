@@ -22,25 +22,94 @@
   </header>
 
   <main>
-    <section class="hero container">
-      <h1>Tra cứu ngành nghề</h1>
-      <p>Khám phá các nhóm ngành nghề, tổ hợp môn và ngành học liên quan.</p>
+    <section class="container onet-hero">
+      <div>
+        <span class="eyebrow">🌐 Kho dữ liệu nghề nghiệp quốc tế</span>
+        <h1>Tra cứu ngành nghề cùng <span>O*NET OnLine</span></h1>
+        <p>Khám phá đặc điểm công việc, kiến thức, kỹ năng và môi trường nghề nghiệp dựa trên nhóm sở thích Holland nổi trội của bạn.</p>
+        <div class="onet-actions">
+          <a class="btn btn-primary" href="#onet-tool">Bắt đầu tra cứu ↓</a>
+          <a class="btn btn-secondary" href="https://www.onetonline.org/find/descriptor/browse/1.B.1" target="_blank" rel="noopener noreferrer">Đi thẳng tới Interests ↗</a>
+        </div>
+      </div>
+      <div class="onet-hero-mark" aria-hidden="true">
+        <span>O*NET</span>
+        <small>Career<br />Explorer</small>
+      </div>
     </section>
 
-    <section class="container">
-      <div class="career-filters">
-        <input type="search" id="search-input" placeholder="Tìm theo tên nghề, ngành học..." />
-        <select id="holland-filter">
-          <option value="">Tất cả nhóm Holland</option>
-          <option value="R">R - Kỹ thuật/Thực tế</option>
-          <option value="I">I - Nghiên cứu</option>
-          <option value="A">A - Nghệ thuật</option>
-          <option value="S">S - Xã hội</option>
-          <option value="E">E - Quản lý/Kinh doanh</option>
-          <option value="C">C - Nghiệp vụ</option>
-        </select>
+    <section class="container onet-guide" aria-labelledby="onet-guide-title">
+      <div class="section-heading">
+        <span class="eyebrow">Hướng dẫn sử dụng</span>
+        <h2 id="onet-guide-title">Tra cứu trên O*NET OnLine → hiểu sâu về nghề</h2>
+        <p>Thực hiện lần lượt bốn bước dưới đây để mở rộng danh sách nghề phù hợp với kết quả Holland của bạn.</p>
       </div>
-      <div id="career-list"></div>
+
+      <div class="onet-step-grid">
+        <article class="guide-step">
+          <span class="step-number">01</span>
+          <div>
+            <h3>Truy cập O*NET</h3>
+            <p>Mở <a href="https://www.onetonline.org/" target="_blank" rel="noopener noreferrer">Onetonline.org ↗</a> và chọn mục <strong>“Interests”</strong>.</p>
+          </div>
+        </article>
+
+        <article class="guide-step guide-step-wide">
+          <span class="step-number">02</span>
+          <div>
+            <h3>Chọn nhóm Holland cao nhất</h3>
+            <p>Nhấp vào tên nhóm có điểm cao nhất của bạn để bắt đầu khám phá nghề.</p>
+            <div class="riasec-guide">
+              <span class="riasec-guide-chip chip-r"><b>R</b>Kỹ thuật<small>Realistic</small></span>
+              <span class="riasec-guide-chip chip-i"><b>I</b>Nghiên cứu<small>Investigative</small></span>
+              <span class="riasec-guide-chip chip-a"><b>A</b>Nghệ thuật<small>Artistic</small></span>
+              <span class="riasec-guide-chip chip-s"><b>S</b>Xã hội<small>Social</small></span>
+              <span class="riasec-guide-chip chip-e"><b>E</b>Quản lý<small>Enterprising</small></span>
+              <span class="riasec-guide-chip chip-c"><b>C</b>Nghiệp vụ<small>Conventional</small></span>
+            </div>
+          </div>
+        </article>
+
+        <article class="guide-step">
+          <span class="step-number">03</span>
+          <div>
+            <h3>Tìm hiểu một nghề</h3>
+            <p>Nhấp vào tên nghề bạn quan tâm để xem nhiệm vụ, kỹ năng, kiến thức và môi trường làm việc.</p>
+          </div>
+        </article>
+
+        <article class="guide-step">
+          <span class="step-number">04</span>
+          <div>
+            <h3>Mở rộng lựa chọn</h3>
+            <p>Tiếp tục chọn nhóm Holland cao thứ hai và thứ ba để tìm hiểu thêm những nghề phù hợp.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="container onet-embed-section" id="onet-tool" aria-labelledby="onet-tool-title">
+      <div class="onet-embed-head">
+        <div>
+          <span class="live-dot">Công cụ tra cứu trực tuyến</span>
+          <h2 id="onet-tool-title">Khám phá nghề trên O*NET OnLine</h2>
+          <p>Sử dụng trực tiếp trong khung bên dưới hoặc mở toàn màn hình để có không gian xem rộng hơn.</p>
+        </div>
+        <div class="onet-embed-actions">
+          <a class="btn btn-secondary" href="https://www.onetonline.org/find/descriptor/browse/1.B.1" target="_blank" rel="noopener noreferrer">Mở mục Interests ↗</a>
+          <a class="btn btn-primary" href="https://www.onetonline.org/" target="_blank" rel="noopener noreferrer">Mở toàn màn hình ↗</a>
+        </div>
+      </div>
+      <div class="onet-frame-wrap">
+        <iframe
+          class="onet-frame"
+          src="https://www.onetonline.org/"
+          title="Tra cứu ngành nghề trên O*NET OnLine"
+          loading="lazy"
+          referrerpolicy="strict-origin-when-cross-origin"
+        ></iframe>
+      </div>
+      <p class="external-source">Nguồn dữ liệu nghề nghiệp: <a href="https://www.onetonline.org/" target="_blank" rel="noopener noreferrer">O*NET OnLine ↗</a></p>
     </section>
   </main>
 
@@ -48,58 +117,6 @@
     <div class="container">Đề tài NCKH học sinh THPT — Hệ thống hỗ trợ tự nhận thức năng lực &amp; định hướng nghề nghiệp tích hợp AI.</div>
   </footer>
 
-  <script>
-    let allCareers = [];
-
-    function render() {
-      const search = document.getElementById("search-input").value.trim().toLowerCase();
-      const holland = document.getElementById("holland-filter").value;
-
-      const filtered = allCareers.filter((c) => {
-        const matchesSearch =
-          !search ||
-          c.name.toLowerCase().includes(search) ||
-          c.sample_majors.join(" ").toLowerCase().includes(search);
-        const matchesHolland = !holland || c.holland.includes(holland);
-        return matchesSearch && matchesHolland;
-      });
-
-      const list = document.getElementById("career-list");
-      if (filtered.length === 0) {
-        list.innerHTML = `<p>Không tìm thấy kết quả phù hợp.</p>`;
-        return;
-      }
-      list.innerHTML = filtered
-        .map(
-          (c) => `
-          <div class="career-card">
-            <h3>${c.name}</h3>
-            <p>${c.description}</p>
-            <p class="career-meta"><strong>Nhóm Holland:</strong> ${c.holland.join(", ")}</p>
-            <p class="career-meta"><strong>Tổ hợp môn tham khảo:</strong> ${c.subject_combinations.join(", ")}</p>
-            <p class="career-meta"><strong>Ngành học liên quan:</strong> ${c.sample_majors.join(", ")}</p>
-          </div>`
-        )
-        .join("");
-    }
-
-    async function main() {
-      const list = document.getElementById("career-list");
-      try {
-        const res = await fetch("data/careers.json", { cache: "no-store" });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-        allCareers = data.careers || [];
-        render();
-        document.getElementById("search-input").addEventListener("input", render);
-        document.getElementById("holland-filter").addEventListener("change", render);
-      } catch (error) {
-        console.error("Không tải được dữ liệu ngành nghề:", error);
-        list.textContent = "Chưa tải được dữ liệu ngành nghề. Vui lòng tải lại trang sau ít phút.";
-      }
-    }
-    main();
-  </script>
   <script src="js/site.js"></script>
 </body>
 </html>
