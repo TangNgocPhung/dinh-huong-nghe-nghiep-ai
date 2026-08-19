@@ -33,11 +33,36 @@
 
   <script src="js/quiz-engine.js"></script>
   <script>
+    function externalAssessmentMarkup(id, name, url) {
+      return `
+        <section class="external-assessment" aria-labelledby="${id}-assessment-title">
+          <div class="external-assessment-head">
+            <div>
+              <span class="live-dot">Công cụ trực tuyến</span>
+              <h2 id="${id}-assessment-title">Làm trắc nghiệm ${name}</h2>
+              <p>Thực hiện bài trắc nghiệm ngay trong khung bên dưới. Nếu khung hiển thị chưa đầy đủ, bạn có thể mở công cụ ở một tab riêng.</p>
+            </div>
+            <a class="btn btn-primary" href="${url}" target="_blank" rel="noopener noreferrer">Mở toàn màn hình ↗</a>
+          </div>
+          <div class="external-frame-wrap">
+            <iframe
+              class="external-assessment-frame"
+              src="${url}"
+              title="Trắc nghiệm ${name} của Hướng nghiệp Sông An"
+              loading="lazy"
+              referrerpolicy="strict-origin-when-cross-origin"
+            ></iframe>
+          </div>
+          <p class="external-source">Nguồn công cụ: <a href="${url}" target="_blank" rel="noopener noreferrer">Hướng nghiệp Sông An ↗</a></p>
+        </section>
+      `;
+    }
+
     function renderHollandExternal(container) {
       const hollandUrl = "https://tracnghiem.huongnghiepsongan.com/assess/tracnghiem/HLKPST1622";
       container.innerHTML = `
-        <div class="holland-intro">
-          <div class="holland-copy">
+        <div class="theory-intro holland-intro">
+          <div class="theory-copy holland-copy">
             <a class="back-link" href="assessments.html">← Quay lại danh sách bài trắc nghiệm</a>
             <span class="eyebrow">🧭 Khám phá sở thích nghề nghiệp</span>
             <h1>Lý thuyết lựa chọn nghề nghiệp <span>— John L. Holland</span></h1>
@@ -56,27 +81,36 @@
             <article class="riasec-type type-c"><b>C</b><strong>Nghiệp vụ</strong><small>Conventional</small></article>
           </div>
         </div>
+        ${externalAssessmentMarkup("holland", "Holland", hollandUrl)}
+      `;
+    }
 
-        <section class="external-assessment" aria-labelledby="external-assessment-title">
-          <div class="external-assessment-head">
-            <div>
-              <span class="live-dot">Công cụ trực tuyến</span>
-              <h2 id="external-assessment-title">Làm trắc nghiệm Holland</h2>
-              <p>Thực hiện bài trắc nghiệm ngay trong khung bên dưới. Nếu khung hiển thị chưa đầy đủ, bạn có thể mở công cụ ở một tab riêng.</p>
-            </div>
-            <a class="btn btn-primary" href="${hollandUrl}" target="_blank" rel="noopener noreferrer">Mở toàn màn hình ↗</a>
+    function renderMIExternal(container) {
+      const miUrl = "https://tracnghiem.huongnghiepsongan.com/assess/tracnghiem/MIPQVI";
+      container.innerHTML = `
+        <div class="theory-intro mi-intro">
+          <div class="theory-copy mi-copy">
+            <a class="back-link" href="assessments.html">← Quay lại danh sách bài trắc nghiệm</a>
+            <span class="eyebrow">🧠 Nhận diện thế mạnh của bạn</span>
+            <h1>Trắc nghiệm Đa trí thông minh <span>— Howard Gardner</span></h1>
+            <p>Trắc nghiệm Đa trí thông minh (Multiple Intelligences) dựa trên Thuyết Đa trí thông minh do nhà tâm lý học Howard Gardner đề xuất năm 1983.</p>
+            <p>Lý thuyết cho rằng con người có thể biểu hiện năng lực nổi trội ở nhiều dạng khác nhau: ngôn ngữ, logic – toán học, không gian, âm nhạc, vận động (thể chất), giao tiếp (tương tác cá nhân), nội tâm (tự nhận thức) và tự nhiên.</p>
+            <p>Bài trắc nghiệm giúp học sinh nhận diện những dạng năng lực mà bản thân có xu hướng phát huy, từ đó hỗ trợ lựa chọn phương pháp học tập và định hướng phát triển phù hợp với thế mạnh cá nhân.</p>
           </div>
-          <div class="external-frame-wrap">
-            <iframe
-              class="external-assessment-frame"
-              src="${hollandUrl}"
-              title="Trắc nghiệm Holland của Hướng nghiệp Sông An"
-              loading="lazy"
-              referrerpolicy="strict-origin-when-cross-origin"
-            ></iframe>
+
+          <div class="mi-model" aria-label="Tám dạng trí thông minh theo Howard Gardner">
+            <div class="mi-center"><strong>MI</strong><span>8 dạng trí thông minh</span></div>
+            <article class="mi-type mi-language"><span>🔤</span><strong>Ngôn ngữ</strong><small>Linguistic</small></article>
+            <article class="mi-type mi-logic"><span>🧮</span><strong>Logic – toán học</strong><small>Logical</small></article>
+            <article class="mi-type mi-space"><span>🧊</span><strong>Không gian</strong><small>Spatial</small></article>
+            <article class="mi-type mi-music"><span>🎵</span><strong>Âm nhạc</strong><small>Musical</small></article>
+            <article class="mi-type mi-body"><span>🏃</span><strong>Vận động</strong><small>Bodily</small></article>
+            <article class="mi-type mi-social"><span>🤝</span><strong>Giao tiếp</strong><small>Interpersonal</small></article>
+            <article class="mi-type mi-self"><span>🪞</span><strong>Nội tâm</strong><small>Intrapersonal</small></article>
+            <article class="mi-type mi-nature"><span>🌿</span><strong>Tự nhiên</strong><small>Naturalistic</small></article>
           </div>
-          <p class="external-source">Nguồn công cụ: <a href="${hollandUrl}" target="_blank" rel="noopener noreferrer">Hướng nghiệp Sông An ↗</a></p>
-        </section>
+        </div>
+        ${externalAssessmentMarkup("mi", "Đa trí thông minh (MI)", miUrl)}
       `;
     }
 
@@ -92,6 +126,11 @@
 
       if (testId === "holland") {
         renderHollandExternal(container);
+        return;
+      }
+
+      if (testId === "mi") {
+        renderMIExternal(container);
         return;
       }
 

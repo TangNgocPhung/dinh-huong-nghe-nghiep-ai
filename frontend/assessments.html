@@ -92,7 +92,7 @@
   <script>
     const TESTS = [
       { id: "holland", name: "Trắc nghiệm Holland (RIASEC)", desc: "Khám phá nhóm sở thích nghề nghiệp theo lý thuyết John L. Holland.", countLabel: "Công cụ trực tuyến" },
-      { id: "mi", name: "Đa trí thông minh (MI)", desc: "Khám phá thế mạnh nhận thức của bạn.", count: 24 },
+      { id: "mi", name: "Đa trí thông minh (MI)", desc: "Nhận diện 8 dạng trí thông minh theo lý thuyết Howard Gardner.", countLabel: "Công cụ trực tuyến" },
       { id: "mbti", name: "MBTI", desc: "Khám phá xu hướng tính cách.", count: 16 },
       { id: "disc", name: "DISC", desc: "Khám phá phong cách hành vi, giao tiếp.", count: 16 },
       { id: "motivators", name: "Động lực (Motivators)", desc: "Khám phá điều thực sự thúc đẩy bạn.", count: 18 },
@@ -100,14 +100,15 @@
 
     const grid = document.getElementById("assessment-cards");
     grid.innerHTML = TESTS.map((t) => {
-      const done = t.id !== "holland" && QuizEngine.getResult(t.id);
+      const done = !["holland", "mi"].includes(t.id) && QuizEngine.getResult(t.id);
       const countLabel = t.countLabel || `${t.count} câu hỏi`;
+      const actionLabel = done ? "Làm lại" : (t.countLabel ? `Mở bài ${t.id === "holland" ? "Holland" : "MI"}` : "Bắt đầu");
       return `
         <div class="card">
           <h3>${t.name}</h3>
           <p>${t.desc}</p>
           <p class="badge-count">${countLabel} ${done ? "· <span style='color:#15803d'>Đã hoàn thành ✓</span>" : ""}</p>
-          <a href="quiz.html?test=${t.id}" class="btn ${done ? "btn-secondary" : "btn-primary"}">${done ? "Làm lại" : (t.id === "holland" ? "Mở bài Holland" : "Bắt đầu")}</a>
+          <a href="quiz.html?test=${t.id}" class="btn ${done ? "btn-secondary" : "btn-primary"}">${actionLabel}</a>
         </div>`;
     }).join("");
   </script>
