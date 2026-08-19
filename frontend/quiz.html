@@ -114,6 +114,37 @@
       `;
     }
 
+    function renderMBTIExternal(container) {
+      const mbtiUrl = "https://mbtitests.com/take-test/";
+      const mbtiTypes = ["ISTJ", "ISFJ", "INFJ", "INTJ", "ISTP", "ISFP", "INFP", "INTP", "ESTP", "ESFP", "ENFP", "ENTP", "ESTJ", "ESFJ", "ENFJ", "ENTJ"];
+      container.innerHTML = `
+        <div class="theory-intro mbti-intro">
+          <div class="theory-copy mbti-copy">
+            <a class="back-link" href="assessments.html">← Quay lại danh sách bài trắc nghiệm</a>
+            <span class="eyebrow">🧩 Khám phá xu hướng tính cách</span>
+            <h1>Myers-Briggs Type Indicator <span>— dựa trên lý thuyết kiểu tâm lý của Carl Jung</span></h1>
+            <p>MBTI (Myers-Briggs Type Indicator) do Katharine Cook Briggs và Isabel Briggs Myers phát triển, dựa trên lý thuyết kiểu tâm lý (Psychological Types) của nhà tâm lý học Carl Jung.</p>
+            <p>Công cụ mô tả xu hướng cá nhân thông qua 4 cặp đối lập, hình thành 16 kiểu tính cách đặc trưng.</p>
+            <p>MBTI giúp học sinh suy ngẫm về phong cách tư duy, cách tiếp nhận thông tin và ra quyết định của bản thân; trong hướng nghiệp, công cụ này cung cấp thêm góc nhìn về môi trường làm việc phù hợp với tính cách cá nhân.</p>
+          </div>
+
+          <div class="mbti-model" aria-label="Bốn cặp xu hướng và mười sáu kiểu tính cách MBTI">
+            <div class="mbti-summary"><strong>16</strong><span>kiểu tính cách từ<br />4 cặp xu hướng</span></div>
+            <div class="mbti-axes">
+              <article class="mbti-axis"><span><b>E</b><small>Hướng ngoại</small></span><i>↔</i><span><b>I</b><small>Hướng nội</small></span></article>
+              <article class="mbti-axis"><span><b>S</b><small>Giác quan</small></span><i>↔</i><span><b>N</b><small>Trực giác</small></span></article>
+              <article class="mbti-axis"><span><b>T</b><small>Lý trí</small></span><i>↔</i><span><b>F</b><small>Cảm xúc</small></span></article>
+              <article class="mbti-axis"><span><b>J</b><small>Nguyên tắc</small></span><i>↔</i><span><b>P</b><small>Linh hoạt</small></span></article>
+            </div>
+            <div class="mbti-type-cloud" aria-label="Danh sách 16 mã tính cách">
+              ${mbtiTypes.map((type) => `<span class="mbti-code-pill">${type}</span>`).join("")}
+            </div>
+          </div>
+        </div>
+        ${externalAssessmentMarkup("mbti", "MBTI", mbtiUrl)}
+      `;
+    }
+
     async function main() {
       const params = new URLSearchParams(window.location.search);
       const testId = params.get("test");
@@ -131,6 +162,11 @@
 
       if (testId === "mi") {
         renderMIExternal(container);
+        return;
+      }
+
+      if (testId === "mbti") {
+        renderMBTIExternal(container);
         return;
       }
 
