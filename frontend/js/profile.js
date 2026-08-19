@@ -2,7 +2,7 @@
 
 const PROFILE_STORAGE_KEY = "dhnn_personal_profile_v1";
 const PROFILE_EXPORT_VERSION = 1;
-const PROFILE_FIELDS = ["fullName", "className", "school", "favoriteSubjects", "talents", "strengths", "interests", "careerGoal"];
+const PROFILE_FIELDS = ["favoriteSubjects", "talents", "strengths", "interests", "careerGoal"];
 const TEST_IDS = ["holland", "mi", "mbti", "disc", "motivators"];
 const TEST_LABELS = {
   holland: "Holland (RIASEC)",
@@ -28,9 +28,6 @@ function emptyProfile() {
     profileId: createProfileId(),
     createdAt: new Date().toISOString(),
     updatedAt: "",
-    fullName: "",
-    className: "",
-    school: "",
     favoriteSubjects: "",
     talents: "",
     strengths: "",
@@ -106,12 +103,6 @@ function fillProfileForm() {
   });
 }
 
-function getInitials(name) {
-  const words = name.trim().split(/\s+/).filter(Boolean);
-  if (!words.length) return "HS";
-  return `${words[0][0]}${words.length > 1 ? words[words.length - 1][0] : ""}`.toUpperCase();
-}
-
 function hasResult(id) {
   return Boolean(profileState.assessmentResults[id].trim() || legacyResults[id]);
 }
@@ -121,14 +112,12 @@ function completedTestIds() {
 }
 
 function renderProfileSummary() {
-  const name = profileState.fullName.trim();
-  const meta = [profileState.className.trim() && `Lớp ${profileState.className.trim()}`, profileState.school.trim()].filter(Boolean);
   const completed = completedTestIds();
 
-  document.getElementById("profile-avatar").textContent = getInitials(name);
+  document.getElementById("profile-avatar").textContent = "HS";
   document.getElementById("profile-code").textContent = `MÃ HỒ SƠ ${profileState.profileId}`;
-  document.getElementById("profile-glance-title").textContent = name || "Hồ sơ của bạn";
-  document.getElementById("profile-glance-meta").textContent = meta.length ? meta.join(" · ") : "Thêm họ tên, lớp và trường để hoàn thiện thông tin.";
+  document.getElementById("profile-glance-title").textContent = "Hồ sơ của bạn";
+  document.getElementById("profile-glance-meta").textContent = "Ghi lại sở thích, năng khiếu và sở trường để hoàn thiện hồ sơ.";
   document.getElementById("profile-progress-text").textContent = `${completed.length}/5 kết quả`;
   document.getElementById("profile-progress-fill").style.width = `${completed.length * 20}%`;
 
@@ -180,8 +169,6 @@ function valueOrEmpty(value) {
 function buildPrintableProfile() {
   const printEl = document.getElementById("print-profile");
   const infoItems = [
-    ["Lớp", profileState.className],
-    ["Trường", profileState.school],
     ["Sở thích môn học", profileState.favoriteSubjects, true],
     ["Năng khiếu", profileState.talents],
     ["Sở trường", profileState.strengths],
@@ -193,7 +180,7 @@ function buildPrintableProfile() {
     <header class="print-profile-header">
       <div>
         <div class="print-profile-brand">Định Hướng Nghề Nghiệp AI</div>
-        <h1>${valueOrEmpty(profileState.fullName)}</h1>
+        <h1>Hồ sơ của tôi</h1>
         <p class="print-profile-subtitle">Hồ sơ năng lực và định hướng nghề nghiệp cá nhân</p>
       </div>
       <div class="print-profile-date">Mã hồ sơ: ${escapeHtml(profileState.profileId)}<br />Ngày xuất: ${new Date().toLocaleDateString("vi-VN")}</div>
@@ -219,8 +206,7 @@ function downloadProfilePdf() {
   persistProfile();
   buildPrintableProfile();
   const oldTitle = document.title;
-  const slug = profileState.fullName.trim().replace(/\s+/g, "-").toLowerCase() || "hoc-sinh";
-  document.title = `ho-so-huong-nghiep-${slug}`;
+  document.title = "ho-so-huong-nghiep";
   window.addEventListener("afterprint", () => { document.title = oldTitle; }, { once: true });
   window.setTimeout(() => window.print(), 80);
 }
@@ -238,9 +224,8 @@ function exportProfileData() {
   const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json;charset=utf-8" });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
-  const slug = profileState.fullName.trim().replace(/[^\p{L}\p{N}]+/gu, "-").replace(/^-|-$/g, "").toLowerCase() || "hoc-sinh";
   anchor.href = url;
-  anchor.download = `ho-so-huong-nghiep-${slug}.json`;
+  anchor.download = "ho-so-huong-nghiep.json";
   anchor.click();
   URL.revokeObjectURL(url);
   showSaveState("Đã tải bản sao lưu hồ sơ", "is-saved");
