@@ -21,18 +21,131 @@
     </div>
   </header>
 
-  <main>
-    <section class="hero container">
-      <h1>Hồ sơ năng lực của bạn</h1>
-      <p>Tổng hợp từ các bài trắc nghiệm bạn đã hoàn thành, lưu trên chính trình duyệt của bạn.</p>
+  <main class="profile-page">
+    <section class="container profile-hero">
+      <div>
+        <span class="eyebrow">🪪 Hồ sơ hướng nghiệp cá nhân</span>
+        <h1>Hiểu rõ mình.<br /><span>Lưu lại hành trình.</span></h1>
+        <p>Ghi lại thông tin, thế mạnh và kết quả trắc nghiệm để tạo nên bức tranh năng lực riêng của bạn.</p>
+        <div class="profile-privacy-note"><span>🔒</span> Dữ liệu được lưu riêng trên trình duyệt của thiết bị này.</div>
+      </div>
+      <div class="profile-hero-actions screen-only">
+        <button class="btn btn-primary" id="download-profile" type="button">Tải hồ sơ PDF ↓</button>
+        <button class="btn btn-secondary" id="export-profile" type="button">Sao lưu dữ liệu</button>
+        <button class="btn btn-secondary" id="import-profile" type="button">Khôi phục hồ sơ</button>
+        <input id="profile-file-input" type="file" accept="application/json,.json" hidden />
+        <p id="profile-save-state" class="profile-save-state" role="status" aria-live="polite">Sẵn sàng tự động lưu</p>
+      </div>
     </section>
 
-    <section class="container">
-      <div id="profile-status"></div>
+    <section class="container profile-editor-grid">
+      <article class="profile-panel">
+        <div class="profile-panel-head">
+          <span class="profile-section-icon">👤</span>
+          <div>
+            <h2>Thông tin của bạn</h2>
+            <p>Điền những thông tin bạn muốn xuất hiện trong hồ sơ tải về.</p>
+          </div>
+        </div>
+
+        <form id="personal-profile-form" autocomplete="on">
+          <div class="profile-form-grid">
+            <label class="profile-field profile-field-wide">
+              <span>Họ và tên</span>
+              <input type="text" name="fullName" data-profile-field placeholder="Ví dụ: Nguyễn Minh Anh" maxlength="80" autocomplete="name" />
+            </label>
+            <label class="profile-field">
+              <span>Lớp</span>
+              <input type="text" name="className" data-profile-field placeholder="Ví dụ: 11A1" maxlength="30" />
+            </label>
+            <label class="profile-field">
+              <span>Trường</span>
+              <input type="text" name="school" data-profile-field placeholder="Tên trường THPT" maxlength="120" />
+            </label>
+            <label class="profile-field profile-field-wide">
+              <span>Sở thích môn học</span>
+              <textarea name="favoriteSubjects" data-profile-field rows="2" maxlength="400" placeholder="Ví dụ: Toán, Ngữ văn, Tiếng Anh, Sinh học..."></textarea>
+              <small>Có thể nhập nhiều nội dung, cách nhau bằng dấu phẩy.</small>
+            </label>
+            <label class="profile-field">
+              <span>Năng khiếu</span>
+              <textarea name="talents" data-profile-field rows="3" maxlength="500" placeholder="Ví dụ: Vẽ, thuyết trình, chơi nhạc cụ..."></textarea>
+            </label>
+            <label class="profile-field">
+              <span>Sở trường của bản thân</span>
+              <textarea name="strengths" data-profile-field rows="3" maxlength="500" placeholder="Ví dụ: Tư duy logic, làm việc nhóm, tổ chức..."></textarea>
+            </label>
+            <label class="profile-field profile-field-wide">
+              <span>Sở thích và hoạt động yêu thích</span>
+              <textarea name="interests" data-profile-field rows="2" maxlength="500" placeholder="Ví dụ: Đọc sách, làm thí nghiệm, hoạt động tình nguyện..."></textarea>
+            </label>
+            <label class="profile-field profile-field-wide">
+              <span>Mục tiêu hoặc nghề đang quan tâm</span>
+              <textarea name="careerGoal" data-profile-field rows="2" maxlength="500" placeholder="Ví dụ: Muốn tìm hiểu ngành Công nghệ thông tin và Thiết kế..."></textarea>
+            </label>
+          </div>
+        </form>
+      </article>
+
+      <aside class="profile-glance" aria-labelledby="profile-glance-title">
+        <div class="profile-avatar" id="profile-avatar">HS</div>
+        <span class="profile-code" id="profile-code">HỒ SƠ CÁ NHÂN</span>
+        <h2 id="profile-glance-title">Hồ sơ của bạn</h2>
+        <p id="profile-glance-meta">Thêm họ tên, lớp và trường để hoàn thiện thông tin.</p>
+        <div class="profile-completion">
+          <div><strong>Tiến trình khám phá</strong><span id="profile-progress-text">0/5 kết quả</span></div>
+          <div class="profile-progress-track"><span id="profile-progress-fill"></span></div>
+        </div>
+        <div id="profile-status"></div>
+      </aside>
+    </section>
+
+    <section class="container assessment-result-editor" aria-labelledby="assessment-result-title">
+      <div class="section-heading">
+        <span class="eyebrow">🧩 Kết quả của bạn</span>
+        <h2 id="assessment-result-title">Lưu kết quả từ 5 công cụ tự nhận thức</h2>
+        <p>Sau khi làm bài trên website bên ngoài, hãy nhập kết quả nổi bật vào ô tương ứng. Nội dung được tự động lưu vào hồ sơ.</p>
+      </div>
+
+      <div class="profile-result-grid">
+        <article class="profile-result-card" data-result-card="holland">
+          <div class="profile-result-mark">R</div>
+          <div class="profile-result-copy"><span>Holland (RIASEC)</span><small>Sở thích nghề nghiệp</small></div>
+          <a href="quiz.html?test=holland" class="result-test-link">Làm bài ↗</a>
+          <label><span>Kết quả nổi bật</span><input type="text" data-assessment-result="holland" maxlength="300" placeholder="Ví dụ: R - I - A" /></label>
+        </article>
+        <article class="profile-result-card" data-result-card="mi">
+          <div class="profile-result-mark">MI</div>
+          <div class="profile-result-copy"><span>Đa trí thông minh</span><small>Thế mạnh nhận thức</small></div>
+          <a href="quiz.html?test=mi" class="result-test-link">Làm bài ↗</a>
+          <label><span>Kết quả nổi bật</span><input type="text" data-assessment-result="mi" maxlength="300" placeholder="Ví dụ: Ngôn ngữ, Giao tiếp, Nội tâm" /></label>
+        </article>
+        <article class="profile-result-card" data-result-card="mbti">
+          <div class="profile-result-mark">M</div>
+          <div class="profile-result-copy"><span>MBTI</span><small>Xu hướng tính cách</small></div>
+          <a href="quiz.html?test=mbti" class="result-test-link">Làm bài ↗</a>
+          <label><span>Kết quả nổi bật</span><input type="text" data-assessment-result="mbti" maxlength="300" placeholder="Ví dụ: INFJ" /></label>
+        </article>
+        <article class="profile-result-card" data-result-card="disc">
+          <div class="profile-result-mark">D</div>
+          <div class="profile-result-copy"><span>DISC</span><small>Phong cách hành vi</small></div>
+          <a href="quiz.html?test=disc" class="result-test-link">Làm bài ↗</a>
+          <label><span>Kết quả nổi bật</span><input type="text" data-assessment-result="disc" maxlength="300" placeholder="Ví dụ: I - S" /></label>
+        </article>
+        <article class="profile-result-card" data-result-card="motivators">
+          <div class="profile-result-mark">⚡</div>
+          <div class="profile-result-copy"><span>Động lực</span><small>Điều thúc đẩy bạn</small></div>
+          <a href="quiz.html?test=motivators" class="result-test-link">Làm bài ↗</a>
+          <label><span>Kết quả nổi bật</span><input type="text" data-assessment-result="motivators" maxlength="300" placeholder="Ví dụ: Sáng tạo, Tự chủ, Phát triển" /></label>
+        </article>
+      </div>
     </section>
 
     <section class="container" id="profile-chart-section" style="display:none;">
-      <h2>Biểu đồ năng lực</h2>
+      <div class="section-heading compact-heading">
+        <span class="eyebrow">📊 Kết quả đã lưu trước đây</span>
+        <h2>Biểu đồ năng lực</h2>
+      </div>
       <div class="radar-grid" id="radar-grid"></div>
     </section>
 
@@ -49,6 +162,20 @@
       </p>
       <div id="career-match-list"></div>
     </section>
+
+    <section class="container profile-download-panel screen-only">
+      <div>
+        <span class="eyebrow">📄 Mang hồ sơ theo bạn</span>
+        <h2>Tải hồ sơ cá nhân về máy</h2>
+        <p>Chọn “Tải hồ sơ PDF”, sau đó chọn <strong>Lưu dưới dạng PDF</strong> trong cửa sổ in. Tệp sao lưu JSON giúp khôi phục dữ liệu trên trình duyệt hoặc thiết bị khác.</p>
+      </div>
+      <div class="profile-download-actions">
+        <button class="btn btn-primary" data-download-profile type="button">Tải hồ sơ PDF ↓</button>
+        <button class="btn btn-secondary" data-export-profile type="button">Tải bản sao lưu</button>
+      </div>
+    </section>
+
+    <section id="print-profile" class="print-profile" aria-label="Hồ sơ hướng nghiệp để in"></section>
   </main>
 
   <footer class="site-footer">

@@ -99,9 +99,15 @@
     ];
 
     const EXTERNAL_NAMES = { holland: "Holland", mi: "MI", mbti: "MBTI", disc: "DISC", motivators: "Động lực" };
+    let SAVED_PROFILE_RESULTS = {};
+    try {
+      SAVED_PROFILE_RESULTS = JSON.parse(localStorage.getItem("dhnn_personal_profile_v1") || "{}").assessmentResults || {};
+    } catch {
+      SAVED_PROFILE_RESULTS = {};
+    }
     const grid = document.getElementById("assessment-cards");
     grid.innerHTML = TESTS.map((t) => {
-      const done = !t.countLabel && QuizEngine.getResult(t.id);
+      const done = Boolean(QuizEngine.getResult(t.id) || String(SAVED_PROFILE_RESULTS[t.id] || "").trim());
       const countLabel = t.countLabel || `${t.count} câu hỏi`;
       const externalName = EXTERNAL_NAMES[t.id] || t.name;
       const actionLabel = done ? "Làm lại" : (t.countLabel ? `Mở bài ${externalName}` : "Bắt đầu");
@@ -109,7 +115,7 @@
         <div class="card">
           <h3>${t.name}</h3>
           <p>${t.desc}</p>
-          <p class="badge-count">${countLabel} ${done ? "· <span style='color:#15803d'>Đã hoàn thành ✓</span>" : ""}</p>
+          <p class="badge-count">${countLabel} ${done ? "· <span style='color:#15803d'>Đã lưu kết quả ✓</span>" : ""}</p>
           <a href="quiz.html?test=${t.id}" class="btn ${done ? "btn-secondary" : "btn-primary"}">${actionLabel}</a>
         </div>`;
     }).join("");
