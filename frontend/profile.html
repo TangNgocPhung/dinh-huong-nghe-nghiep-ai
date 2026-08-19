@@ -88,45 +88,21 @@
       </aside>
     </section>
 
-    <section class="container assessment-result-editor" aria-labelledby="assessment-result-title">
-      <div class="section-heading">
-        <span class="eyebrow">🧩 Kết quả của bạn</span>
-        <h2 id="assessment-result-title">Lưu kết quả từ 5 công cụ tự nhận thức</h2>
-        <p>Sau khi làm bài trên website bên ngoài, hãy nhập kết quả nổi bật vào ô tương ứng. Nội dung được tự động lưu vào hồ sơ.</p>
+    <section class="container profile-result-images" aria-labelledby="result-images-title">
+      <div class="result-images-intro">
+        <div>
+          <span class="eyebrow">🖼️ Kết quả của học sinh</span>
+          <h2 id="result-images-title">Thêm hình ảnh kết quả</h2>
+          <p>Chụp hoặc lưu hình kết quả sau khi hoàn thành bài trắc nghiệm, sau đó thêm vào hồ sơ. Tối đa 5 ảnh và tất cả ảnh sẽ xuất hiện trong file PDF.</p>
+        </div>
+        <div class="result-images-actions">
+          <button class="btn btn-primary" id="add-result-images" type="button">Chọn ảnh kết quả +</button>
+          <input id="result-images-input" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden />
+          <small>Ảnh được thu nhỏ và lưu riêng trên thiết bị này.</small>
+        </div>
       </div>
-
-      <div class="profile-result-grid">
-        <article class="profile-result-card" data-result-card="holland">
-          <div class="profile-result-mark">R</div>
-          <div class="profile-result-copy"><span>Holland (RIASEC)</span><small>Sở thích nghề nghiệp</small></div>
-          <a href="quiz.html?test=holland" class="result-test-link">Làm bài ↗</a>
-          <label><span>Kết quả nổi bật</span><input type="text" data-assessment-result="holland" maxlength="300" placeholder="Ví dụ: R - I - A" /></label>
-        </article>
-        <article class="profile-result-card" data-result-card="mi">
-          <div class="profile-result-mark">MI</div>
-          <div class="profile-result-copy"><span>Đa trí thông minh</span><small>Thế mạnh nhận thức</small></div>
-          <a href="quiz.html?test=mi" class="result-test-link">Làm bài ↗</a>
-          <label><span>Kết quả nổi bật</span><input type="text" data-assessment-result="mi" maxlength="300" placeholder="Ví dụ: Ngôn ngữ, Giao tiếp, Nội tâm" /></label>
-        </article>
-        <article class="profile-result-card" data-result-card="mbti">
-          <div class="profile-result-mark">M</div>
-          <div class="profile-result-copy"><span>MBTI</span><small>Xu hướng tính cách</small></div>
-          <a href="quiz.html?test=mbti" class="result-test-link">Làm bài ↗</a>
-          <label><span>Kết quả nổi bật</span><input type="text" data-assessment-result="mbti" maxlength="300" placeholder="Ví dụ: INFJ" /></label>
-        </article>
-        <article class="profile-result-card" data-result-card="disc">
-          <div class="profile-result-mark">D</div>
-          <div class="profile-result-copy"><span>DISC</span><small>Phong cách hành vi</small></div>
-          <a href="quiz.html?test=disc" class="result-test-link">Làm bài ↗</a>
-          <label><span>Kết quả nổi bật</span><input type="text" data-assessment-result="disc" maxlength="300" placeholder="Ví dụ: I - S" /></label>
-        </article>
-        <article class="profile-result-card" data-result-card="motivators">
-          <div class="profile-result-mark">⚡</div>
-          <div class="profile-result-copy"><span>Động lực</span><small>Điều thúc đẩy bạn</small></div>
-          <a href="quiz.html?test=motivators" class="result-test-link">Làm bài ↗</a>
-          <label><span>Kết quả nổi bật</span><input type="text" data-assessment-result="motivators" maxlength="300" placeholder="Ví dụ: Sáng tạo, Tự chủ, Phát triển" /></label>
-        </article>
-      </div>
+      <div class="result-images-empty" id="result-images-empty">Chưa có hình ảnh kết quả. Hãy chọn ảnh từ máy hoặc điện thoại của bạn.</div>
+      <div class="result-images-grid" id="result-images-grid" aria-live="polite"></div>
     </section>
 
     <section class="container" id="profile-chart-section" style="display:none;">
@@ -146,7 +122,7 @@
       <div>
         <span class="eyebrow">📄 Mang hồ sơ theo bạn</span>
         <h2>Tải hồ sơ cá nhân về máy</h2>
-        <p>Chọn “Tải hồ sơ PDF”, sau đó chọn <strong>Lưu dưới dạng PDF</strong> trong cửa sổ in. Tệp sao lưu JSON giúp khôi phục dữ liệu trên trình duyệt hoặc thiết bị khác.</p>
+        <p>Chọn “Tải hồ sơ PDF”, sau đó chọn <strong>Lưu dưới dạng PDF</strong> trong cửa sổ in. Các ảnh kết quả đã thêm sẽ được đưa vào PDF; tệp sao lưu JSON giúp khôi phục toàn bộ dữ liệu trên thiết bị khác.</p>
       </div>
       <div class="profile-download-actions">
         <button class="btn btn-primary" data-download-profile type="button">Tải hồ sơ PDF ↓</button>
