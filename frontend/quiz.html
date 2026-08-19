@@ -33,6 +33,53 @@
 
   <script src="js/quiz-engine.js"></script>
   <script>
+    function renderHollandExternal(container) {
+      const hollandUrl = "https://tracnghiem.huongnghiepsongan.com/assess/tracnghiem/HLKPST1622";
+      container.innerHTML = `
+        <div class="holland-intro">
+          <div class="holland-copy">
+            <a class="back-link" href="assessments.html">← Quay lại danh sách bài trắc nghiệm</a>
+            <span class="eyebrow">🧭 Khám phá sở thích nghề nghiệp</span>
+            <h1>Lý thuyết lựa chọn nghề nghiệp <span>— John L. Holland</span></h1>
+            <p>Trắc nghiệm Holland (RIASEC) được xây dựng dựa trên lý thuyết lựa chọn nghề nghiệp của nhà tâm lý học John L. Holland, nhằm khám phá sở thích và xu hướng nghề nghiệp của mỗi cá nhân.</p>
+            <p>Mô hình phân chia sở thích thành 6 nhóm cơ bản: Realistic (Kỹ thuật), Investigative (Nghiên cứu), Artistic (Nghệ thuật), Social (Xã hội), Enterprising (Quản lý) và Conventional (Nghiệp vụ).</p>
+            <p>Kết quả trắc nghiệm cho biết những nhóm sở thích nổi trội của học sinh và mối liên hệ với các nhóm môi trường nghề nghiệp có xu hướng phù hợp, đóng vai trò nền tảng khoa học trong quá trình định hướng nghề nghiệp.</p>
+          </div>
+
+          <div class="riasec-model" aria-label="Sáu nhóm sở thích nghề nghiệp RIASEC">
+            <div class="riasec-center"><strong>RIASEC</strong><span>6 nhóm sở thích</span></div>
+            <article class="riasec-type type-r"><b>R</b><strong>Kỹ thuật</strong><small>Realistic</small></article>
+            <article class="riasec-type type-i"><b>I</b><strong>Nghiên cứu</strong><small>Investigative</small></article>
+            <article class="riasec-type type-a"><b>A</b><strong>Nghệ thuật</strong><small>Artistic</small></article>
+            <article class="riasec-type type-s"><b>S</b><strong>Xã hội</strong><small>Social</small></article>
+            <article class="riasec-type type-e"><b>E</b><strong>Quản lý</strong><small>Enterprising</small></article>
+            <article class="riasec-type type-c"><b>C</b><strong>Nghiệp vụ</strong><small>Conventional</small></article>
+          </div>
+        </div>
+
+        <section class="external-assessment" aria-labelledby="external-assessment-title">
+          <div class="external-assessment-head">
+            <div>
+              <span class="live-dot">Công cụ trực tuyến</span>
+              <h2 id="external-assessment-title">Làm trắc nghiệm Holland</h2>
+              <p>Thực hiện bài trắc nghiệm ngay trong khung bên dưới. Nếu khung hiển thị chưa đầy đủ, bạn có thể mở công cụ ở một tab riêng.</p>
+            </div>
+            <a class="btn btn-primary" href="${hollandUrl}" target="_blank" rel="noopener noreferrer">Mở toàn màn hình ↗</a>
+          </div>
+          <div class="external-frame-wrap">
+            <iframe
+              class="external-assessment-frame"
+              src="${hollandUrl}"
+              title="Trắc nghiệm Holland của Hướng nghiệp Sông An"
+              loading="lazy"
+              referrerpolicy="strict-origin-when-cross-origin"
+            ></iframe>
+          </div>
+          <p class="external-source">Nguồn công cụ: <a href="${hollandUrl}" target="_blank" rel="noopener noreferrer">Hướng nghiệp Sông An ↗</a></p>
+        </section>
+      `;
+    }
+
     async function main() {
       const params = new URLSearchParams(window.location.search);
       const testId = params.get("test");
@@ -40,6 +87,11 @@
 
       if (!testId) {
         container.innerHTML = `<p>Thiếu tham số bài test. Hãy quay lại <a href="assessments.html">danh sách bài trắc nghiệm</a>.</p>`;
+        return;
+      }
+
+      if (testId === "holland") {
+        renderHollandExternal(container);
         return;
       }
 
