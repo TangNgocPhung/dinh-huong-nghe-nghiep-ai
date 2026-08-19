@@ -145,6 +145,39 @@
       `;
     }
 
+    function renderDISCExternal(container) {
+      const discUrl = "https://testfast.vn/disc";
+      container.innerHTML = `
+        <div class="theory-intro disc-intro">
+          <div class="theory-copy disc-copy">
+            <a class="back-link" href="assessments.html">← Quay lại danh sách bài trắc nghiệm</a>
+            <span class="eyebrow">💬 Hiểu phong cách hành vi và giao tiếp</span>
+            <h1>Mô hình hành vi <span>— dựa trên nghiên cứu của William Moulton Marston</span></h1>
+            <p>DISC là mô hình đánh giá xu hướng hành vi và phong cách giao tiếp, có nguồn gốc từ nghiên cứu của nhà tâm lý học William Moulton Marston.</p>
+            <p>Mô hình gồm 4 nhóm hành vi chính: Dominance – D (Thống trị), Influence – I (Ảnh hưởng), Steadiness – S (Kiên định) và Conscientiousness – C (Tuân thủ).</p>
+            <p>Bài trắc nghiệm giúp học sinh hiểu cách bản thân giao tiếp, hợp tác và phản ứng trong môi trường làm việc, từ đó hỗ trợ lựa chọn môi trường học tập – nghề nghiệp phù hợp với phong cách cá nhân.</p>
+          </div>
+
+          <div class="disc-model" aria-label="Bốn nhóm hành vi DISC">
+            <article class="disc-type disc-d">
+              <b>D</b><div><strong>Dominance</strong><span>Thống trị</span><small>Quyết đoán · Hướng tới kết quả</small></div>
+            </article>
+            <article class="disc-type disc-i">
+              <b>I</b><div><strong>Influence</strong><span>Ảnh hưởng</span><small>Nhiệt tình · Truyền cảm hứng</small></div>
+            </article>
+            <article class="disc-type disc-s">
+              <b>S</b><div><strong>Steadiness</strong><span>Kiên định</span><small>Điềm tĩnh · Hợp tác</small></div>
+            </article>
+            <article class="disc-type disc-c">
+              <b>C</b><div><strong>Conscientiousness</strong><span>Tuân thủ</span><small>Cẩn thận · Chính xác</small></div>
+            </article>
+            <div class="disc-center" aria-hidden="true">DISC</div>
+          </div>
+        </div>
+        ${externalAssessmentMarkup("disc", "DISC", discUrl)}
+      `;
+    }
+
     async function main() {
       const params = new URLSearchParams(window.location.search);
       const testId = params.get("test");
@@ -167,6 +200,11 @@
 
       if (testId === "mbti") {
         renderMBTIExternal(container);
+        return;
+      }
+
+      if (testId === "disc") {
+        renderDISCExternal(container);
         return;
       }
 
