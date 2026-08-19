@@ -95,14 +95,15 @@
       { id: "mi", name: "Đa trí thông minh (MI)", desc: "Nhận diện 8 dạng trí thông minh theo lý thuyết Howard Gardner.", countLabel: "Công cụ trực tuyến" },
       { id: "mbti", name: "MBTI", desc: "Khám phá 4 cặp xu hướng và 16 kiểu tính cách theo lý thuyết Carl Jung.", countLabel: "Công cụ trực tuyến" },
       { id: "disc", name: "DISC", desc: "Khám phá 4 nhóm hành vi và phong cách giao tiếp theo William Moulton Marston.", countLabel: "Công cụ trực tuyến" },
-      { id: "motivators", name: "Động lực (Motivators)", desc: "Khám phá điều thực sự thúc đẩy bạn.", count: 18 },
+      { id: "motivators", name: "Động lực (Motivators)", desc: "Khám phá các yếu tố thúc đẩy bạn học tập, làm việc và theo đuổi mục tiêu.", countLabel: "Công cụ trực tuyến" },
     ];
 
+    const EXTERNAL_NAMES = { holland: "Holland", mi: "MI", mbti: "MBTI", disc: "DISC", motivators: "Động lực" };
     const grid = document.getElementById("assessment-cards");
     grid.innerHTML = TESTS.map((t) => {
-      const done = !["holland", "mi", "mbti", "disc"].includes(t.id) && QuizEngine.getResult(t.id);
+      const done = !t.countLabel && QuizEngine.getResult(t.id);
       const countLabel = t.countLabel || `${t.count} câu hỏi`;
-      const externalName = t.id === "holland" ? "Holland" : t.id.toUpperCase();
+      const externalName = EXTERNAL_NAMES[t.id] || t.name;
       const actionLabel = done ? "Làm lại" : (t.countLabel ? `Mở bài ${externalName}` : "Bắt đầu");
       return `
         <div class="card">

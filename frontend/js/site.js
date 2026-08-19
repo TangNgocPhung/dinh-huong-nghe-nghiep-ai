@@ -48,7 +48,7 @@
   window.addEventListener("scroll", updateScroll, { passive: true });
   updateScroll();
 
-  const revealTargets = document.querySelectorAll(".card, .career-card, .about-panel, .pillar, .quiz-question, .overview-copy, .overview-tool, .overview-note, .theory-copy, .riasec-type, .mi-type, .mbti-axis, .mbti-code-pill, .disc-type, .external-assessment, section > h2");
+  const revealTargets = document.querySelectorAll(".card, .career-card, .about-panel, .pillar, .quiz-question, .overview-copy, .overview-tool, .overview-note, .theory-copy, .riasec-type, .mi-type, .mbti-axis, .mbti-code-pill, .disc-type, .motive-type, .external-assessment, section > h2");
   if ("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {

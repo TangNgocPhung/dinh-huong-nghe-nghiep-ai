@@ -249,6 +249,22 @@ main { padding: 34px 0 90px; position: relative; }
 .disc-s { background: linear-gradient(145deg, #55b77b, #2c9962); }
 .disc-c { background: linear-gradient(145deg, #438ec8, #2f70b2); }
 .disc-center { position: absolute; z-index: 3; inset: 50% auto auto 50%; width: 84px; height: 84px; display: grid; place-items: center; border: 7px solid var(--color-surface); border-radius: 50%; color: var(--color-primary); background: var(--color-surface); box-shadow: 0 11px 28px rgba(28,35,80,.22); font-size: .86rem; font-weight: 900; letter-spacing: .12em; transform: translate(-50%, -50%); }
+.motive-model { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 11px; padding: 20px; border: 1px solid rgba(91,76,240,.15); border-radius: 30px; background: linear-gradient(145deg, rgba(13,159,188,.08), rgba(139,92,246,.08), rgba(246,184,61,.08)); box-shadow: 0 22px 55px rgba(52,61,120,.12); }
+.motive-center { grid-column: 1 / -1; min-height: 100px; display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 2px; border-radius: 22px; color: #fff; background: linear-gradient(135deg, #f08b37, #e65173 46%, #704fda); box-shadow: 0 16px 36px rgba(194,75,103,.22); }
+.motive-center > span { font-size: 2rem; animation: overviewPulse 2.4s ease-in-out infinite; }
+.motive-center strong { font-size: 1.05rem; line-height: 1.35; }
+.motive-type { min-height: 108px; display: grid; grid-template-columns: auto 1fr; column-gap: 11px; align-content: center; padding: 14px; border: 1px solid rgba(91,76,240,.12); border-radius: 18px; background: rgba(255,255,255,.86); box-shadow: 0 10px 28px rgba(52,61,120,.08); animation: riasecFloat 5s ease-in-out infinite; }
+.motive-type:nth-child(3n) { animation-delay: -1.4s; }
+.motive-type:nth-child(3n + 1) { animation-delay: -2.8s; }
+.motive-type > span { grid-row: 1 / 3; width: 41px; height: 41px; display: grid; place-items: center; border-radius: 13px; background: var(--motive-bg); font-size: 1.15rem; }
+.motive-type strong { align-self: end; font-size: .84rem; }
+.motive-type small { align-self: start; margin-top: 4px; color: var(--color-text-muted); font-size: .68rem; }
+.motive-achievement { --motive-bg: rgba(246,184,61,.18); }
+.motive-creativity { --motive-bg: rgba(230,81,115,.15); }
+.motive-stability { --motive-bg: rgba(67,142,200,.16); }
+.motive-autonomy { --motive-bg: rgba(112,79,218,.15); }
+.motive-influence { --motive-bg: rgba(85,183,123,.16); }
+.motive-growth { --motive-bg: rgba(13,159,188,.15); }
 .external-assessment { margin-bottom: 70px; padding: clamp(20px, 3vw, 34px); border: 1px solid var(--color-border); border-radius: 28px; background: var(--color-surface); box-shadow: var(--shadow); }
 .external-assessment-head { display: flex; justify-content: space-between; align-items: center; gap: 24px; margin-bottom: 22px; }
 .external-assessment-head h2 { margin: 9px 0 6px; font-size: clamp(1.55rem, 3vw, 2.25rem); }
@@ -494,6 +510,7 @@ input:focus, select:focus { outline: 3px solid rgba(91,76,240,.14); border-color
 [data-theme="dark"] .riasec-type { background: rgba(26,35,59,.9); border-color: rgba(124,109,255,.22); }
 [data-theme="dark"] .mi-type { background: rgba(26,35,59,.9); border-color: rgba(124,109,255,.22); }
 [data-theme="dark"] .mbti-axis { background: rgba(26,35,59,.9); border-color: rgba(124,109,255,.22); }
+[data-theme="dark"] .motive-type { background: rgba(26,35,59,.9); border-color: rgba(124,109,255,.22); }
 
 @keyframes float { 0%,100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-12px) rotate(1deg); } }
 @keyframes spin { to { transform: rotate(360deg); } }
@@ -525,6 +542,9 @@ input:focus, select:focus { outline: 3px solid rgba(91,76,240,.14); border-color
   .disc-model { padding: 13px; }
   .disc-type { min-height: 155px; flex-direction: column; align-items: center; padding: 18px 10px; text-align: center; }
   .disc-center { width: 68px; height: 68px; border-width: 5px; font-size: .72rem; }
+  .motive-model { padding: 13px; }
+  .motive-type { min-height: 112px; grid-template-columns: 1fr; text-align: center; }
+  .motive-type > span { grid-row: auto; justify-self: center; margin-bottom: 7px; }
   .external-assessment-head { align-items: stretch; flex-direction: column; }
   .external-assessment-head .btn { text-align: center; }
   .external-assessment-frame { min-height: 620px; height: 72vh; }

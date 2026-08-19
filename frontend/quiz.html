@@ -178,6 +178,33 @@
       `;
     }
 
+    function renderMotivatorsExternal(container) {
+      const motivatorsUrl = "https://junglemotives.com/free-quiz/";
+      container.innerHTML = `
+        <div class="theory-intro motivators-intro">
+          <div class="theory-copy motivators-copy">
+            <a class="back-link" href="assessments.html">← Quay lại danh sách bài trắc nghiệm</a>
+            <span class="eyebrow">⚡ Hiểu điều tạo nên động lực bên trong</span>
+            <h1>Khám phá các yếu tố <span>thúc đẩy cá nhân</span></h1>
+            <p>Trắc nghiệm Động lực tập trung khám phá những yếu tố thúc đẩy một cá nhân học tập, làm việc và theo đuổi mục tiêu.</p>
+            <p>Các động lực có thể liên quan đến thành tựu, sự sáng tạo, ổn định, tự chủ, ảnh hưởng xã hội hoặc cơ hội phát triển.</p>
+            <p>Bài test giúp học sinh trả lời câu hỏi <strong>“Điều gì thực sự thúc đẩy mình?”</strong> — một yếu tố quan trọng trong hướng nghiệp, vì một nghề phù hợp không chỉ cần đúng sở thích mà còn cần đáp ứng giá trị và động lực cá nhân.</p>
+          </div>
+
+          <div class="motive-model" aria-label="Sáu nhóm yếu tố tạo động lực cá nhân">
+            <div class="motive-center"><span>🔥</span><strong>Động lực<br />bên trong</strong></div>
+            <article class="motive-type motive-achievement"><span>🏆</span><strong>Thành tựu</strong><small>Chinh phục mục tiêu</small></article>
+            <article class="motive-type motive-creativity"><span>🎨</span><strong>Sáng tạo</strong><small>Tạo ra điều mới</small></article>
+            <article class="motive-type motive-stability"><span>🛡️</span><strong>Ổn định</strong><small>An toàn và bền vững</small></article>
+            <article class="motive-type motive-autonomy"><span>🕊️</span><strong>Tự chủ</strong><small>Tự do lựa chọn</small></article>
+            <article class="motive-type motive-influence"><span>🤝</span><strong>Ảnh hưởng xã hội</strong><small>Kết nối và đóng góp</small></article>
+            <article class="motive-type motive-growth"><span>🌱</span><strong>Phát triển</strong><small>Học hỏi và tiến bộ</small></article>
+          </div>
+        </div>
+        ${externalAssessmentMarkup("motivators", "Động lực", motivatorsUrl)}
+      `;
+    }
+
     async function main() {
       const params = new URLSearchParams(window.location.search);
       const testId = params.get("test");
@@ -205,6 +232,11 @@
 
       if (testId === "disc") {
         renderDISCExternal(container);
+        return;
+      }
+
+      if (testId === "motivators") {
+        renderMotivatorsExternal(container);
         return;
       }
 
