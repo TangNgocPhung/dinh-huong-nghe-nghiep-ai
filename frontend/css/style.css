@@ -345,21 +345,6 @@ main { padding: 34px 0 90px; position: relative; }
 .profile-progress-track span { display: block; width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--color-primary), var(--color-secondary)); transition: width .45s ease; }
 .profile-glance #profile-status { text-align: left; }
 .profile-glance #profile-status p { margin: 10px 0 0; color: var(--color-text-muted); font-size: .78rem; }
-.profile-result-images { padding-bottom: 82px; }
-.result-images-intro { display: flex; justify-content: space-between; align-items: center; gap: 32px; padding: clamp(24px, 4vw, 38px); border: 1px solid rgba(91,76,240,.2); border-radius: 28px; background: linear-gradient(135deg, rgba(91,76,240,.09), rgba(13,159,188,.1)); }
-.result-images-intro h2 { margin: 12px 0 7px; font-size: clamp(1.7rem, 3vw, 2.35rem); }
-.result-images-intro p { max-width: 760px; margin: 0; color: var(--color-text-muted); }
-.result-images-actions { display: flex; flex: 0 0 auto; flex-direction: column; align-items: stretch; gap: 8px; text-align: center; }
-.result-images-actions small { max-width: 230px; color: var(--color-text-muted); font-size: .7rem; }
-.result-images-empty { margin-top: 18px; padding: 24px; border: 1px dashed var(--color-border); border-radius: 18px; color: var(--color-text-muted); background: var(--color-surface-soft); text-align: center; }
-.result-images-empty[hidden] { display: none; }
-.result-images-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-top: 20px; }
-.result-image-card { overflow: hidden; margin: 0; border: 1px solid var(--color-border); border-radius: 20px; background: var(--color-surface); box-shadow: 0 14px 36px rgba(52,61,120,.08); }
-.result-image-card img { width: 100%; aspect-ratio: 16 / 10; display: block; object-fit: contain; background: #fff; }
-.result-image-card figcaption { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 13px 15px; }
-.result-image-card figcaption span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .78rem; font-weight: 750; }
-.result-image-card button { flex: 0 0 auto; border: 0; color: #b42318; background: transparent; font: inherit; font-size: .72rem; font-weight: 800; cursor: pointer; }
-.result-image-card button:hover { text-decoration: underline; }
 .compact-heading { margin-top: 6px; }
 .profile-download-panel { display: flex; justify-content: space-between; align-items: center; gap: 34px; margin-top: 72px; padding: clamp(24px, 4vw, 40px); border: 1px solid rgba(91,76,240,.2); border-radius: 28px; background: linear-gradient(135deg, rgba(91,76,240,.1), rgba(13,159,188,.11)); }
 .profile-download-panel h2 { margin: 11px 0 7px; }
@@ -657,12 +642,9 @@ input:focus, select:focus { outline: 3px solid rgba(91,76,240,.14); border-color
   .motive-type > span { grid-row: auto; justify-self: center; margin-bottom: 7px; }
   .profile-hero { min-height: auto; padding-top: 48px; padding-bottom: 48px; }
   .profile-hero h1 { font-size: clamp(2.45rem, 13vw, 3.5rem); }
-  .profile-form-grid, .result-images-grid { grid-template-columns: 1fr; }
+  .profile-form-grid { grid-template-columns: 1fr; }
   .profile-field-wide { grid-column: auto; }
   .profile-panel { padding: 21px; }
-  .result-images-intro { align-items: stretch; flex-direction: column; }
-  .result-images-actions { width: 100%; }
-  .result-images-actions small { max-width: none; }
   .profile-download-panel { align-items: stretch; flex-direction: column; }
   .profile-download-actions { width: 100%; }
   .profile-download-actions .btn { flex: 1; }
@@ -732,5 +714,9 @@ input:focus, select:focus { outline: 3px solid rgba(91,76,240,.14); border-color
   .print-result-images figure { break-inside: avoid; margin: 0; }
   .print-result-images img { width: 100%; max-height: 220mm; display: block; object-fit: contain; border: 1px solid #dfe4f1; border-radius: 6px; background: #fff; }
   .print-result-images figcaption { margin-top: 3px; color: #606985; font-size: 8pt; text-align: center; }
+  .print-mbti-result { break-inside: avoid; margin-top: 10mm; padding: 12px 14px; border: 1px solid #dfe4f1; border-left: 5px solid #5b4cf0; border-radius: 7px; background: #f5f7ff; }
+  .print-mbti-result span { display: block; color: #606985; font-size: 8pt; font-weight: 700; text-transform: uppercase; }
+  .print-mbti-result strong { display: block; margin-top: 3px; color: #5b4cf0; font-size: 24pt; }
+  .print-mbti-result p { margin: 3px 0 0; color: #434e6d; }
   .print-profile-footer { margin-top: 20px; padding-top: 9px; border-top: 1px solid #dfe4f1; color: #606985; font-size: 8pt; }
 }

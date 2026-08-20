@@ -3,9 +3,6 @@
 const PROFILE_STORAGE_KEY = "dhnn_personal_profile_v1";
 const PROFILE_EXPORT_VERSION = 2;
 const PROFILE_FIELDS = ["favoriteSubjects", "talents", "strengths", "interests", "careerGoal"];
-const MAX_RESULT_IMAGES = 5;
-const MAX_IMAGE_EDGE = 1200;
-const RESULT_IMAGE_QUALITY = 0.74;
 const TEST_IDS = ["holland", "mi", "mbti", "disc", "motivators"];
 const TEST_LABELS = {
   holland: "Holland (RIASEC)",
@@ -36,7 +33,6 @@ function emptyProfile() {
     strengths: "",
     interests: "",
     careerGoal: "",
-    resultImages: [],
   };
 }
 
@@ -51,16 +47,6 @@ function normalizeProfile(input) {
   PROFILE_FIELDS.forEach((field) => {
     clean[field] = typeof input[field] === "string" ? input[field].slice(0, 500) : "";
   });
-  clean.resultImages = Array.isArray(input.resultImages)
-    ? input.resultImages
-      .filter((image) => image && typeof image.dataUrl === "string" && /^data:image\/(?:jpeg|png|webp);base64,/i.test(image.dataUrl))
-      .slice(0, MAX_RESULT_IMAGES)
-      .map((image, index) => ({
-        id: typeof image.id === "string" && image.id ? image.id.slice(0, 80) : `image-${index + 1}`,
-        name: typeof image.name === "string" && image.name ? image.name.slice(0, 120) : `Ảnh kết quả ${index + 1}`,
-        dataUrl: image.dataUrl,
-      }))
-    : [];
   return clean;
 }
 
@@ -87,7 +73,7 @@ function persistProfile() {
     renderProfileSummary();
     return true;
   } catch {
-    showSaveState("Không đủ dung lượng lưu ảnh. Hãy xóa bớt ảnh và thử lại.", "is-saving");
+    showSaveState("Không thể lưu hồ sơ trên trình duyệt. Vui lòng thử lại.", "is-saving");
     return false;
   }
 }
@@ -110,24 +96,24 @@ function fillProfileForm() {
 }
 
 function renderProfileSummary() {
-  const imageCount = profileState.resultImages.length;
+  const completed = TEST_IDS.filter((id) => Boolean(legacyResults[id]));
 
   document.getElementById("profile-avatar").textContent = "HS";
   document.getElementById("profile-code").textContent = `MÃ HỒ SƠ ${profileState.profileId}`;
   document.getElementById("profile-glance-title").textContent = "Hồ sơ của bạn";
   document.getElementById("profile-glance-meta").textContent = "Ghi lại sở thích, năng khiếu và sở trường để hoàn thiện hồ sơ.";
-  document.getElementById("profile-progress-text").textContent = `${imageCount}/5 ảnh`;
-  document.getElementById("profile-progress-fill").style.width = `${imageCount * 20}%`;
-  renderStatus(imageCount, document.getElementById("profile-status"));
-  renderResultImages();
+  document.getElementById("profile-progress-text").textContent = `${completed.length}/5 kết quả`;
+  document.getElementById("profile-progress-fill").style.width = `${completed.length * 20}%`;
+  renderStatus(completed, document.getElementById("profile-status"));
 }
 
-function renderStatus(imageCount, el) {
-  if (!imageCount) {
-    el.innerHTML = "<p>Chưa có ảnh kết quả. Hãy thêm ảnh để đưa vào hồ sơ PDF.</p>";
+function renderStatus(completed, el) {
+  if (!completed.length) {
+    el.innerHTML = "<p>Chưa có kết quả trắc nghiệm được lưu trên thiết bị này.</p>";
     return;
   }
-  el.innerHTML = `<p>Đã lưu ${imageCount} ảnh kết quả trong hồ sơ.</p>${imageCount === MAX_RESULT_IMAGES ? '<p class="result-highlight">Đã đủ 5 ảnh kết quả!</p>' : ""}`;
+  const doneList = completed.map((id) => `<span class="badge badge-done">${TEST_LABELS[id]}</span>`).join(" ");
+  el.innerHTML = `<p>Đã lưu:</p><div>${doneList}</div>${completed.length === TEST_IDS.length ? '<p class="result-highlight">Đã đủ 5 kết quả!</p>' : ""}`;
 }
 
 function escapeHtml(value) {
@@ -143,90 +129,22 @@ function valueOrEmpty(value) {
   return value && value.trim() ? escapeHtml(value.trim()) : "Chưa cập nhật";
 }
 
-function renderResultImages() {
-  const grid = document.getElementById("result-images-grid");
-  const empty = document.getElementById("result-images-empty");
-  if (!grid || !empty) return;
-
-  empty.hidden = profileState.resultImages.length > 0;
-  grid.innerHTML = profileState.resultImages.map((image, index) => `
-    <figure class="result-image-card">
-      <img src="${image.dataUrl}" alt="Ảnh kết quả học sinh ${index + 1}" />
-      <figcaption>
-        <span>${escapeHtml(image.name)}</span>
-        <button type="button" data-remove-result-image="${escapeHtml(image.id)}" aria-label="Xóa ${escapeHtml(image.name)}">Xóa ảnh</button>
-      </figcaption>
-    </figure>
-  `).join("");
+function collectResultChartImages() {
+  return Array.from(document.querySelectorAll("#radar-grid .radar-card")).map((card, index) => {
+    const canvas = card.querySelector("canvas");
+    const title = card.querySelector("h3")?.textContent?.trim() || `Kết quả trắc nghiệm ${index + 1}`;
+    if (!canvas) return null;
+    try {
+      return { title, dataUrl: canvas.toDataURL("image/png") };
+    } catch {
+      return null;
+    }
+  }).filter(Boolean);
 }
 
-function compressResultImage(file) {
-  return new Promise((resolve, reject) => {
-    if (!file || !/^image\/(jpeg|png|webp)$/i.test(file.type)) {
-      reject(new Error("Định dạng ảnh không được hỗ trợ"));
-      return;
-    }
-    if (file.size > 15 * 1024 * 1024) {
-      reject(new Error("Ảnh lớn hơn 15 MB"));
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.addEventListener("error", () => reject(new Error("Không thể đọc ảnh")));
-    reader.addEventListener("load", () => {
-      const sourceImage = new Image();
-      sourceImage.addEventListener("error", () => reject(new Error("Ảnh không hợp lệ")));
-      sourceImage.addEventListener("load", () => {
-        const scale = Math.min(1, MAX_IMAGE_EDGE / Math.max(sourceImage.width, sourceImage.height));
-        const canvas = document.createElement("canvas");
-        canvas.width = Math.max(1, Math.round(sourceImage.width * scale));
-        canvas.height = Math.max(1, Math.round(sourceImage.height * scale));
-        const context = canvas.getContext("2d");
-        context.fillStyle = "#ffffff";
-        context.fillRect(0, 0, canvas.width, canvas.height);
-        context.drawImage(sourceImage, 0, 0, canvas.width, canvas.height);
-        resolve({
-          id: `result-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-          name: file.name.slice(0, 120) || "Ảnh kết quả",
-          dataUrl: canvas.toDataURL("image/jpeg", RESULT_IMAGE_QUALITY),
-        });
-      });
-      sourceImage.src = String(reader.result);
-    });
-    reader.readAsDataURL(file);
-  });
-}
-
-async function addResultImages(files) {
-  const availableSlots = MAX_RESULT_IMAGES - profileState.resultImages.length;
-  const selectedFiles = Array.from(files || []).slice(0, availableSlots);
-  if (!availableSlots) {
-    window.alert("Hồ sơ đã có đủ 5 ảnh. Hãy xóa một ảnh trước khi thêm ảnh mới.");
-    return;
-  }
-  if (!selectedFiles.length) return;
-
-  const previousImages = [...profileState.resultImages];
-  showSaveState("Đang xử lý hình ảnh...", "is-saving");
-  try {
-    const newImages = [];
-    for (const file of selectedFiles) newImages.push(await compressResultImage(file));
-    profileState.resultImages.push(...newImages);
-    if (!persistProfile()) {
-      profileState.resultImages = previousImages;
-      renderProfileSummary();
-      return;
-    }
-    showSaveState(`Đã thêm ${newImages.length} ảnh kết quả`, "is-saved");
-  } catch (error) {
-    profileState.resultImages = previousImages;
-    renderProfileSummary();
-    window.alert(`${error.message}. Vui lòng chọn ảnh JPG, PNG hoặc WebP khác.`);
-  }
-}
-
-function buildPrintableProfile() {
+function buildPrintableProfile(chartImages = []) {
   const printEl = document.getElementById("print-profile");
+  const mbtiResult = legacyResults.mbti?.result;
   const infoItems = [
     ["Sở thích môn học", profileState.favoriteSubjects, true],
     ["Năng khiếu", profileState.talents],
@@ -251,17 +169,24 @@ function buildPrintableProfile() {
       </div>
     </section>
     <section class="print-profile-section print-result-images-section">
-      <h2>Hình ảnh kết quả của học sinh</h2>
-      ${profileState.resultImages.length ? `
+      <h2>Hình ảnh kết quả trắc nghiệm đã làm</h2>
+      ${chartImages.length ? `
         <div class="print-result-images">
-          ${profileState.resultImages.map((image, index) => `
+          ${chartImages.map((image, index) => `
             <figure>
-              <img src="${image.dataUrl}" alt="Ảnh kết quả học sinh ${index + 1}" />
-              <figcaption>${escapeHtml(image.name)}</figcaption>
+              <img src="${image.dataUrl}" alt="Biểu đồ kết quả ${escapeHtml(image.title)}" />
+              <figcaption>${escapeHtml(image.title)}</figcaption>
             </figure>
           `).join("")}
         </div>
-      ` : "<p>Chưa thêm hình ảnh kết quả.</p>"}
+      ` : "<p>Chưa có biểu đồ kết quả được lưu trên thiết bị này.</p>"}
+      ${mbtiResult?.code ? `
+        <div class="print-mbti-result">
+          <span>Kết quả MBTI</span>
+          <strong>${escapeHtml(mbtiResult.code)}</strong>
+          <p>${Array.isArray(mbtiResult.breakdown) ? mbtiResult.breakdown.map((item) => `${escapeHtml(item.axis)}: ${escapeHtml(item.result)}`).join(" · ") : ""}</p>
+        </div>
+      ` : ""}
     </section>
     <footer class="print-profile-footer">Kết quả chỉ mang tính tham khảo và nên được kết hợp với năng lực học tập, hoàn cảnh thực tế cùng tư vấn chuyên môn.</footer>
   `;
@@ -270,7 +195,8 @@ function buildPrintableProfile() {
 async function downloadProfilePdf() {
   window.clearTimeout(saveTimer);
   persistProfile();
-  buildPrintableProfile();
+  const chartImages = collectResultChartImages();
+  buildPrintableProfile(chartImages);
   const oldTitle = document.title;
   document.title = "ho-so-huong-nghiep";
   window.addEventListener("afterprint", () => { document.title = oldTitle; }, { once: true });
@@ -334,19 +260,6 @@ function bindProfileActions() {
   [document.getElementById("download-profile"), ...document.querySelectorAll("[data-download-profile]")].filter(Boolean).forEach((button) => button.addEventListener("click", downloadProfilePdf));
   [document.getElementById("export-profile"), ...document.querySelectorAll("[data-export-profile]")].filter(Boolean).forEach((button) => button.addEventListener("click", exportProfileData));
 
-  const resultImagesInput = document.getElementById("result-images-input");
-  document.getElementById("add-result-images").addEventListener("click", () => resultImagesInput.click());
-  resultImagesInput.addEventListener("change", async () => {
-    await addResultImages(resultImagesInput.files);
-    resultImagesInput.value = "";
-  });
-  document.getElementById("result-images-grid").addEventListener("click", (event) => {
-    const removeButton = event.target.closest("[data-remove-result-image]");
-    if (!removeButton) return;
-    profileState.resultImages = profileState.resultImages.filter((image) => image.id !== removeButton.dataset.removeResultImage);
-    persistProfile();
-  });
-
   const fileInput = document.getElementById("profile-file-input");
   document.getElementById("import-profile").addEventListener("click", () => fileInput.click());
   fileInput.addEventListener("change", () => {
@@ -384,7 +297,7 @@ function renderRadarChart(likertResults) {
     new Chart(card.querySelector("canvas").getContext("2d"), {
       type: "radar",
       data: { labels: dimensions.map((item) => item.name), datasets: [{ data: dimensions.map((item) => item.percent), backgroundColor: `${color}33`, borderColor: color, borderWidth: 2, pointBackgroundColor: color }] },
-      options: { scales: { r: { min: 0, max: 100, ticks: { stepSize: 25 } } }, plugins: { legend: { display: false } } },
+      options: { animation: false, scales: { r: { min: 0, max: 100, ticks: { stepSize: 25 } } }, plugins: { legend: { display: false } } },
     });
   });
 }
