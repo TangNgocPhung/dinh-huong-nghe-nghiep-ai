@@ -552,6 +552,16 @@ main { padding: 34px 0 90px; position: relative; }
 /* About page */
 .about-hero { padding-bottom: 48px; }
 .about-hero p { max-width: 850px; }
+.about-school { margin-bottom: 24px; }
+.school-identity-card { position: relative; overflow: hidden; display: flex; align-items: center; gap: 24px; padding: clamp(22px, 3vw, 32px); border: 1px solid rgba(57,157,55,.22); border-radius: 28px; background: linear-gradient(135deg, rgba(57,157,55,.1), var(--color-surface) 58%, rgba(255,213,28,.12)); box-shadow: var(--shadow); }
+.school-identity-card::before { content: ""; position: absolute; width: 210px; height: 210px; right: -75px; top: -105px; border: 28px solid rgba(57,157,55,.08); border-radius: 50%; }
+.school-logo-wrap { position: relative; flex: 0 0 auto; width: clamp(104px, 12vw, 148px); aspect-ratio: 1; display: grid; place-items: center; padding: 8px; border: 1px solid rgba(57,157,55,.18); border-radius: 50%; background: #fff; box-shadow: 0 14px 32px rgba(44,121,42,.16); }
+.school-logo-wrap img { width: 100%; height: 100%; display: block; border-radius: 50%; object-fit: contain; }
+.school-identity-copy { position: relative; min-width: 0; }
+.school-identity-copy .eyebrow { color: #278328; border-color: rgba(57,157,55,.2); background: rgba(57,157,55,.08); }
+.school-identity-copy h2 { margin: 14px 0 5px; font-size: clamp(1.7rem, 3.3vw, 2.65rem); line-height: 1.12; letter-spacing: -.035em; }
+.school-identity-copy p { margin: 0; color: var(--color-text-muted); font-size: 1rem; font-weight: 750; }
+.school-identity-mark { position: relative; margin-left: auto; padding-right: 18px; color: rgba(57,157,55,.12); font-size: clamp(3rem, 8vw, 6.8rem); font-weight: 950; letter-spacing: -.08em; }
 .about-layout { display: grid; grid-template-columns: 1.25fr .75fr; gap: 24px; }
 .about-panel { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 24px; padding: 30px; box-shadow: var(--shadow); }
 .about-panel h2 { margin-top: 0; }
@@ -622,6 +632,8 @@ input:focus, select:focus { outline: 3px solid rgba(91,76,240,.14); border-color
   .theme-toggle { position: absolute; right: 18px; top: 10px; }
   .people-grid, .pillar-grid { grid-template-columns: 1fr; }
   .about-panel { padding: 22px; }
+  .school-identity-card { align-items: flex-start; }
+  .school-identity-mark { display: none; }
   .overview-shell { padding: 26px 20px; border-radius: 24px; }
   .overview-tools { grid-template-columns: 1fr; }
   .overview-tool-wide { grid-column: auto; }
@@ -671,6 +683,9 @@ input:focus, select:focus { outline: 3px solid rgba(91,76,240,.14); border-color
   .home-actions, .trust-row { justify-content: center; }
   .hero-visual { min-height: 390px; }
   .about-layout { grid-template-columns: 1fr; }
+  .school-identity-card { flex-direction: column; text-align: center; }
+  .school-logo-wrap { margin: 0 auto; }
+  .school-identity-copy { width: 100%; }
   .overview-grid { grid-template-columns: 1fr; }
   .theory-intro { grid-template-columns: 1fr; }
   .profile-hero, .profile-editor-grid { grid-template-columns: 1fr; }
