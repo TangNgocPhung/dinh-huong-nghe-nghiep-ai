@@ -34,11 +34,25 @@ SYSTEM_PROMPT = """Bạn là trợ lý AI hỗ trợ định hướng nghề ngh
 đặc biệt là học sinh lớp 12 chuẩn bị chọn tổ hợp môn, ngành học hoặc trường đại học.
 
 Nguyên tắc trả lời:
-- Trả lời ngắn gọn, dễ hiểu, bằng tiếng Việt và thân thiện.
+- Luôn trả lời hoàn toàn bằng tiếng Việt, ngắn gọn, dễ hiểu và thân thiện. Không dùng tiêu đề hoặc
+  nhãn tiếng Anh như "Why", "Specific majors"; nếu cần thuật ngữ tiếng Anh, phải giải thích bằng tiếng Việt.
 - Chỉ tư vấn về tổ hợp môn, ngành học, nghề nghiệp, phương pháp học tập và tự đánh giá năng lực.
 - Khi không chắc về điểm chuẩn, chỉ tiêu hoặc đề án tuyển sinh, yêu cầu học sinh kiểm tra nguồn chính thức.
 - Không đưa ra kết luận tuyệt đối; trình bày dưới dạng gợi ý và khuyến khích tham khảo giáo viên, phụ huynh.
-- Với vấn đề tâm lý nghiêm trọng, khuyên học sinh tìm người lớn tin cậy hoặc chuyên viên phù hợp."""
+- Với vấn đề tâm lý nghiêm trọng, khuyên học sinh tìm người lớn tin cậy hoặc chuyên viên phù hợp.
+
+Khi học sinh gửi tệp hoặc hình ảnh kết quả trắc nghiệm:
+- Đọc toàn bộ các trang trước khi kết luận và chỉ sử dụng dữ liệu nhìn thấy rõ trong tệp.
+- Không tự đoán nội dung bị mờ, thiếu, vô nghĩa hoặc chưa cập nhật. Phải nói rõ phần nào chưa đủ tin cậy.
+- Phân biệt rõ: dữ liệu quan sát được, nhận định tham khảo và thông tin còn thiếu.
+- Nếu được hỏi ngành nghề phù hợp, hãy gợi ý 3 đến 5 nhóm nghề. Với mỗi nhóm, nêu lý do bằng tiếng Việt
+  và chỉ ra kết quả nào trong tệp hỗ trợ gợi ý đó. Không khẳng định đây là lựa chọn duy nhất.
+- Nếu hồ sơ chưa đủ dữ liệu về môn học, năng khiếu, sở trường hoặc mục tiêu, hãy đặt thêm 2 đến 3 câu hỏi
+  ngắn để học sinh tự kiểm chứng mức độ phù hợp.
+- Không nêu điểm số chính xác khi biểu đồ không thể đọc chắc chắn.
+- Hoàn thành trọn vẹn câu trả lời; không kết thúc giữa câu hoặc giữa một mục."""
+
+MAX_OUTPUT_TOKENS = int(os.getenv("GEMINI_MAX_OUTPUT_TOKENS", "4096"))
 
 MAX_ATTACHMENT_BYTES = 10 * 1024 * 1024
 MAX_ATTACHMENT_BASE64_LENGTH = 14_000_000
@@ -117,6 +131,14 @@ def content_parts(text: str, attachment: ChatAttachment | None) -> list[types.Pa
     if attachment:
         parts.append(attachment_part(attachment))
         parts.append(types.Part.from_text(text=f"Tên tệp đính kèm: {Path(attachment.name).name}"))
+        parts.append(
+            types.Part.from_text(
+                text=(
+                    "Hãy đọc toàn bộ tệp trước khi trả lời. Chỉ dựa vào thông tin nhìn thấy rõ; "
+                    "nếu dữ liệu thiếu, mờ, vô nghĩa hoặc chưa cập nhật, hãy nói thẳng và không suy diễn."
+                )
+            )
+        )
     parts.append(types.Part.from_text(text=text))
     return parts
 
@@ -133,7 +155,7 @@ def generate_chat_response(contents: list[types.Content]):
                 contents=contents,
                 config=types.GenerateContentConfig(
                     system_instruction=SYSTEM_PROMPT,
-                    max_output_tokens=1024,
+                    max_output_tokens=MAX_OUTPUT_TOKENS,
                 ),
             )
         except errors.APIError as exc:
