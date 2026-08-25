@@ -753,9 +753,9 @@ input:focus, select:focus { outline: 3px solid rgba(91,76,240,.14); border-color
   .print-info-item span { display: block; margin-bottom: 2px; color: #606985; font-size: 8pt; font-weight: 700; text-transform: uppercase; }
   .print-info-item p { margin: 0; white-space: pre-wrap; }
   .print-result-images-section { break-inside: auto; }
-  .print-result-images { display: grid; grid-template-columns: 1fr; gap: 10mm; }
-  .print-result-images figure { break-inside: avoid; margin: 0; }
-  .print-result-images img { width: 100%; max-height: 220mm; display: block; object-fit: contain; border: 1px solid #dfe4f1; border-radius: 6px; background: #fff; }
+  .print-result-images { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7mm 6mm; align-items: start; }
+  .print-result-images figure { break-inside: avoid; margin: 0; text-align: center; }
+  .print-result-images img { width: 100%; max-width: 88mm; max-height: 88mm; margin: 0 auto; display: block; object-fit: contain; border: 1px solid #dfe4f1; border-radius: 6px; background: #fff; }
   .print-result-images figcaption { margin-top: 3px; color: #606985; font-size: 8pt; text-align: center; }
   .print-mbti-result { break-inside: avoid; margin-top: 10mm; padding: 12px 14px; border: 1px solid #dfe4f1; border-left: 5px solid #5b4cf0; border-radius: 7px; background: #f5f7ff; }
   .print-mbti-result span { display: block; color: #606985; font-size: 8pt; font-weight: 700; text-transform: uppercase; }
