@@ -149,7 +149,12 @@ def generate_chat_response(contents: list[types.Content]):
 
 @app.get("/api/health")
 def health():
-    return {"ok": True, "llm_configured": client is not None, "provider": "gemini"}
+    return {
+        "ok": True,
+        "llm_configured": client is not None,
+        "provider": "gemini",
+        "overload_fallback": bool(GEMINI_FALLBACK_MODELS),
+    }
 
 
 @app.post("/api/chat", response_model=ChatResponse)
