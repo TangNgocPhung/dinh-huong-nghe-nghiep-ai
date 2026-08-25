@@ -29,10 +29,31 @@
 
     <section class="container">
       <div class="chat-window">
-        <div class="chat-messages" id="chat-messages"></div>
+        <div class="chat-messages" id="chat-messages" role="log" aria-live="polite"></div>
         <form class="chat-form" id="chat-form">
-          <input type="text" id="chat-input" placeholder="Nhập câu hỏi của bạn..." autocomplete="off" required />
-          <button type="submit" class="btn btn-primary">Gửi</button>
+          <div class="chat-attachment-preview" id="chat-attachment-preview" hidden>
+            <span class="chat-attachment-icon" aria-hidden="true">📄</span>
+            <span class="chat-attachment-info">
+              <strong id="chat-attachment-name"></strong>
+              <small id="chat-attachment-size"></small>
+            </span>
+            <button type="button" class="chat-remove-file" id="chat-remove-file" aria-label="Bỏ tệp đính kèm">×</button>
+          </div>
+          <div class="chat-controls">
+            <input
+              type="file"
+              id="chat-file"
+              accept="image/jpeg,image/png,image/webp,image/gif,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
+              hidden
+            />
+            <button type="button" class="chat-attach-button" id="chat-attach-button" aria-label="Đính kèm tệp" title="Đính kèm tệp">
+              <span aria-hidden="true">📎</span>
+              <span class="chat-attach-label">Thêm tệp</span>
+            </button>
+            <input type="text" id="chat-input" placeholder="Nhập câu hỏi về tệp hoặc hướng nghiệp..." autocomplete="off" />
+            <button type="submit" class="btn btn-primary" id="chat-submit">Gửi</button>
+          </div>
+          <p class="chat-file-help">Hỗ trợ ảnh, PDF, Word, Excel và PowerPoint · tối đa 10 MB</p>
         </form>
       </div>
       <p style="color:var(--color-text-muted);font-size:0.85rem;margin-top:12px;">

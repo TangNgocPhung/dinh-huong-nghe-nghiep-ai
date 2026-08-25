@@ -8,33 +8,119 @@ const IS_LOCAL_FRONTEND = ["localhost", "127.0.0.1"].includes(window.location.ho
   && window.location.port !== "8000";
 const BACKEND_URL = window.DHNN_BACKEND_URL
   || (IS_LOCAL_FRONTEND ? "http://localhost:8000" : window.location.origin);
+const MAX_FILE_SIZE = 10 * 1024 * 1024;
+const ALLOWED_EXTENSIONS = new Set([
+  "jpg", "jpeg", "png", "webp", "gif", "pdf",
+  "doc", "docx", "xls", "xlsx", "ppt", "pptx",
+]);
 
-function appendMessage(container, role, text) {
+function appendMessage(container, role, text, attachmentName = "") {
   const msg = document.createElement("div");
   msg.className = `chat-msg chat-msg-${role}`;
   const bubble = document.createElement("div");
   bubble.className = "chat-bubble";
-  bubble.textContent = text;
+  if (attachmentName) {
+    const fileChip = document.createElement("span");
+    fileChip.className = "chat-message-file";
+    fileChip.textContent = `📎 ${attachmentName}`;
+    bubble.appendChild(fileChip);
+  }
+  if (text) {
+    const messageText = document.createElement("span");
+    messageText.textContent = text;
+    bubble.appendChild(messageText);
+  }
   msg.appendChild(bubble);
   container.appendChild(msg);
   container.scrollTop = container.scrollHeight;
 }
 
-async function sendChatMessage(message, history) {
+function formatFileSize(bytes) {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+function fileToAttachment(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = String(reader.result || "");
+      const commaIndex = result.indexOf(",");
+      if (commaIndex < 0) {
+        reject(new Error("Không thể đọc tệp đã chọn."));
+        return;
+      }
+      resolve({
+        name: file.name,
+        mime_type: file.type || "application/octet-stream",
+        data: result.slice(commaIndex + 1),
+      });
+    };
+    reader.onerror = () => reject(new Error("Không thể đọc tệp đã chọn."));
+    reader.readAsDataURL(file);
+  });
+}
+
+async function sendChatMessage(message, history, attachment) {
   const res = await fetch(`${BACKEND_URL}/api/chat`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message, history }),
+    body: JSON.stringify({ message, history, attachment }),
   });
-  if (!res.ok) throw new Error(`Backend lỗi: ${res.status}`);
-  return res.json();
+  const payload = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(payload.detail || `Máy chủ trả về lỗi ${res.status}.`);
+  return payload;
 }
 
 function initChatbot() {
   const form = document.getElementById("chat-form");
   const input = document.getElementById("chat-input");
   const messages = document.getElementById("chat-messages");
+  const fileInput = document.getElementById("chat-file");
+  const attachButton = document.getElementById("chat-attach-button");
+  const attachmentPreview = document.getElementById("chat-attachment-preview");
+  const attachmentName = document.getElementById("chat-attachment-name");
+  const attachmentSize = document.getElementById("chat-attachment-size");
+  const removeFileButton = document.getElementById("chat-remove-file");
+  const submitButton = document.getElementById("chat-submit");
   const history = [];
+  let selectedFile = null;
+
+  function clearSelectedFile() {
+    selectedFile = null;
+    fileInput.value = "";
+    attachmentPreview.hidden = true;
+    attachmentName.textContent = "";
+    attachmentSize.textContent = "";
+  }
+
+  function showFileError(message) {
+    appendMessage(messages, "bot", message);
+    clearSelectedFile();
+  }
+
+  attachButton.addEventListener("click", () => fileInput.click());
+  removeFileButton.addEventListener("click", clearSelectedFile);
+
+  fileInput.addEventListener("change", () => {
+    const file = fileInput.files[0];
+    if (!file) return;
+    const extension = file.name.includes(".") ? file.name.split(".").pop().toLowerCase() : "";
+    if (!ALLOWED_EXTENSIONS.has(extension)) {
+      showFileError("Tệp này chưa được hỗ trợ. Hãy chọn ảnh, PDF, Word, Excel hoặc PowerPoint.");
+      return;
+    }
+    if (file.size > MAX_FILE_SIZE) {
+      showFileError("Tệp vượt quá 10 MB. Vui lòng chọn tệp nhỏ hơn.");
+      return;
+    }
+    selectedFile = file;
+    attachmentName.textContent = file.name;
+    attachmentSize.textContent = formatFileSize(file.size);
+    attachmentPreview.hidden = false;
+    input.focus();
+  });
 
   appendMessage(
     messages,
@@ -45,10 +131,18 @@ function initChatbot() {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const text = input.value.trim();
-    if (!text) return;
-    appendMessage(messages, "user", text);
+    if (!text && !selectedFile) {
+      input.focus();
+      return;
+    }
+
+    const file = selectedFile;
+    const displayText = text || "Hãy phân tích nội dung tệp này và đưa ra gợi ý phù hợp.";
+    appendMessage(messages, "user", displayText, file?.name || "");
     input.value = "";
     input.disabled = true;
+    attachButton.disabled = true;
+    submitButton.disabled = true;
 
     const typingEl = document.createElement("div");
     typingEl.className = "chat-msg chat-msg-bot";
@@ -60,19 +154,32 @@ function initChatbot() {
     messages.scrollTop = messages.scrollHeight;
 
     try {
-      const { reply } = await sendChatMessage(text, history);
+      const attachment = file ? await fileToAttachment(file) : null;
+      clearSelectedFile();
+      const { reply } = await sendChatMessage(displayText, history, attachment);
       typingEl.remove();
       appendMessage(messages, "bot", reply);
-      history.push({ role: "user", content: text }, { role: "assistant", content: reply });
+      if (attachment) {
+        history.forEach((item) => {
+          if (item.role === "user") delete item.attachment;
+        });
+      }
+      history.push(
+        { role: "user", content: displayText, attachment },
+        { role: "assistant", content: reply }
+      );
+      while (history.length > 20) history.shift();
     } catch (err) {
       typingEl.remove();
       appendMessage(
         messages,
         "bot",
-        "Chatbot đang tạm thời không phản hồi. Vui lòng đợi một chút rồi thử lại."
+        err.message || "Chatbot đang tạm thời không phản hồi. Vui lòng đợi một chút rồi thử lại."
       );
     } finally {
       input.disabled = false;
+      attachButton.disabled = false;
+      submitButton.disabled = false;
       input.focus();
     }
   });
