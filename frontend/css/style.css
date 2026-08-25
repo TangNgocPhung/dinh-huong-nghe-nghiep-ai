@@ -444,6 +444,13 @@ main { padding: 34px 0 90px; position: relative; }
 .chat-file-help { margin: 0; color: var(--color-text-muted); font-size: .72rem; }
 .chat-message-file { display: block; width: fit-content; max-width: 100%; overflow: hidden; margin-bottom: 6px; padding: 6px 9px; border-radius: 9px; background: rgba(255,255,255,.17); font-size: .8rem; font-weight: 750; text-overflow: ellipsis; white-space: nowrap; }
 .chat-msg-bot .chat-message-file { background: rgba(91,76,240,.09); }
+.chat-message-text { line-height: 1.62; white-space: pre-wrap; }
+.chat-message-text p { margin: 0 0 8px; }
+.chat-message-text p:last-child, .chat-message-text ul:last-child, .chat-message-text ol:last-child { margin-bottom: 0; }
+.chat-message-text ul, .chat-message-text ol { margin: 5px 0 10px; padding-left: 22px; }
+.chat-message-text li + li { margin-top: 4px; }
+.chat-message-text strong { font-weight: 850; }
+.chat-message-text code { padding: 2px 5px; border-radius: 5px; background: rgba(91,76,240,.1); font-family: Consolas, monospace; font-size: .88em; }
 
 /* Footer */
 .site-footer {

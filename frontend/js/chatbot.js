@@ -14,6 +14,72 @@ const ALLOWED_EXTENSIONS = new Set([
   "doc", "docx", "xls", "xlsx", "ppt", "pptx",
 ]);
 
+function appendInlineMarkdown(container, text) {
+  const tokenPattern = /(\*\*[^*]+\*\*|__[^_]+__|`[^`]+`|\*[^*\n]+\*)/g;
+  let cursor = 0;
+  for (const match of text.matchAll(tokenPattern)) {
+    if (match.index > cursor) {
+      container.appendChild(document.createTextNode(text.slice(cursor, match.index)));
+    }
+    const token = match[0];
+    let element;
+    if (token.startsWith("**") || token.startsWith("__")) {
+      element = document.createElement("strong");
+      element.textContent = token.slice(2, -2);
+    } else if (token.startsWith("`")) {
+      element = document.createElement("code");
+      element.textContent = token.slice(1, -1);
+    } else {
+      element = document.createElement("em");
+      element.textContent = token.slice(1, -1);
+    }
+    container.appendChild(element);
+    cursor = match.index + token.length;
+  }
+  if (cursor < text.length) {
+    container.appendChild(document.createTextNode(text.slice(cursor)));
+  }
+}
+
+function renderMarkdown(container, text) {
+  const lines = text.replace(/\r\n?/g, "\n").split("\n");
+  let currentList = null;
+
+  for (const originalLine of lines) {
+    const line = originalLine.trim();
+    if (!line) {
+      currentList = null;
+      continue;
+    }
+
+    const bulletMatch = line.match(/^[-*•]\s+(.+)$/);
+    const numberedMatch = line.match(/^\d+[.)]\s+(.+)$/);
+    if (bulletMatch || numberedMatch) {
+      const listType = numberedMatch ? "ol" : "ul";
+      if (!currentList || currentList.tagName.toLowerCase() !== listType) {
+        currentList = document.createElement(listType);
+        container.appendChild(currentList);
+      }
+      const item = document.createElement("li");
+      appendInlineMarkdown(item, (bulletMatch || numberedMatch)[1]);
+      currentList.appendChild(item);
+      continue;
+    }
+
+    currentList = null;
+    const headingMatch = line.match(/^#{1,6}\s+(.+)$/);
+    const paragraph = document.createElement("p");
+    if (headingMatch) {
+      const strong = document.createElement("strong");
+      appendInlineMarkdown(strong, headingMatch[1]);
+      paragraph.appendChild(strong);
+    } else {
+      appendInlineMarkdown(paragraph, line);
+    }
+    container.appendChild(paragraph);
+  }
+}
+
 function appendMessage(container, role, text, attachmentName = "") {
   const msg = document.createElement("div");
   msg.className = `chat-msg chat-msg-${role}`;
@@ -26,8 +92,10 @@ function appendMessage(container, role, text, attachmentName = "") {
     bubble.appendChild(fileChip);
   }
   if (text) {
-    const messageText = document.createElement("span");
-    messageText.textContent = text;
+    const messageText = document.createElement("div");
+    messageText.className = "chat-message-text";
+    if (role === "bot") renderMarkdown(messageText, text);
+    else messageText.textContent = text;
     bubble.appendChild(messageText);
   }
   msg.appendChild(bubble);
