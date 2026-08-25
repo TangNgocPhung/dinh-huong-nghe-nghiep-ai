@@ -2,6 +2,7 @@
 
 import base64
 import binascii
+import logging
 import os
 from pathlib import Path
 from typing import Literal
@@ -11,14 +12,23 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from google import genai
-from google.genai import types
+from google.genai import errors, types
 from pydantic import BaseModel, Field
 
 load_dotenv(Path(__file__).resolve().parents[1] / ".env")
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.5-flash")
+GEMINI_FALLBACK_MODELS = [
+    model.strip()
+    for model in os.getenv(
+        "GEMINI_FALLBACK_MODELS",
+        "gemini-3.5-flash-lite,gemini-2.5-flash-lite",
+    ).split(",")
+    if model.strip()
+]
 CORS_ORIGINS = [o.strip() for o in os.getenv("CORS_ORIGINS", "").split(",") if o.strip()]
+logger = logging.getLogger(__name__)
 
 SYSTEM_PROMPT = """Bạn là trợ lý AI hỗ trợ định hướng nghề nghiệp cho học sinh THPT tại Việt Nam,
 đặc biệt là học sinh lớp 12 chuẩn bị chọn tổ hợp môn, ngành học hoặc trường đại học.
@@ -111,6 +121,32 @@ def content_parts(text: str, attachment: ChatAttachment | None) -> list[types.Pa
     return parts
 
 
+def generate_chat_response(contents: list[types.Content]):
+    """Dùng model chính và tự chuyển sang model dự phòng khi Gemini quá tải."""
+    model_candidates = list(dict.fromkeys([GEMINI_MODEL, *GEMINI_FALLBACK_MODELS]))
+    last_error: errors.APIError | None = None
+
+    for model in model_candidates:
+        try:
+            return client.models.generate_content(
+                model=model,
+                contents=contents,
+                config=types.GenerateContentConfig(
+                    system_instruction=SYSTEM_PROMPT,
+                    max_output_tokens=1024,
+                ),
+            )
+        except errors.APIError as exc:
+            last_error = exc
+            if exc.code not in {429, 500, 502, 503, 504}:
+                raise
+            logger.warning("Gemini model %s temporarily unavailable: %s", model, exc.code)
+
+    if last_error:
+        raise last_error
+    raise RuntimeError("Không có mô hình Gemini khả dụng.")
+
+
 @app.get("/api/health")
 def health():
     return {"ok": True, "llm_configured": client is not None, "provider": "gemini"}
@@ -134,16 +170,24 @@ def chat(req: ChatRequest):
     contents.append(types.Content(role="user", parts=content_parts(req.message, req.attachment)))
 
     try:
-        response = client.models.generate_content(
-            model=GEMINI_MODEL,
-            contents=contents,
-            config=types.GenerateContentConfig(
-                system_instruction=SYSTEM_PROMPT,
-                max_output_tokens=1024,
-            ),
-        )
+        response = generate_chat_response(contents)
+    except errors.APIError as exc:
+        logger.exception("Gemini API request failed after fallback attempts")
+        if exc.code in {429, 500, 502, 503, 504}:
+            raise HTTPException(
+                status_code=503,
+                detail="Hệ thống AI đang có nhiều người sử dụng. Vui lòng chờ khoảng 30 giây rồi gửi lại.",
+            ) from exc
+        raise HTTPException(
+            status_code=502,
+            detail="AI chưa thể xử lý yêu cầu này. Vui lòng thử câu hỏi ngắn hơn hoặc chọn tệp khác.",
+        ) from exc
     except Exception as exc:
-        raise HTTPException(status_code=502, detail=f"Lỗi khi gọi Gemini API: {exc}") from exc
+        logger.exception("Unexpected Gemini request failure")
+        raise HTTPException(
+            status_code=502,
+            detail="Chatbot đang tạm thời không phản hồi. Vui lòng thử lại sau ít phút.",
+        ) from exc
 
     return ChatResponse(reply=response.text or "Xin lỗi, Gemini không trả về nội dung.")
 
