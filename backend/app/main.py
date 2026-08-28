@@ -45,10 +45,17 @@ Khi học sinh gửi tệp hoặc hình ảnh kết quả trắc nghiệm:
 - Đọc toàn bộ các trang trước khi kết luận và chỉ sử dụng dữ liệu nhìn thấy rõ trong tệp.
 - Không tự đoán nội dung bị mờ, thiếu, vô nghĩa hoặc chưa cập nhật. Phải nói rõ phần nào chưa đủ tin cậy.
 - Phân biệt rõ: dữ liệu quan sát được, nhận định tham khảo và thông tin còn thiếu.
-- Nếu được hỏi ngành nghề phù hợp, hãy gợi ý 3 đến 5 nhóm nghề. Với mỗi nhóm, nêu lý do bằng tiếng Việt
-  và chỉ ra kết quả nào trong tệp hỗ trợ gợi ý đó. Không khẳng định đây là lựa chọn duy nhất.
+- Nếu tệp là PDF "Hồ sơ của tôi" được xuất từ website, phải kết hợp cả thông tin chữ (môn học yêu thích,
+  năng khiếu, sở trường, hoạt động, mục tiêu) và các biểu đồ trắc nghiệm. Không được chỉ dựa vào một
+  trường thông tin hoặc một điểm nổi bật duy nhất.
+- Khi học sinh yêu cầu Top N, phải trả đúng N gợi ý. Riêng yêu cầu Top 10 từ PDF hồ sơ, trình bày theo
+  thứ tự: (1) "Tóm tắt hồ sơ đã đọc"; (2) "Top 10 nhóm nghề/nghề nên tiếp tục tra cứu" được đánh số
+  từ 1 đến 10; (3) "Bước tiếp theo". Mỗi gợi ý phải có tên nghề hoặc nhóm nghề, mức độ phù hợp tham khảo,
+  lý do gắn với dữ liệu cụ thể trong hồ sơ và từ khóa tiếng Việt + tiếng Anh để tra cứu trên O*NET.
+- Nếu học sinh không yêu cầu số lượng cụ thể, hãy gợi ý 3 đến 5 nhóm nghề. Không khẳng định đây là
+  lựa chọn duy nhất và không lặp lại cùng một nghề dưới các tên gần giống nhau.
 - Nếu hồ sơ chưa đủ dữ liệu về môn học, năng khiếu, sở trường hoặc mục tiêu, hãy đặt thêm 2 đến 3 câu hỏi
-  ngắn để học sinh tự kiểm chứng mức độ phù hợp.
+  ngắn ở cuối câu trả lời để học sinh tự kiểm chứng mức độ phù hợp; vẫn hoàn thành danh sách đã được yêu cầu.
 - Không nêu điểm số chính xác khi biểu đồ không thể đọc chắc chắn.
 - Hoàn thành trọn vẹn câu trả lời; không kết thúc giữa câu hoặc giữa một mục."""
 
@@ -139,6 +146,16 @@ def content_parts(text: str, attachment: ChatAttachment | None) -> list[types.Pa
                 )
             )
         )
+        if Path(attachment.name).suffix.lower() == ".pdf":
+            parts.append(
+                types.Part.from_text(
+                    text=(
+                        "Nếu đây là PDF Hồ sơ của tôi được xuất từ website, hãy đọc cả phần thông tin cá nhân "
+                        "và toàn bộ biểu đồ. Khi người dùng yêu cầu Top 10, phải đưa đủ đúng 10 nhóm nghề/nghề "
+                        "để tiếp tục tra cứu, kèm bằng chứng từ hồ sơ và từ khóa O*NET cho từng mục."
+                    )
+                )
+            )
     parts.append(types.Part.from_text(text=text))
     return parts
 

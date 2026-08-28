@@ -13,6 +13,13 @@ const ALLOWED_EXTENSIONS = new Set([
   "jpg", "jpeg", "png", "webp", "gif", "pdf",
   "doc", "docx", "xls", "xlsx", "ppt", "pptx",
 ]);
+const PROFILE_ANALYSIS_PROMPT = [
+  "Hãy đọc toàn bộ PDF Hồ sơ của tôi, kết hợp thông tin cá nhân và tất cả biểu đồ trắc nghiệm.",
+  "Hãy xếp hạng đúng Top 10 nhóm nghề hoặc nghề phù hợp nhất để tôi tiếp tục tìm hiểu.",
+  "Với mỗi gợi ý, nêu mức độ phù hợp tham khảo, lý do dựa trên dữ liệu cụ thể trong hồ sơ",
+  "và cho từ khóa tiếng Việt cùng tiếng Anh để tra cứu trên O*NET.",
+  "Không suy đoán phần không đọc rõ và không lặp lại các nghề gần giống nhau.",
+].join(" ");
 
 function appendInlineMarkdown(container, text) {
   const tokenPattern = /(\*\*[^*]+\*\*|__[^_]+__|`[^`]+`|\*[^*\n]+\*)/g;
@@ -151,6 +158,8 @@ function initChatbot() {
   const attachmentName = document.getElementById("chat-attachment-name");
   const attachmentSize = document.getElementById("chat-attachment-size");
   const removeFileButton = document.getElementById("chat-remove-file");
+  const profileSuggestion = document.getElementById("chat-profile-suggestion");
+  const profilePromptButton = document.getElementById("chat-profile-prompt");
   const submitButton = document.getElementById("chat-submit");
   const history = [];
   let selectedFile = null;
@@ -161,6 +170,7 @@ function initChatbot() {
     attachmentPreview.hidden = true;
     attachmentName.textContent = "";
     attachmentSize.textContent = "";
+    profileSuggestion.hidden = true;
   }
 
   function showFileError(message) {
@@ -170,6 +180,10 @@ function initChatbot() {
 
   attachButton.addEventListener("click", () => fileInput.click());
   removeFileButton.addEventListener("click", clearSelectedFile);
+  profilePromptButton.addEventListener("click", () => {
+    input.value = PROFILE_ANALYSIS_PROMPT;
+    input.focus();
+  });
 
   fileInput.addEventListener("change", () => {
     const file = fileInput.files[0];
@@ -187,6 +201,10 @@ function initChatbot() {
     attachmentName.textContent = file.name;
     attachmentSize.textContent = formatFileSize(file.size);
     attachmentPreview.hidden = false;
+    profileSuggestion.hidden = extension !== "pdf";
+    if (extension === "pdf" && /(?:_hs|ho[-_ ]?so)/i.test(file.name) && !input.value.trim()) {
+      input.value = PROFILE_ANALYSIS_PROMPT;
+    }
     input.focus();
   });
 
@@ -205,7 +223,10 @@ function initChatbot() {
     }
 
     const file = selectedFile;
-    const displayText = text || "Hãy phân tích nội dung tệp này và đưa ra gợi ý phù hợp.";
+    const isPdf = file?.name.toLowerCase().endsWith(".pdf");
+    const displayText = text || (isPdf
+      ? PROFILE_ANALYSIS_PROMPT
+      : "Hãy phân tích nội dung tệp này và đưa ra gợi ý phù hợp.");
     appendMessage(messages, "user", displayText, file?.name || "");
     input.value = "";
     input.disabled = true;

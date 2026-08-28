@@ -25,7 +25,7 @@
   <main>
     <section class="hero container">
       <h1>Hỏi đáp cùng chatbot AI</h1>
-      <p>Hỏi về tổ hợp môn, ngành học, hoặc cách chọn nghề phù hợp với bản thân.</p>
+      <p>Hỏi về tổ hợp môn, ngành học hoặc gửi PDF “Hồ sơ của tôi” để nhận Top 10 nghề nên tiếp tục tra cứu.</p>
     </section>
 
     <section class="container">
@@ -39,6 +39,11 @@
               <small id="chat-attachment-size"></small>
             </span>
             <button type="button" class="chat-remove-file" id="chat-remove-file" aria-label="Bỏ tệp đính kèm">×</button>
+          </div>
+          <div class="chat-profile-suggestion" id="chat-profile-suggestion" hidden>
+            <span aria-hidden="true">✨</span>
+            <span>PDF hồ sơ có thể được phân tích để xếp hạng nghề phù hợp.</span>
+            <button type="button" id="chat-profile-prompt">Dùng yêu cầu Top 10</button>
           </div>
           <div class="chat-controls">
             <input
@@ -54,7 +59,7 @@
             <input type="text" id="chat-input" placeholder="Nhập câu hỏi về tệp hoặc hướng nghiệp..." autocomplete="off" />
             <button type="submit" class="btn btn-primary" id="chat-submit">Gửi</button>
           </div>
-          <p class="chat-file-help">Hỗ trợ ảnh, PDF, Word, Excel và PowerPoint · tối đa 10 MB</p>
+          <p class="chat-file-help">Hỗ trợ ảnh, PDF, Word, Excel và PowerPoint · tối đa 10 MB. PDF hồ sơ sẽ được đọc cả phần chữ và biểu đồ.</p>
         </form>
       </div>
       <p style="color:var(--color-text-muted);font-size:0.85rem;margin-top:12px;">

@@ -441,6 +441,10 @@ main { padding: 34px 0 90px; position: relative; }
 .chat-attachment-info small { color: var(--color-text-muted); font-size: .72rem; }
 .chat-remove-file { flex: 0 0 auto; width: 28px; height: 28px; display: grid; place-items: center; padding: 0; border: 0; border-radius: 50%; color: var(--color-text-muted); background: transparent; font-size: 1.2rem; cursor: pointer; }
 .chat-remove-file:hover { color: var(--color-text); background: rgba(91,76,240,.11); }
+.chat-profile-suggestion { display: flex; align-items: center; gap: 8px; width: fit-content; max-width: 100%; padding: 8px 10px; border: 1px solid rgba(0,166,193,.25); border-radius: 12px; color: var(--color-text); background: rgba(0,166,193,.07); font-size: .78rem; }
+.chat-profile-suggestion[hidden] { display: none; }
+.chat-profile-suggestion button { flex: 0 0 auto; padding: 5px 9px; border: 0; border-radius: 8px; color: #fff; background: linear-gradient(135deg, var(--color-primary), #00a6c1); font: inherit; font-weight: 800; cursor: pointer; }
+.chat-profile-suggestion button:hover { filter: brightness(1.05); }
 .chat-file-help { margin: 0; color: var(--color-text-muted); font-size: .72rem; }
 .chat-message-file { display: block; width: fit-content; max-width: 100%; overflow: hidden; margin-bottom: 6px; padding: 6px 9px; border-radius: 9px; background: rgba(255,255,255,.17); font-size: .8rem; font-weight: 750; text-overflow: ellipsis; white-space: nowrap; }
 .chat-msg-bot .chat-message-file { background: rgba(91,76,240,.09); }
@@ -698,6 +702,7 @@ input:focus, select:focus { outline: 3px solid rgba(91,76,240,.14); border-color
   .chat-controls { gap: 8px; }
   .chat-attach-button { width: 44px; padding: 0; }
   .chat-attach-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .chat-profile-suggestion { align-items: flex-start; flex-wrap: wrap; }
   .chat-controls .btn { padding-left: 14px; padding-right: 14px; }
   .chat-bubble { max-width: 88%; }
   .external-assessment-head { align-items: stretch; flex-direction: column; }
