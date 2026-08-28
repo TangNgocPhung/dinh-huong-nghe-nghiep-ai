@@ -4,6 +4,7 @@ import base64
 import binascii
 import logging
 import os
+import re
 from pathlib import Path
 from typing import Literal
 
@@ -52,6 +53,8 @@ Khi học sinh gửi tệp hoặc hình ảnh kết quả trắc nghiệm:
   thứ tự: (1) "Tóm tắt hồ sơ đã đọc"; (2) "Top 10 nhóm nghề/nghề nên tiếp tục tra cứu" được đánh số
   từ 1 đến 10; (3) "Bước tiếp theo". Mỗi gợi ý phải có tên nghề hoặc nhóm nghề, mức độ phù hợp tham khảo,
   lý do gắn với dữ liệu cụ thể trong hồ sơ và từ khóa tiếng Việt + tiếng Anh để tra cứu trên O*NET.
+- Với danh sách Top 10, viết cô đọng: mỗi nghề tối đa 3 dòng ngắn, không lặp lại phần giải thích chung,
+  không dùng đoạn văn dài và phải ưu tiên hoàn thành đủ các mục từ 1 đến 10 trước phần kết luận.
 - Nếu học sinh không yêu cầu số lượng cụ thể, hãy gợi ý 3 đến 5 nhóm nghề. Không khẳng định đây là
   lựa chọn duy nhất và không lặp lại cùng một nghề dưới các tên gần giống nhau.
 - Nếu hồ sơ chưa đủ dữ liệu về môn học, năng khiếu, sở trường hoặc mục tiêu, hãy đặt thêm 2 đến 3 câu hỏi
@@ -59,7 +62,10 @@ Khi học sinh gửi tệp hoặc hình ảnh kết quả trắc nghiệm:
 - Không nêu điểm số chính xác khi biểu đồ không thể đọc chắc chắn.
 - Hoàn thành trọn vẹn câu trả lời; không kết thúc giữa câu hoặc giữa một mục."""
 
-MAX_OUTPUT_TOKENS = int(os.getenv("GEMINI_MAX_OUTPUT_TOKENS", "4096"))
+MAX_OUTPUT_TOKENS = max(8192, int(os.getenv("GEMINI_MAX_OUTPUT_TOKENS", "8192")))
+GEMINI_THINKING_BUDGET = int(os.getenv("GEMINI_THINKING_BUDGET", "512"))
+TOP_TEN_REQUEST_PATTERN = re.compile(r"\btop\s*10\b|\b10\s+(?:nhóm\s+)?nghề\b", re.IGNORECASE)
+NUMBERED_ITEM_PATTERN = re.compile(r"(?m)^\s*(?:#{1,6}\s*)?(10|[1-9])[.)]\s+")
 
 MAX_ATTACHMENT_BYTES = 10 * 1024 * 1024
 MAX_ATTACHMENT_BASE64_LENGTH = 14_000_000
@@ -173,6 +179,10 @@ def generate_chat_response(contents: list[types.Content]):
                 config=types.GenerateContentConfig(
                     system_instruction=SYSTEM_PROMPT,
                     max_output_tokens=MAX_OUTPUT_TOKENS,
+                    thinking_config=types.ThinkingConfig(
+                        thinking_budget=GEMINI_THINKING_BUDGET,
+                        include_thoughts=False,
+                    ),
                 ),
             )
         except errors.APIError as exc:
@@ -184,6 +194,37 @@ def generate_chat_response(contents: list[types.Content]):
     if last_error:
         raise last_error
     raise RuntimeError("Không có mô hình Gemini khả dụng.")
+
+
+def numbered_items(text: str) -> set[int]:
+    """Lấy các số thứ tự nghề đã xuất hiện trong câu trả lời."""
+    return {int(number) for number in NUMBERED_ITEM_PATTERN.findall(text)}
+
+
+def retry_incomplete_top_ten(contents: list[types.Content], response_text: str) -> str:
+    """Yêu cầu viết lại ngắn gọn nếu Gemini chưa trả đủ danh sách 1–10."""
+    found_items = numbered_items(response_text)
+    if all(number in found_items for number in range(1, 11)):
+        return response_text
+
+    logger.warning("Top 10 response incomplete; found numbered items: %s", sorted(found_items))
+    retry_instruction = types.Part.from_text(
+        text=(
+            "Câu trả lời vừa tạo chưa có đủ các mục đánh số từ 1 đến 10. Hãy viết lại TOÀN BỘ câu trả lời "
+            "theo dạng cô đọng và phải có đúng 10 mục. Mỗi mục chỉ gồm: tên nghề/nhóm nghề; mức độ phù hợp; "
+            "một lý do ngắn dựa trên hồ sơ; từ khóa O*NET tiếng Anh. Không viết phần mở đầu dài, không lặp ý "
+            "và không dừng trước mục số 10."
+        )
+    )
+    retry_contents = list(contents)
+    last_content = retry_contents[-1]
+    retry_contents[-1] = types.Content(
+        role=last_content.role,
+        parts=[*(last_content.parts or []), retry_instruction],
+    )
+    retry_response = generate_chat_response(retry_contents)
+    retry_text = retry_response.text or ""
+    return retry_text if len(numbered_items(retry_text)) > len(found_items) else response_text
 
 
 @app.get("/api/health")
@@ -233,7 +274,16 @@ def chat(req: ChatRequest):
             detail="Chatbot đang tạm thời không phản hồi. Vui lòng thử lại sau ít phút.",
         ) from exc
 
-    return ChatResponse(reply=response.text or "Xin lỗi, Gemini không trả về nội dung.")
+    reply = response.text or "Xin lỗi, Gemini không trả về nội dung."
+    if req.attachment and TOP_TEN_REQUEST_PATTERN.search(req.message):
+        try:
+            reply = retry_incomplete_top_ten(contents, reply)
+        except errors.APIError:
+            logger.exception("Gemini could not retry an incomplete Top 10 response")
+        except Exception:
+            logger.exception("Unexpected failure while retrying an incomplete Top 10 response")
+
+    return ChatResponse(reply=reply)
 
 
 FRONTEND_DIR = Path(__file__).resolve().parents[2] / "frontend"
