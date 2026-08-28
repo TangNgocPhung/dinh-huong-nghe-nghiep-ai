@@ -234,6 +234,8 @@ def health():
         "llm_configured": client is not None,
         "provider": "gemini",
         "overload_fallback": bool(GEMINI_FALLBACK_MODELS),
+        "response_policy": "top10-complete-v2",
+        "max_output_tokens": MAX_OUTPUT_TOKENS,
     }
 
 
