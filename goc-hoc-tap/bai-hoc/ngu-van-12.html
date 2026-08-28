@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thư Viện Bài Giảng Ngữ Văn 12</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Be+Vietnam+Pro:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+  :root {
+    --bg: #EFF1EC;
+    --surface: #FFFFFF;
+    --surface-2: #F6F7F1;
+    --ink: #232823;
+    --ink-muted: #5B6259;
+    --ink-faint: #8B9186;
+    --rule: #DEE2D5;
+    --border: #D6DACC;
+    --on-accent: #FFFFFF;
+
+    --accent-1: #5E4F96;
+
+    --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+    --font-body: 'Be Vietnam Pro', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    --font-mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
+
+    --shadow: 0 10px 30px -14px rgba(35, 40, 35, 0.28);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1B1D18;
+      --surface: #232620;
+      --surface-2: #292C24;
+      --ink: #ECEEE5;
+      --ink-muted: #ABB2A0;
+      --ink-faint: #767C6B;
+      --rule: #363A30;
+      --border: #383C31;
+      --on-accent: #15160F;
+
+      --accent-1: #B3A3EA;
+
+      --shadow: 0 10px 30px -14px rgba(0, 0, 0, 0.55);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #1B1D18;
+    --surface: #232620;
+    --surface-2: #292C24;
+    --ink: #ECEEE5;
+    --ink-muted: #ABB2A0;
+    --ink-faint: #767C6B;
+    --rule: #363A30;
+    --border: #383C31;
+    --on-accent: #15160F;
+
+    --accent-1: #B3A3EA;
+
+    --shadow: 0 10px 30px -14px rgba(0, 0, 0, 0.55);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+  }
+
+  .topbar {
+    position: sticky; top: 0; z-index: 20;
+    background: color-mix(in srgb, var(--surface) 94%, transparent);
+    border-bottom: 1px solid var(--border);
+    border-top: 4px solid var(--accent-1);
+    backdrop-filter: blur(10px);
+  }
+  .topbar-inner {
+    max-width: 900px; margin: 0 auto;
+    padding: 0.8rem clamp(1rem, 4vw, 2rem);
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+  }
+  .back-link {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    font-size: 0.84rem; font-weight: 600; text-decoration: none; color: var(--ink-muted);
+  }
+  .back-link:hover { color: var(--accent-1); }
+  .back-link svg { width: 1rem; height: 1rem; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .lesson-tag {
+    font-family: var(--font-mono); font-size: 0.68rem; font-weight: 600; letter-spacing: 0.08em; color: var(--accent-1);
+  }
+
+  .page { max-width: 900px; margin: 0 auto; padding: clamp(1.75rem, 4vw, 3rem) clamp(1.25rem, 4vw, 2rem) 4rem; }
+
+  .masthead { max-width: 680px; margin-bottom: 1.75rem; }
+  .masthead-eyebrow {
+    display: block; font-family: var(--font-mono); font-size: 0.7rem; font-weight: 600;
+    letter-spacing: 0.12em; color: var(--ink-faint); margin-bottom: 0.75rem;
+  }
+  .masthead-title {
+    font-family: var(--font-display); font-weight: 600; font-size: clamp(1.9rem, 4.4vw, 2.6rem);
+    line-height: 1.08; margin: 0 0 0.6rem; text-wrap: balance;
+  }
+  .masthead-sub { font-size: 1rem; color: var(--ink-muted); margin: 0; max-width: 62ch; }
+
+  .summary-strip { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.25rem 0 0.5rem; }
+  .summary-pill {
+    font-family: var(--font-mono); font-size: 0.76rem; font-weight: 600; color: var(--ink-muted);
+    background: var(--surface-2); border: 1px solid var(--border); border-radius: 999px; padding: 0.4rem 0.8rem;
+  }
+  .summary-pill strong { color: var(--accent-1); }
+
+  .semester-block { margin-top: 2.25rem; }
+  .semester-head {
+    display: flex; align-items: baseline; gap: 0.6rem; margin-bottom: 1rem;
+    padding-bottom: 0.6rem; border-bottom: 1px solid var(--border);
+  }
+  .semester-head h2 {
+    font-family: var(--font-display); font-weight: 600; font-size: 1.4rem; margin: 0;
+  }
+  .semester-count { font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-muted); }
+
+  .empty-state {
+    display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0.85rem;
+    padding: 2.5rem 1.5rem; border: 1px dashed var(--border); border-radius: 14px;
+    background: var(--surface-2);
+  }
+  .empty-state-icon {
+    width: 2.75rem; height: 2.75rem; border-radius: 50%; flex: 0 0 auto;
+    display: flex; align-items: center; justify-content: center;
+    background: color-mix(in srgb, var(--accent-1) 14%, var(--surface));
+    color: var(--accent-1);
+  }
+  .empty-state-icon svg { width: 1.4rem; height: 1.4rem; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .empty-state p { margin: 0; font-style: italic; color: var(--ink-faint); font-size: 0.92rem; max-width: 46ch; line-height: 1.6; }
+
+  .site-footer { border-top: 1px solid var(--border); background: var(--surface-2); margin-top: 3rem; }
+  .footer-inner {
+    max-width: 900px; margin: 0 auto; padding: 1.4rem clamp(1.25rem, 4vw, 2rem);
+    display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+  }
+  .footer-logo { width: 44px; height: 44px; object-fit: contain; flex: 0 0 auto; }
+  .footer-text { font-size: 0.82rem; color: var(--ink-muted); }
+  .footer-text strong { color: var(--ink); }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<svg style="display:none" aria-hidden="true">
+  <symbol id="icon-back" viewBox="0 0 24 24"><polyline points="15,5 8,12 15,19"></polyline></symbol>
+  <symbol id="icon-pencil" viewBox="0 0 24 24">
+    <path d="M4 20l1-5 11-11 4 4-11 11-5 1z"></path>
+    <line x1="14" y1="6" x2="18" y2="10"></line>
+  </symbol>
+</svg>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="back-link" href="../index.html">
+      <svg aria-hidden="true"><use href="#icon-back"></use></svg>
+      Về Góc Học Tập
+    </a>
+    <span class="lesson-tag">NGỮ VĂN 12 · BÀI GIẢNG &amp; SLIDE</span>
+  </div>
+</header>
+
+<div class="page">
+  <header class="masthead">
+    <span class="masthead-eyebrow">THƯ VIỆN BÀI GIẢNG</span>
+    <h1 class="masthead-title">Bài giảng Ngữ Văn 12</h1>
+    <p class="masthead-sub">Danh sách bài học Ngữ văn 12 sẽ được cập nhật dần theo từng học kỳ. Mỗi bài có bài giảng sẽ hiện nút "Mở bài giảng" ngay tại đây.</p>
+    <div class="summary-strip">
+      <span class="summary-pill">Học kỳ 1 · <strong>Đang cập nhật</strong></span>
+      <span class="summary-pill">Học kỳ 2 · <strong>Đang cập nhật</strong></span>
+    </div>
+  </header>
+
+  <section class="semester-block" id="hk1">
+    <div class="semester-head">
+      <h2>Học kỳ 1</h2>
+    </div>
+    <div class="empty-state">
+      <span class="empty-state-icon"><svg aria-hidden="true"><use href="#icon-pencil"></use></svg></span>
+      <p>Danh sách bài giảng Học kỳ 1 đang được biên soạn và sẽ sớm được cập nhật tại đây.</p>
+    </div>
+  </section>
+
+  <section class="semester-block" id="hk2">
+    <div class="semester-head">
+      <h2>Học kỳ 2</h2>
+    </div>
+    <div class="empty-state">
+      <span class="empty-state-icon"><svg aria-hidden="true"><use href="#icon-pencil"></use></svg></span>
+      <p>Danh sách bài giảng Học kỳ 2 đang được biên soạn và sẽ sớm được cập nhật tại đây.</p>
+    </div>
+  </section>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <img class="footer-logo" src="../assets/logo-thpt-nguyen-khuyen.png" alt="Logo Trường THPT Nguyễn Khuyến" width="44" height="44" loading="lazy">
+    <p class="footer-text"><strong>Trường THPT Nguyễn Khuyến</strong> · Góc học tập môn Ngữ Văn · GV: Trần Thị Uyên</p>
+  </div>
+</footer>
+
+</body>
+</html>

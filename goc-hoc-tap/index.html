@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Góc Học Tập</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Be+Vietnam+Pro:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+  :root {
+    --bg: #EFF1EC;
+    --surface: #FFFFFF;
+    --surface-2: #F6F7F1;
+    --ink: #232823;
+    --ink-muted: #5B6259;
+    --ink-faint: #8B9186;
+    --rule: #DEE2D5;
+    --border: #D6DACC;
+    --on-accent: #FFFFFF;
+
+    --accent-1: #34618F; /* Ngữ văn 11 */
+    --accent-2: #5E4F96; /* Ngữ văn 12 */
+    --accent-3: #256F69; /* topbar / GV pill */
+    --accent-5: #9C5426; /* thương hiệu / footer */
+
+    --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+    --font-body: 'Be Vietnam Pro', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    --font-mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
+
+    --shadow: 0 10px 30px -14px rgba(35, 40, 35, 0.28);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1B1D18;
+      --surface: #232620;
+      --surface-2: #292C24;
+      --ink: #ECEEE5;
+      --ink-muted: #ABB2A0;
+      --ink-faint: #767C6B;
+      --rule: #363A30;
+      --border: #383C31;
+      --on-accent: #15160F;
+
+      --accent-1: #82B2E1;
+      --accent-2: #B3A3EA;
+      --accent-3: #6FD1C6;
+      --accent-5: #E39C61;
+
+      --shadow: 0 10px 30px -14px rgba(0, 0, 0, 0.55);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #1B1D18;
+    --surface: #232620;
+    --surface-2: #292C24;
+    --ink: #ECEEE5;
+    --ink-muted: #ABB2A0;
+    --ink-faint: #767C6B;
+    --rule: #363A30;
+    --border: #383C31;
+    --on-accent: #15160F;
+
+    --accent-1: #82B2E1;
+    --accent-2: #B3A3EA;
+    --accent-3: #6FD1C6;
+    --accent-5: #E39C61;
+
+    --shadow: 0 10px 30px -14px rgba(0, 0, 0, 0.55);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: color-mix(in srgb, var(--surface) 94%, transparent);
+    border-top: 5px solid var(--accent-3);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 8px 28px -24px rgba(35, 40, 35, 0.6);
+    backdrop-filter: blur(14px);
+  }
+
+  .topbar-inner {
+    width: min(1280px, 100%);
+    margin: 0 auto;
+    padding: 1rem clamp(1.25rem, 4vw, 2rem);
+    display: grid;
+    grid-template-columns: minmax(130px, 0.24fr) minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(1rem, 3vw, 2.25rem);
+  }
+
+  .brand {
+    color: var(--accent-5);
+    text-decoration: none;
+    line-height: 0.9;
+  }
+
+  .brand-kicker {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .brand-name {
+    display: block;
+    font-family: var(--font-display);
+    font-size: clamp(1.45rem, 2.4vw, 2rem);
+    font-weight: 700;
+  }
+
+  .page {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: clamp(2rem, 5vw, 3.5rem) clamp(1.25rem, 4vw, 2rem) clamp(2.5rem, 6vw, 4.5rem);
+  }
+
+  .masthead {
+    margin-bottom: clamp(1.75rem, 4vw, 2.75rem);
+    max-width: 640px;
+  }
+
+  .masthead-eyebrow {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    color: var(--ink-faint);
+    margin-bottom: 0.85rem;
+  }
+
+  .masthead-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(2.1rem, 5vw, 3rem);
+    line-height: 1.05;
+    margin: 0 0 0.6rem;
+    text-wrap: balance;
+  }
+
+  .masthead-sub {
+    font-size: 1.02rem;
+    line-height: 1.6;
+    color: var(--ink-muted);
+    margin: 0;
+    max-width: 52ch;
+  }
+
+  .teacher {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin-top: 1rem;
+    padding: 0.55rem 0.85rem;
+    border: 1px solid color-mix(in srgb, var(--accent-3) 36%, var(--border));
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--accent-3) 9%, var(--surface));
+    color: color-mix(in srgb, var(--accent-3) 78%, var(--ink));
+    font-size: 0.86rem;
+    font-weight: 600;
+  }
+
+  .teacher svg {
+    width: 1.05rem;
+    height: 1.05rem;
+    flex: 0 0 auto;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .teacher-separator {
+    color: var(--ink-faint);
+    font-weight: 400;
+  }
+
+  .tabbar {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.65rem;
+    overflow-x: auto;
+    padding: 0.25rem;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .tabbar::-webkit-scrollbar { height: 6px; }
+  .tabbar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  .tab {
+    --accent: var(--accent-1);
+    flex: 0 0 auto;
+    appearance: none;
+    border: 1px solid color-mix(in srgb, var(--accent) 72%, var(--border));
+    background: color-mix(in srgb, var(--accent) 13%, var(--surface));
+    color: color-mix(in srgb, var(--accent) 82%, var(--ink));
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.92rem;
+    padding: 0.72rem 1.05rem;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease, color 0.16s ease, border-color 0.16s ease;
+    white-space: nowrap;
+  }
+
+  .tab:hover {
+    transform: translateY(-2px);
+    background: color-mix(in srgb, var(--accent) 20%, var(--surface));
+  }
+
+  .tab[aria-selected="true"] {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--on-accent);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px -10px color-mix(in srgb, var(--accent) 74%, transparent);
+    position: relative;
+    z-index: 2;
+  }
+
+  .tab:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .sheet {
+    position: relative;
+    z-index: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: clamp(1.5rem, 4vw, 2.75rem);
+    background-image: repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent 37px,
+      var(--rule) 37px,
+      var(--rule) 38px
+    );
+    background-position: 0 0.5rem;
+  }
+
+  .panel { --accent: var(--accent-1); display: none; }
+  .panel.active { display: block; }
+
+  .panel-eyebrow {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.13em;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+  }
+
+  .panel-head h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.6rem, 3.4vw, 2.15rem);
+    margin: 0 0 0.65rem;
+    text-wrap: balance;
+  }
+
+  .panel-head p {
+    font-size: 1rem;
+    line-height: 1.65;
+    color: var(--ink-muted);
+    max-width: 60ch;
+    margin: 0 0 2rem;
+  }
+
+  .shelf {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 1rem;
+  }
+
+  .card {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.15rem 1.2rem 1.3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .card-icon {
+    width: 2.35rem;
+    height: 2.35rem;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(in srgb, var(--accent) 16%, var(--surface-2));
+    color: var(--accent);
+  }
+
+  .card-icon svg { width: 1.25rem; height: 1.25rem; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+
+  .card h3 {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 1rem;
+    margin: 0;
+  }
+
+  .card p {
+    font-size: 0.88rem;
+    font-style: italic;
+    color: var(--ink-faint);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .card--resource {
+    border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+    background: color-mix(in srgb, var(--accent) 7%, var(--surface-2));
+  }
+
+  .card-meta {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+  }
+
+  .card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: auto;
+    padding-top: 0.25rem;
+  }
+
+  .resource-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.25rem;
+    padding: 0.5rem 0.8rem;
+    border: 1px solid var(--accent);
+    border-radius: 9px;
+    background: var(--accent);
+    color: var(--on-accent);
+    font-size: 0.76rem;
+    font-weight: 600;
+    line-height: 1;
+    text-decoration: none;
+    transition: transform 0.16s ease, box-shadow 0.16s ease;
+  }
+
+  .resource-link:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 7px 14px -10px var(--accent);
+  }
+
+  .resource-link:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .site-footer {
+    border-top: 5px solid var(--accent-5);
+    background: #173F3A;
+    color: #F5F7F1;
+  }
+
+  .footer-inner {
+    width: min(1080px, 100%);
+    margin: 0 auto;
+    padding: clamp(1.6rem, 4vw, 2.4rem) clamp(1.25rem, 4vw, 2rem);
+    display: grid;
+    grid-template-columns: 92px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: clamp(1.2rem, 4vw, 2.25rem);
+  }
+
+  .school-logo {
+    display: block;
+    width: 92px;
+    height: 92px;
+    object-fit: contain;
+    filter: drop-shadow(0 7px 12px rgba(0, 0, 0, 0.2));
+  }
+
+  .footer-kicker {
+    display: block;
+    margin-bottom: 0.4rem;
+    color: #A8D8C9;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .footer-school-name {
+    margin: 0 0 0.55rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.35rem, 3vw, 1.8rem);
+    font-weight: 600;
+    line-height: 1.15;
+  }
+
+  .footer-address {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin: 0;
+    color: #C8D8D1;
+    font-size: 0.84rem;
+    font-style: normal;
+    line-height: 1.55;
+  }
+
+  .footer-address svg {
+    width: 1rem;
+    height: 1rem;
+    margin-top: 0.12rem;
+    flex: 0 0 auto;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .footer-teacher {
+    min-width: 235px;
+    padding: 0.9rem 1.05rem;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.07);
+  }
+
+  .footer-teacher-label {
+    display: block;
+    margin-bottom: 0.32rem;
+    color: #A8D8C9;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .footer-teacher-name {
+    display: block;
+    font-size: 0.92rem;
+    font-weight: 600;
+  }
+
+  .footer-teacher-subject {
+    display: block;
+    margin-top: 0.2rem;
+    color: #C8D8D1;
+    font-size: 0.78rem;
+  }
+
+  .footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .footer-bottom p {
+    width: min(1080px, 100%);
+    margin: 0 auto;
+    padding: 0.85rem clamp(1.25rem, 4vw, 2rem) 1rem;
+    color: #9FB7AE;
+    font-size: 0.7rem;
+    line-height: 1.5;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+
+  @media (max-width: 760px) {
+    .topbar-inner {
+      grid-template-columns: 1fr;
+      gap: 0.8rem;
+      padding-inline: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: baseline;
+      gap: 0.55rem;
+    }
+
+    .brand-kicker { margin-bottom: 0; }
+
+    .tabbar {
+      justify-content: flex-start;
+      margin-inline: -0.25rem;
+    }
+
+    .tab {
+      font-size: 0.84rem;
+      padding: 0.65rem 0.9rem;
+    }
+
+    .footer-inner {
+      grid-template-columns: 70px minmax(0, 1fr);
+      align-items: start;
+    }
+
+    .school-logo {
+      width: 70px;
+      height: 70px;
+    }
+
+    .footer-teacher {
+      grid-column: 1 / -1;
+      min-width: 0;
+    }
+  }
+</style>
+</head>
+<body>
+
+<svg style="display:none" aria-hidden="true">
+  <symbol id="icon-play" viewBox="0 0 24 24">
+    <rect x="3" y="3" width="18" height="18" rx="4"></rect>
+    <polygon points="10,8 16,12 10,16"></polygon>
+  </symbol>
+  <symbol id="icon-doc" viewBox="0 0 24 24">
+    <path d="M6 3h8l4 4v14H6z"></path>
+    <path d="M14 3v4h4"></path>
+    <line x1="9" y1="12" x2="15" y2="12"></line>
+    <line x1="9" y1="16" x2="15" y2="16"></line>
+  </symbol>
+  <symbol id="icon-pencil" viewBox="0 0 24 24">
+    <path d="M4 20l1-5 11-11 4 4-11 11-5 1z"></path>
+    <line x1="14" y1="6" x2="18" y2="10"></line>
+  </symbol>
+  <symbol id="icon-check" viewBox="0 0 24 24">
+    <rect x="4" y="3" width="16" height="18" rx="2"></rect>
+    <polyline points="8,12 11,15 16,9"></polyline>
+  </symbol>
+  <symbol id="icon-teacher" viewBox="0 0 24 24">
+    <circle cx="12" cy="8" r="3.5"></circle>
+    <path d="M5.5 20c.6-4 2.7-6 6.5-6s5.9 2 6.5 6"></path>
+  </symbol>
+  <symbol id="icon-location" viewBox="0 0 24 24">
+    <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"></path>
+    <circle cx="12" cy="10" r="2.5"></circle>
+  </symbol>
+</svg>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="#main-content" aria-label="Về nội dung chính của Góc Học Tập">
+      <span class="brand-kicker">Tài liệu</span>
+      <span class="brand-name">Góc Học Tập</span>
+    </a>
+
+    <nav class="tabbar" role="tablist" aria-label="Danh sách môn học">
+      <button class="tab" style="--accent:var(--accent-1)" role="tab" id="tab-nguvan11" aria-controls="panel-nguvan11" aria-selected="true" data-panel="panel-nguvan11">Ngữ Văn 11</button>
+      <button class="tab" style="--accent:var(--accent-2)" role="tab" id="tab-nguvan12" aria-controls="panel-nguvan12" aria-selected="false" tabindex="-1" data-panel="panel-nguvan12">Ngữ Văn 12</button>
+    </nav>
+  </div>
+</header>
+
+<div class="page" id="main-content">
+  <header class="masthead">
+    <span class="masthead-eyebrow">TÀI LIỆU GIẢNG DẠY</span>
+    <h1 class="masthead-title">Góc Học Tập</h1>
+    <p class="masthead-sub">Nơi lưu bài giảng, tài liệu và bài tập cho từng môn học — chọn một tab phía trên để xem nội dung.</p>
+    <div class="teacher" aria-label="Giáo viên Trần Thị Uyên, môn Ngữ Văn">
+      <svg aria-hidden="true"><use href="#icon-teacher"></use></svg>
+      <span>GV: Trần Thị Uyên</span>
+      <span class="teacher-separator" aria-hidden="true">·</span>
+      <span>Môn Ngữ Văn</span>
+    </div>
+  </header>
+
+  <main class="sheet">
+    <section class="panel active" style="--accent:var(--accent-1)" id="panel-nguvan11" role="tabpanel" aria-labelledby="tab-nguvan11" tabindex="0">
+      <div class="panel-head">
+        <span class="panel-eyebrow">MÔN HỌC · LỚP 11</span>
+        <h2>Ngữ Văn 11</h2>
+        <p>Rèn luyện kỹ năng đọc hiểu, viết và nói – nghe qua các thể loại văn học và văn bản nghị luận, thông tin theo chương trình Ngữ văn 11.</p>
+      </div>
+      <div class="shelf">
+        <article class="card card--resource">
+          <span class="card-icon"><svg><use href="#icon-play"></use></svg></span>
+          <span class="card-meta">THƯ VIỆN BÀI GIẢNG</span>
+          <h3>Bài giảng &amp; Slide</h3>
+          <p>Danh sách bài học Ngữ văn 11 theo Học kỳ 1 và Học kỳ 2 — nội dung đang được biên soạn.</p>
+          <div class="card-actions">
+            <a class="resource-link" href="bai-hoc/ngu-van-11.html" target="_blank" rel="noopener">Xem danh sách bài giảng</a>
+          </div>
+        </article>
+        <article class="card">
+          <span class="card-icon"><svg><use href="#icon-doc"></use></svg></span>
+          <h3>Tài liệu &amp; Giáo trình</h3>
+          <p>Nội dung sẽ được cập nhật.</p>
+        </article>
+        <article class="card">
+          <span class="card-icon"><svg><use href="#icon-pencil"></use></svg></span>
+          <h3>Bài tập thực hành</h3>
+          <p>Nội dung sẽ được cập nhật.</p>
+        </article>
+        <article class="card">
+          <span class="card-icon"><svg><use href="#icon-check"></use></svg></span>
+          <h3>Kiểm tra - Đánh giá</h3>
+          <p>Nội dung sẽ được cập nhật.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel" style="--accent:var(--accent-2)" id="panel-nguvan12" role="tabpanel" aria-labelledby="tab-nguvan12" tabindex="0">
+      <div class="panel-head">
+        <span class="panel-eyebrow">MÔN HỌC · LỚP 12</span>
+        <h2>Ngữ Văn 12</h2>
+        <p>Củng cố kỹ năng đọc hiểu, viết và nói – nghe, hệ thống hoá kiến thức qua các tác phẩm và chủ đề Ngữ văn 12, chuẩn bị cho kỳ thi tốt nghiệp THPT.</p>
+      </div>
+      <div class="shelf">
+        <article class="card card--resource">
+          <span class="card-icon"><svg><use href="#icon-play"></use></svg></span>
+          <span class="card-meta">THƯ VIỆN BÀI GIẢNG</span>
+          <h3>Bài giảng &amp; Slide</h3>
+          <p>Danh sách bài học Ngữ văn 12 theo Học kỳ 1 và Học kỳ 2 — nội dung đang được biên soạn.</p>
+          <div class="card-actions">
+            <a class="resource-link" href="bai-hoc/ngu-van-12.html" target="_blank" rel="noopener">Xem danh sách bài giảng</a>
+          </div>
+        </article>
+        <article class="card">
+          <span class="card-icon"><svg><use href="#icon-doc"></use></svg></span>
+          <h3>Tài liệu &amp; Giáo trình</h3>
+          <p>Nội dung sẽ được cập nhật.</p>
+        </article>
+        <article class="card">
+          <span class="card-icon"><svg><use href="#icon-pencil"></use></svg></span>
+          <h3>Bài tập thực hành</h3>
+          <p>Nội dung sẽ được cập nhật.</p>
+        </article>
+        <article class="card">
+          <span class="card-icon"><svg><use href="#icon-check"></use></svg></span>
+          <h3>Kiểm tra - Đánh giá</h3>
+          <p>Nội dung sẽ được cập nhật.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <img class="school-logo" src="assets/logo-thpt-nguyen-khuyen.png" alt="Logo Trường THPT Nguyễn Khuyến" width="92" height="92" loading="lazy">
+
+    <div class="footer-school">
+      <span class="footer-kicker">Góc học tập môn Ngữ Văn</span>
+      <h2 class="footer-school-name">Trường THPT Nguyễn Khuyến</h2>
+      <address class="footer-address">
+        <svg aria-hidden="true"><use href="#icon-location"></use></svg>
+        <span>Số 50 Thành Thái, Phường Hòa Hưng, Thành phố Hồ Chí Minh</span>
+      </address>
+    </div>
+
+    <div class="footer-teacher">
+      <span class="footer-teacher-label">Giáo viên phụ trách</span>
+      <span class="footer-teacher-name">Trần Thị Uyên</span>
+      <span class="footer-teacher-subject">Giáo viên môn Ngữ Văn</span>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2026 Góc Học Tập · Trường THPT Nguyễn Khuyến</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var panels = Array.prototype.slice.call(document.querySelectorAll('.panel'));
+  var STORAGE_KEY = 'goc-hoc-tap-ngu-van:active-tab';
+
+  function activate(tab, moveFocus) {
+    tabs.forEach(function (t) {
+      var selected = t === tab;
+      t.setAttribute('aria-selected', selected ? 'true' : 'false');
+      t.tabIndex = selected ? 0 : -1;
+    });
+    panels.forEach(function (p) {
+      p.classList.toggle('active', p.id === tab.dataset.panel);
+    });
+    if (moveFocus) tab.focus();
+    try { localStorage.setItem(STORAGE_KEY, tab.id); } catch (e) {}
+  }
+
+  tabs.forEach(function (tab, i) {
+    tab.addEventListener('click', function () { activate(tab, false); });
+    tab.addEventListener('keydown', function (e) {
+      var next = null;
+      if (e.key === 'ArrowRight') next = tabs[(i + 1) % tabs.length];
+      else if (e.key === 'ArrowLeft') next = tabs[(i - 1 + tabs.length) % tabs.length];
+      else if (e.key === 'Home') next = tabs[0];
+      else if (e.key === 'End') next = tabs[tabs.length - 1];
+      if (next) { e.preventDefault(); activate(next, true); }
+    });
+  });
+
+  try {
+    var savedId = localStorage.getItem(STORAGE_KEY);
+    var saved = savedId && document.getElementById(savedId);
+    if (saved) activate(saved, false);
+  } catch (e) {}
+})();
+</script>
+</body>
+</html>
