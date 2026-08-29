@@ -182,6 +182,19 @@ function initChatbot() {
   const history = [];
   let selectedFile = null;
 
+  function autoResizeInput() {
+    input.style.height = "auto";
+    input.style.height = Math.min(input.scrollHeight, 160) + "px";
+  }
+
+  input.addEventListener("input", autoResizeInput);
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      form.requestSubmit();
+    }
+  });
+
   function clearSelectedFile() {
     selectedFile = null;
     fileInput.value = "";
@@ -200,6 +213,7 @@ function initChatbot() {
   removeFileButton.addEventListener("click", clearSelectedFile);
   profilePromptButton.addEventListener("click", () => {
     input.value = PROFILE_ANALYSIS_PROMPT;
+    autoResizeInput();
     input.focus();
   });
   copyPromptButton.addEventListener("click", async () => {
@@ -241,6 +255,7 @@ function initChatbot() {
     profileSuggestion.hidden = extension !== "pdf";
     if (extension === "pdf" && /(?:_hs|ho[-_ ]?so)/i.test(file.name) && !input.value.trim()) {
       input.value = PROFILE_ANALYSIS_PROMPT;
+      autoResizeInput();
     }
     input.focus();
   });
@@ -266,6 +281,7 @@ function initChatbot() {
       : "Hãy phân tích nội dung tệp này và đưa ra gợi ý phù hợp.");
     appendMessage(messages, "user", displayText, file?.name || "");
     input.value = "";
+    autoResizeInput();
     input.disabled = true;
     attachButton.disabled = true;
     submitButton.disabled = true;
