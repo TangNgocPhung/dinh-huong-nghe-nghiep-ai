@@ -13,13 +13,29 @@ const ALLOWED_EXTENSIONS = new Set([
   "jpg", "jpeg", "png", "webp", "gif", "pdf",
   "doc", "docx", "xls", "xlsx", "ppt", "pptx",
 ]);
-const PROFILE_ANALYSIS_PROMPT = [
-  "Hãy đọc toàn bộ PDF Hồ sơ của tôi, kết hợp thông tin cá nhân và tất cả biểu đồ trắc nghiệm.",
-  "Hãy xếp hạng đúng Top 10 nhóm nghề hoặc nghề phù hợp nhất để tôi tiếp tục tìm hiểu.",
-  "Với mỗi gợi ý, nêu mức độ phù hợp tham khảo, lý do dựa trên dữ liệu cụ thể trong hồ sơ",
-  "và cho từ khóa tiếng Việt cùng tiếng Anh để tra cứu trên O*NET.",
-  "Không suy đoán phần không đọc rõ và không lặp lại các nghề gần giống nhau.",
-].join(" ");
+const PROFILE_ANALYSIS_PROMPT = "Dựa trên Hồ sơ của tôi trong tệp đính kèm (học sinh cần đính kèm file), hãy đề xuất và xếp hạng 10 ngành học/nghề nghiệp phù hợp, nêu rõ cơ sở đề xuất.";
+
+async function copyText(text) {
+  if (navigator.clipboard && window.isSecureContext) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return;
+    } catch {
+      // Dùng cách tương thích phía dưới nếu trình duyệt chặn Clipboard API.
+    }
+  }
+
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.setAttribute("readonly", "");
+  textarea.style.position = "fixed";
+  textarea.style.opacity = "0";
+  document.body.appendChild(textarea);
+  textarea.select();
+  const copied = document.execCommand("copy");
+  textarea.remove();
+  if (!copied) throw new Error("copy-failed");
+}
 
 function appendInlineMarkdown(container, text) {
   const tokenPattern = /(\*\*[^*]+\*\*|__[^_]+__|`[^`]+`|\*[^*\n]+\*)/g;
@@ -160,6 +176,8 @@ function initChatbot() {
   const removeFileButton = document.getElementById("chat-remove-file");
   const profileSuggestion = document.getElementById("chat-profile-suggestion");
   const profilePromptButton = document.getElementById("chat-profile-prompt");
+  const copyPromptButton = document.getElementById("chat-copy-prompt");
+  const copyPromptStatus = document.getElementById("chat-copy-status");
   const submitButton = document.getElementById("chat-submit");
   const history = [];
   let selectedFile = null;
@@ -183,6 +201,25 @@ function initChatbot() {
   profilePromptButton.addEventListener("click", () => {
     input.value = PROFILE_ANALYSIS_PROMPT;
     input.focus();
+  });
+  copyPromptButton.addEventListener("click", async () => {
+    const label = copyPromptButton.querySelector("[data-copy-label]");
+    copyPromptButton.classList.remove("is-copied", "copy-error");
+    try {
+      await copyText(PROFILE_ANALYSIS_PROMPT);
+      label.textContent = "Đã sao chép";
+      copyPromptStatus.textContent = "Đã sao chép prompt mẫu vào bộ nhớ tạm.";
+      copyPromptButton.classList.add("is-copied");
+    } catch {
+      label.textContent = "Không thể sao chép";
+      copyPromptStatus.textContent = "Không thể sao chép tự động. Vui lòng chọn và sao chép nội dung prompt.";
+      copyPromptButton.classList.add("copy-error");
+    }
+    window.setTimeout(() => {
+      label.textContent = "Sao chép prompt";
+      copyPromptStatus.textContent = "";
+      copyPromptButton.classList.remove("is-copied", "copy-error");
+    }, 2200);
   });
 
   fileInput.addEventListener("change", () => {
