@@ -62,8 +62,10 @@ a:hover { text-decoration: underline; }
   color: var(--color-text);
   display: inline-flex;
   align-items: center;
+  gap: 9px;
   white-space: nowrap;
 }
+.site-logo-mark { width: 31px; height: 31px; display: block; flex: 0 0 auto; padding: 1px; border: 1px solid rgba(57,157,55,.2); border-radius: 50%; background: #fff; object-fit: cover; box-shadow: 0 5px 13px rgba(25,75,40,.12); }
 .site-logo:hover { text-decoration: none; }
 .site-nav { display: flex; gap: 20px; flex-wrap: wrap; }
 .site-nav { align-items: center; }
