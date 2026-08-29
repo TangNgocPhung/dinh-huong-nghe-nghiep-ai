@@ -392,7 +392,7 @@ main { padding: 34px 0 90px; position: relative; }
 .onet-step-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 .guide-step { display: flex; gap: 18px; min-height: 175px; padding: 25px; border: 1px solid var(--color-border); border-radius: 22px; background: var(--color-surface); box-shadow: 0 12px 35px rgba(52,61,120,.08); transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease; }
 .guide-step:hover { transform: translateY(-4px); border-color: rgba(91,76,240,.35); box-shadow: var(--shadow-hover); }
-.guide-step-wide { grid-column: 1 / -1; }
+.guide-step-wide { grid-column: 1 / -1; min-height: 0; }
 .step-number { flex: 0 0 auto; width: 48px; height: 48px; display: grid; place-items: center; border-radius: 15px; color: #fff; background: linear-gradient(135deg, var(--color-primary), var(--color-secondary)); font-size: .76rem; font-weight: 900; letter-spacing: .06em; }
 .guide-step h3 { margin: 4px 0 8px; font-size: 1.08rem; }
 .guide-step p { margin: 0; color: var(--color-text-muted); line-height: 1.65; }
@@ -401,6 +401,10 @@ main { padding: 34px 0 90px; position: relative; }
 .riasec-guide-chip b { grid-row: 1 / 3; width: 34px; height: 34px; display: grid; place-items: center; border-radius: 11px; color: #fff; background: var(--chip-color); }
 .riasec-guide-chip small { color: var(--color-text-muted); font-size: .66rem; font-weight: 600; }
 .chip-r { --chip-color: #248a9d; } .chip-i { --chip-color: #4d8ec7; } .chip-a { --chip-color: #dc8f35; } .chip-s { --chip-color: #4b9d68; } .chip-e { --chip-color: #d15c68; } .chip-c { --chip-color: #766fba; }
+.onet-guide-note { display: flex; align-items: flex-start; gap: 13px; margin-top: 18px; padding: 18px 20px; border: 1px solid rgba(220,143,53,.28); border-radius: 17px; background: rgba(220,143,53,.09); }
+.onet-guide-note > span { flex: 0 0 auto; font-size: 1.2rem; }
+.onet-guide-note p { margin: 0; color: var(--color-text-muted); line-height: 1.7; }
+.onet-guide-note strong { color: var(--color-text); }
 .career-documents { padding-bottom: 76px; }
 .document-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
 .document-card { overflow: hidden; display: grid; grid-template-rows: 300px 1fr; border: 1px solid var(--color-border); border-radius: 26px; background: var(--color-surface); box-shadow: 0 18px 44px rgba(52,61,120,.1); transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease; }
