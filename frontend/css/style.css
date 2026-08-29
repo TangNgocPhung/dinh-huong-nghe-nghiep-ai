@@ -506,6 +506,8 @@ main { padding: 34px 0 90px; position: relative; }
 
 /* Modern landing page */
 .home-hero {
+  position: relative;
+  isolation: isolate;
   min-height: 600px;
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(340px, 0.85fr);
@@ -514,7 +516,10 @@ main { padding: 34px 0 90px; position: relative; }
   padding-top: 72px;
   padding-bottom: 72px;
 }
-.home-copy { position: relative; z-index: 2; }
+.home-copy, .hero-visual { position: relative; z-index: 2; }
+.home-watermark { position: absolute; z-index: 0; right: 4%; bottom: 24px; left: 4%; color: var(--color-text); opacity: .05; text-align: center; text-transform: uppercase; pointer-events: none; user-select: none; }
+.home-watermark > span { display: block; font-size: clamp(1.15rem, 3.5vw, 3.25rem); font-weight: 950; letter-spacing: .11em; line-height: 1.08; }
+.home-watermark > small { display: block; margin-top: 7px; font-size: clamp(.64rem, 1.35vw, 1rem); font-weight: 850; letter-spacing: .32em; }
 .eyebrow {
   display: inline-flex;
   align-items: center;
@@ -667,6 +672,7 @@ input:focus, select:focus { outline: 3px solid rgba(91,76,240,.14); border-color
 }
 [data-theme="dark"] .site-header { background: rgba(14,19,36,.88); }
 [data-theme="dark"] .mini-card { background: rgba(23,30,51,.88); border-color: rgba(255,255,255,.13); }
+[data-theme="dark"] .home-watermark { opacity: .04; }
 [data-theme="dark"] .quiz-instructions, [data-theme="dark"] .chat-msg-bot .chat-bubble { background: #222c4b; }
 [data-theme="dark"] .binary-option:has(input:checked) { background: #222c4b; }
 [data-theme="dark"] .overview-shell { background: linear-gradient(135deg, rgba(23,30,51,.96), rgba(20,27,48,.9)); border-color: rgba(124, 109, 255, .25); }
