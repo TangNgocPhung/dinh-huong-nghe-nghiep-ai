@@ -456,8 +456,8 @@ main { padding: 34px 0 90px; position: relative; }
   border-radius: var(--radius);
   display: flex;
   flex-direction: column;
-  height: 60vh;
-  max-height: 620px;
+  height: 80vh;
+  max-height: 820px;
 }
 .chat-prompt-guide { margin-bottom: 22px; }
 .chat-prompt-card { padding: clamp(20px, 3vw, 28px); border: 1px solid rgba(91,76,240,.22); border-radius: 22px; background: linear-gradient(135deg, rgba(91,76,240,.09), rgba(13,159,188,.08)); box-shadow: 0 14px 38px rgba(52,61,120,.07); }
