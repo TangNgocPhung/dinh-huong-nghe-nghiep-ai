@@ -525,6 +525,9 @@ main { padding: 34px 0 90px; position: relative; }
 .footer-team { display: grid; gap: 15px; }
 .footer-credit { padding-left: 12px; border-left: 3px solid rgba(91,76,240,.35); }
 .footer-credit > strong { display: block; color: var(--color-text); line-height: 1.55; }
+.footer-advisory { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 30px 0 0; padding: 16px 18px 0; border-top: 1px solid rgba(91,76,240,.2); color: var(--color-text); text-align: center; line-height: 1.6; }
+.footer-advisory > span { flex: 0 0 auto; font-size: 1.05rem; }
+.footer-advisory > strong { font-weight: 800; }
 
 /* Modern landing page */
 .home-hero {
