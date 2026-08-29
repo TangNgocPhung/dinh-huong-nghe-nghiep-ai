@@ -41,9 +41,9 @@ a:hover { text-decoration: underline; }
 
 /* Header / nav */
 .site-header {
-  background: rgba(255, 255, 255, 0.88);
+  background: linear-gradient(90deg, #eceeff 0%, #e5f5f7 100%);
   backdrop-filter: blur(18px);
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid #d3d9ee;
   position: sticky;
   top: 0;
   z-index: 50;
@@ -487,12 +487,12 @@ main { padding: 34px 0 90px; position: relative; }
 
 /* Footer */
 .site-footer {
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid #cfd7eb;
   padding: clamp(32px, 5vw, 48px) 0;
   text-align: left;
   color: var(--color-text-muted);
   font-size: 0.85rem;
-  background: var(--color-surface-soft);
+  background: linear-gradient(135deg, #e3e6fb 0%, #dceff2 100%);
 }
 .footer-layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 270px), 1fr)); gap: clamp(26px, 4vw, 44px); align-items: start; }
 .footer-school { display: flex; align-items: center; gap: 15px; }
@@ -672,7 +672,8 @@ input:focus, select:focus { outline: 3px solid rgba(91,76,240,.14); border-color
   --color-border: #2c3654;
   --shadow: 0 15px 40px rgba(0,0,0,.22);
 }
-[data-theme="dark"] .site-header { background: rgba(14,19,36,.88); }
+[data-theme="dark"] .site-header { border-bottom-color: #303b5b; background: linear-gradient(90deg, #171d33 0%, #102a35 100%); }
+[data-theme="dark"] .site-footer { border-top-color: #303b5b; background: linear-gradient(135deg, #171d33 0%, #122b37 100%); }
 [data-theme="dark"] .mini-card { background: rgba(23,30,51,.88); border-color: rgba(255,255,255,.13); }
 [data-theme="dark"] .home-watermark { opacity: .04; }
 [data-theme="dark"] .quiz-instructions, [data-theme="dark"] .chat-msg-bot .chat-bubble { background: #222c4b; }
