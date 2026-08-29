@@ -1,8 +1,9 @@
 /* Hồ sơ hướng nghiệp cá nhân: tự lưu trên trình duyệt, tổng hợp kết quả và xuất bản in PDF. */
 
 const PROFILE_STORAGE_KEY = "dhnn_personal_profile_v1";
-const PROFILE_EXPORT_VERSION = 2;
-const PROFILE_FIELDS = ["favoriteSubjects", "talents", "strengths", "interests", "careerGoal"];
+const PROFILE_EXPORT_VERSION = 3;
+const PROFILE_FIELDS = ["talents", "strengths", "interests", "careerGoal"];
+const MAX_SUBJECT_PREFERENCES = 20;
 const TEST_IDS = ["holland", "mi", "mbti", "disc", "motivators"];
 const TEST_LABELS = {
   holland: "Holland (RIASEC)",
@@ -29,6 +30,7 @@ function emptyProfile() {
     createdAt: new Date().toISOString(),
     updatedAt: "",
     favoriteSubjects: "",
+    subjectPreferences: [],
     talents: "",
     strengths: "",
     interests: "",
@@ -47,6 +49,15 @@ function normalizeProfile(input) {
   PROFILE_FIELDS.forEach((field) => {
     clean[field] = typeof input[field] === "string" ? input[field].slice(0, 500) : "";
   });
+
+  const subjects = Array.isArray(input.subjectPreferences)
+    ? input.subjectPreferences
+    : (typeof input.favoriteSubjects === "string" ? input.favoriteSubjects.split(",").map((subject) => ({ subject, score: "" })) : []);
+  clean.subjectPreferences = subjects.slice(0, MAX_SUBJECT_PREFERENCES).map((item) => ({
+    subject: typeof item === "string" ? item.trim().slice(0, 80) : String(item?.subject || "").trim().slice(0, 80),
+    score: typeof item === "object" && item !== null ? String(item.score ?? "").trim().slice(0, 12) : "",
+  }));
+  clean.favoriteSubjects = clean.subjectPreferences.map((item) => item.subject).filter(Boolean).join(", ").slice(0, 500);
   return clean;
 }
 
@@ -93,6 +104,84 @@ function fillProfileForm() {
       scheduleSave();
     });
   });
+  fillSubjectPreferencesForm();
+}
+
+function syncFavoriteSubjects() {
+  profileState.favoriteSubjects = profileState.subjectPreferences
+    .map((item) => item.subject.trim())
+    .filter(Boolean)
+    .join(", ")
+    .slice(0, 500);
+}
+
+function createSubjectPreferenceRow(item, index, total) {
+  const row = document.createElement("div");
+  row.className = "subject-preference-row";
+  if (total > 1) row.classList.add("has-remove");
+  row.innerHTML = `
+    <label class="subject-preference-input">
+      <span>Môn học ${index + 1}</span>
+      <input type="text" maxlength="80" value="${escapeHtml(item.subject)}" placeholder="Ví dụ: Toán" data-subject-name="${index}" />
+    </label>
+    <label class="subject-preference-input">
+      <span>Điểm số</span>
+      <input type="number" min="0" max="10" step="0.1" value="${escapeHtml(item.score)}" placeholder="Ví dụ: 8" data-subject-score="${index}" />
+    </label>
+    <button class="subject-remove-button" type="button" data-remove-subject="${index}" aria-label="Xóa môn học ${index + 1}" title="Xóa môn học ${index + 1}" ${total === 1 ? "hidden" : ""}>×</button>
+  `;
+  return row;
+}
+
+function renderSubjectPreferences() {
+  const container = document.getElementById("subject-preferences");
+  const addButton = document.getElementById("add-subject-preference");
+  if (!container || !addButton) return;
+
+  if (!profileState.subjectPreferences.length) {
+    profileState.subjectPreferences.push({ subject: "", score: "" });
+  }
+
+  container.innerHTML = "";
+  profileState.subjectPreferences.forEach((item, index) => {
+    container.appendChild(createSubjectPreferenceRow(item, index, profileState.subjectPreferences.length));
+  });
+  addButton.disabled = profileState.subjectPreferences.length >= MAX_SUBJECT_PREFERENCES;
+
+  container.querySelectorAll("[data-subject-name]").forEach((input) => {
+    input.addEventListener("input", () => {
+      profileState.subjectPreferences[Number(input.dataset.subjectName)].subject = input.value.slice(0, 80);
+      syncFavoriteSubjects();
+      scheduleSave();
+    });
+  });
+  container.querySelectorAll("[data-subject-score]").forEach((input) => {
+    input.addEventListener("input", () => {
+      profileState.subjectPreferences[Number(input.dataset.subjectScore)].score = input.value.slice(0, 12);
+      scheduleSave();
+    });
+  });
+  container.querySelectorAll("[data-remove-subject]").forEach((button) => {
+    button.addEventListener("click", () => {
+      profileState.subjectPreferences.splice(Number(button.dataset.removeSubject), 1);
+      syncFavoriteSubjects();
+      renderSubjectPreferences();
+      scheduleSave();
+    });
+  });
+}
+
+function fillSubjectPreferencesForm() {
+  renderSubjectPreferences();
+  const addButton = document.getElementById("add-subject-preference");
+  if (!addButton) return;
+  addButton.addEventListener("click", () => {
+    if (profileState.subjectPreferences.length >= MAX_SUBJECT_PREFERENCES) return;
+    profileState.subjectPreferences.push({ subject: "", score: "" });
+    renderSubjectPreferences();
+    scheduleSave();
+    document.querySelector(`[data-subject-name="${profileState.subjectPreferences.length - 1}"]`)?.focus();
+  });
 }
 
 function renderProfileSummary() {
@@ -129,6 +218,13 @@ function valueOrEmpty(value) {
   return value && value.trim() ? escapeHtml(value.trim()) : "Chưa cập nhật";
 }
 
+function formatSubjectPreferences() {
+  return profileState.subjectPreferences
+    .filter((item) => item.subject.trim() || item.score.trim())
+    .map((item, index) => `Môn học ${index + 1}: ${item.subject.trim() || "Chưa cập nhật"}${item.score.trim() ? ` — Điểm số: ${item.score.trim()}` : ""}`)
+    .join("\n");
+}
+
 function collectResultChartImages() {
   return Array.from(document.querySelectorAll("#radar-grid .radar-card")).map((card, index) => {
     const canvas = card.querySelector("canvas");
@@ -146,7 +242,7 @@ function buildPrintableProfile(chartImages = []) {
   const printEl = document.getElementById("print-profile");
   const mbtiResult = legacyResults.mbti?.result;
   const infoItems = [
-    ["Sở thích môn học", profileState.favoriteSubjects, true],
+    ["Sở thích môn học", formatSubjectPreferences(), true],
     ["Năng khiếu", profileState.talents],
     ["Sở trường", profileState.strengths],
     ["Sở thích và hoạt động", profileState.interests, true],

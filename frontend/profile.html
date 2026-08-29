@@ -51,11 +51,14 @@
 
         <form id="personal-profile-form" autocomplete="on">
           <div class="profile-form-grid">
-            <label class="profile-field profile-field-wide">
+            <div class="profile-field profile-field-wide subject-preferences-field">
               <span>Sở thích môn học</span>
-              <textarea name="favoriteSubjects" data-profile-field rows="2" maxlength="400" placeholder="Ví dụ: Toán, Ngữ văn, Tiếng Anh, Sinh học..."></textarea>
-              <small>Có thể nhập nhiều nội dung, cách nhau bằng dấu phẩy.</small>
-            </label>
+              <div id="subject-preferences" class="subject-preferences" aria-live="polite"></div>
+              <button id="add-subject-preference" class="subject-add-button" type="button">
+                <span aria-hidden="true">+</span> Thêm môn học
+              </button>
+              <small>Điểm số chỉ mang tính đại diện, không cần hoàn toàn chính xác.</small>
+            </div>
             <label class="profile-field">
               <span>Năng khiếu</span>
               <textarea name="talents" data-profile-field rows="3" maxlength="500" placeholder="Ví dụ: Vẽ, thuyết trình, chơi nhạc cụ..."></textarea>
