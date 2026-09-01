@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Birthstone&family=Imperial+Script&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Birthstone&family=Imperial+Script&family=Send+Flowers&display=swap");
 
 :root {
   --color-bg: #f5f7ff;
@@ -59,8 +59,11 @@ a:hover { text-decoration: underline; }
   padding-bottom: 14px;
 }
 .site-logo {
-  font-weight: 700;
-  font-size: 1.15rem;
+  font-family: "Send Flowers", "Segoe Print", "Bradley Hand", cursive;
+  font-weight: 400;
+  font-size: clamp(1.45rem, 2.2vw, 1.85rem);
+  line-height: 1;
+  letter-spacing: .01em;
   color: var(--color-text);
   display: inline-flex;
   align-items: center;
