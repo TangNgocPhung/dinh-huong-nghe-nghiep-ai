@@ -665,7 +665,25 @@ main { padding: 34px 0 90px; position: relative; }
 .about-layout { display: grid; grid-template-columns: 1.25fr .75fr; gap: 24px; }
 .about-panel { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 24px; padding: 30px; box-shadow: var(--shadow); }
 .about-panel h2 { margin-top: 0; }
-.project-title { font-size: clamp(1.35rem, 2.6vw, 2rem); line-height: 1.35; margin: 14px 0 0; }
+.project-title {
+  margin: 14px 0 0;
+  font-family: "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+  font-size: clamp(1.5rem, 2.8vw, 2.15rem);
+  font-style: italic;
+  font-weight: 700;
+  line-height: 1.32;
+  letter-spacing: .015em;
+  text-wrap: balance;
+  text-shadow: 0 2px 12px rgba(91, 76, 240, .1);
+}
+@supports ((background-clip: text) or (-webkit-background-clip: text)) {
+  .project-title {
+    background: linear-gradient(120deg, #332c9e 0%, #5b4cf0 48%, #087d99 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+}
 .mentor-card { color: #fff; background: linear-gradient(145deg, #5145df, #168da9); border: none; }
 .mentor-card p { color: rgba(255,255,255,.78); margin-bottom: 4px; }
 .mentor-card h2 { font-size: 1.55rem; }
@@ -721,6 +739,9 @@ input:focus, select:focus { outline: 3px solid rgba(91,76,240,.14); border-color
 [data-theme="dark"] .profile-privacy-note { color: #86efac; background: rgba(34,197,94,.1); }
 [data-theme="dark"] .profile-glance::before { background: linear-gradient(135deg, rgba(124,109,255,.2), rgba(13,159,188,.17)); }
 [data-theme="dark"] .profile-download-panel { background: linear-gradient(135deg, rgba(124,109,255,.14), rgba(13,159,188,.13)); }
+@supports ((background-clip: text) or (-webkit-background-clip: text)) {
+  [data-theme="dark"] .project-title { background-image: linear-gradient(120deg, #c6c2ff, #9b91ff 48%, #71e2ee); }
+}
 
 @keyframes float { 0%,100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-12px) rotate(1deg); } }
 @keyframes spin { to { transform: rotate(360deg); } }
@@ -737,6 +758,7 @@ input:focus, select:focus { outline: 3px solid rgba(91,76,240,.14); border-color
   .theme-toggle { position: absolute; right: 18px; top: 10px; }
   .people-grid, .pillar-grid { grid-template-columns: 1fr; }
   .about-panel { padding: 22px; }
+  .project-title { font-size: clamp(1.32rem, 6.2vw, 1.72rem); line-height: 1.36; letter-spacing: .005em; }
   .school-identity-card { align-items: flex-start; }
   .school-identity-mark { display: none; }
   .overview-shell { padding: 26px 20px; border-radius: 24px; }
