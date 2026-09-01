@@ -82,4 +82,69 @@
       if (progressFill) progressFill.style.width = `${completed * 20}%`;
     });
   }
+
+  const siteFooter = document.querySelector(".site-footer");
+  if (siteFooter) {
+    const statsWrap = document.createElement("div");
+    statsWrap.className = "container visitor-stats-wrap";
+    statsWrap.innerHTML = `
+      <section class="visitor-stats" aria-labelledby="visitor-stats-title">
+        <div class="visitor-stats-heading">
+          <span class="visitor-stats-icon" aria-hidden="true">📊</span>
+          <div>
+            <strong id="visitor-stats-title">Thống kê lượt truy cập</strong>
+            <small>Bộ đếm không lưu họ tên hay địa chỉ IP.</small>
+          </div>
+        </div>
+        <div class="visitor-stats-grid" aria-live="polite">
+          <div class="visitor-stat"><strong data-visit-stat="month">—</strong><span>Tháng này</span></div>
+          <div class="visitor-stat"><strong data-visit-stat="year">—</strong><span>Năm nay</span></div>
+          <div class="visitor-stat"><strong data-visit-stat="total">—</strong><span>Tổng lượt</span></div>
+        </div>
+        <span class="visitor-stats-status" data-visit-status>Đang cập nhật…</span>
+      </section>`;
+
+    const advisory = siteFooter.querySelector(".footer-advisory")?.parentElement;
+    siteFooter.insertBefore(statsWrap, advisory || null);
+
+    const loadVisitStats = async () => {
+      const apiBase = "https://dhnn-visit-counter.tangphung126.workers.dev";
+      const countedKey = "dhnn_visit_counted_v1";
+      let shouldRecord = false;
+      try {
+        shouldRecord = sessionStorage.getItem(countedKey) !== "1";
+      } catch {
+        shouldRecord = false;
+      }
+
+      try {
+        const response = await fetch(`${apiBase}/${shouldRecord ? "visit" : "stats"}`, {
+          method: shouldRecord ? "POST" : "GET",
+          headers: { Accept: "application/json" },
+        });
+        if (!response.ok) throw new Error("Visit statistics are unavailable");
+        const stats = await response.json();
+        const formatter = new Intl.NumberFormat("vi-VN");
+        ["month", "year", "total"].forEach((key) => {
+          const value = Number(stats[key]);
+          const target = statsWrap.querySelector(`[data-visit-stat="${key}"]`);
+          if (target) target.textContent = formatter.format(Number.isFinite(value) ? value : 0);
+        });
+        if (shouldRecord) {
+          try {
+            sessionStorage.setItem(countedKey, "1");
+          } catch {
+            // Không lưu được trạng thái phiên: vẫn chỉ hiển thị số liệu đã nhận.
+          }
+        }
+        const status = statsWrap.querySelector("[data-visit-status]");
+        if (status) status.textContent = "Cập nhật theo thời gian thực";
+      } catch {
+        const status = statsWrap.querySelector("[data-visit-status]");
+        if (status) status.textContent = "Số liệu sẽ được cập nhật lại sau";
+      }
+    };
+
+    void loadVisitStats();
+  }
 })();

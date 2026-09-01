@@ -1,0 +1,17 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "dhnn-visit-counter",
+  "main": "src/index.js",
+  "compatibility_date": "2026-09-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "preview_urls": false,
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "dhnn-visit-counter",
+      "database_id": "cb8eb7cd-7366-4e9c-ab47-4907d7df723e",
+      "migrations_dir": "migrations"
+    }
+  ]
+}
