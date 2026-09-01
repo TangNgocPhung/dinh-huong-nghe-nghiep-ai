@@ -85,6 +85,21 @@
 
   const siteFooter = document.querySelector(".site-footer");
   if (siteFooter) {
+    const periodLabels = (now = new Date()) => {
+      const parts = new Intl.DateTimeFormat("en-US", {
+        timeZone: "Asia/Ho_Chi_Minh",
+        year: "numeric",
+        month: "numeric",
+      }).formatToParts(now);
+      const year = parts.find((part) => part.type === "year")?.value;
+      const month = parts.find((part) => part.type === "month")?.value;
+      return {
+        month: month ? `Tháng ${month}` : "Tháng này",
+        year: year ? `Năm ${year}` : "Năm nay",
+      };
+    };
+    const initialLabels = periodLabels();
+
     const statsWrap = document.createElement("div");
     statsWrap.className = "container visitor-stats-wrap";
     statsWrap.innerHTML = `
@@ -97,8 +112,8 @@
           </div>
         </div>
         <div class="visitor-stats-grid" aria-live="polite">
-          <div class="visitor-stat"><strong data-visit-stat="month">—</strong><span>Tháng này</span></div>
-          <div class="visitor-stat"><strong data-visit-stat="year">—</strong><span>Năm nay</span></div>
+          <div class="visitor-stat"><strong data-visit-stat="month">—</strong><span data-visit-label="month">${initialLabels.month}</span></div>
+          <div class="visitor-stat"><strong data-visit-stat="year">—</strong><span data-visit-label="year">${initialLabels.year}</span></div>
           <div class="visitor-stat"><strong data-visit-stat="total">—</strong><span>Tổng lượt</span></div>
         </div>
         <span class="visitor-stats-status" data-visit-status>Đang cập nhật…</span>
@@ -130,6 +145,15 @@
           const target = statsWrap.querySelector(`[data-visit-stat="${key}"]`);
           if (target) target.textContent = formatter.format(Number.isFinite(value) ? value : 0);
         });
+        const monthNumber = Number(String(stats.monthKey || "").split("-")[1]);
+        if (Number.isFinite(monthNumber)) {
+          const monthLabel = statsWrap.querySelector('[data-visit-label="month"]');
+          if (monthLabel) monthLabel.textContent = `Tháng ${monthNumber}`;
+        }
+        if (stats.yearKey) {
+          const yearLabel = statsWrap.querySelector('[data-visit-label="year"]');
+          if (yearLabel) yearLabel.textContent = `Năm ${stats.yearKey}`;
+        }
         if (shouldRecord) {
           try {
             sessionStorage.setItem(countedKey, "1");
