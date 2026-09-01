@@ -647,8 +647,10 @@ main { padding: 34px 0 90px; position: relative; }
 .tool-code { grid-column: 1 / -1; justify-self: start; padding: 3px 8px; border-radius: 999px; color: var(--color-primary); background: rgba(91, 76, 240, .09); font-size: .67rem; font-weight: 800; letter-spacing: .04em; }
 .tool-action { position: absolute; right: 16px; bottom: 16px; color: var(--color-primary); font-size: .72rem; font-weight: 850; }
 
-/* About page */
+/* Home introduction */
+.home-about { margin-top: clamp(64px, 9vw, 108px); padding-top: 8px; scroll-margin-top: 84px; }
 .about-hero { padding-bottom: 48px; }
+.about-hero h2 { margin-bottom: 18px; font-size: clamp(2.1rem, 5vw, 3.8rem); line-height: 1.12; letter-spacing: -.045em; }
 .about-hero p { max-width: 850px; }
 .about-school { margin-bottom: 24px; }
 .school-identity-card { position: relative; overflow: hidden; display: flex; align-items: center; gap: 24px; padding: clamp(22px, 3vw, 32px); border: 1px solid rgba(57,157,55,.22); border-radius: 28px; background: linear-gradient(135deg, rgba(57,157,55,.1), var(--color-surface) 58%, rgba(255,213,28,.12)); box-shadow: var(--shadow); }
@@ -668,6 +670,9 @@ main { padding: 34px 0 90px; position: relative; }
 .mentor-card p { color: rgba(255,255,255,.78); margin-bottom: 4px; }
 .mentor-card h2 { font-size: 1.55rem; }
 .people-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 18px; }
+.about-team { margin-top: 24px; }
+.about-values { margin-top: 54px; }
+.about-actions { justify-content: center; margin-top: 34px; }
 .person-card { display: flex; align-items: center; gap: 14px; padding: 18px; border: 1px solid var(--color-border); border-radius: 18px; background: var(--color-bg); }
 .person-avatar { flex: 0 0 48px; width: 48px; height: 48px; display: grid; place-items: center; border-radius: 50%; color: #fff; background: linear-gradient(135deg, var(--color-primary), var(--color-secondary)); font-weight: 800; }
 .person-card strong { display: block; }
