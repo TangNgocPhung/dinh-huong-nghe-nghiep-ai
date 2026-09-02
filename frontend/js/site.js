@@ -61,18 +61,22 @@
     setCareerView();
   }
 
+  const resourceViewSections = Array.from(document.querySelectorAll("[data-resource-view]"));
   const resourceLinks = document.querySelectorAll(".site-nav-menu a[href*='resources.html#']");
-  if (resourceLinks.length) {
-    const setCurrentResourceLink = () => {
+  if (resourceViewSections.length) {
+    const setResourceView = () => {
       const selectedResource = window.location.hash === "#career-experience" ? "career-experience" : "career-experts";
+      resourceViewSections.forEach((section) => {
+        section.hidden = section.dataset.resourceView !== selectedResource;
+      });
       resourceLinks.forEach((link) => {
         const isCurrent = link.getAttribute("href").endsWith(`#${selectedResource}`);
-        if (isCurrent && window.location.pathname.endsWith("resources.html")) link.setAttribute("aria-current", "page");
+        if (isCurrent) link.setAttribute("aria-current", "page");
         else link.removeAttribute("aria-current");
       });
     };
-    window.addEventListener("hashchange", setCurrentResourceLink);
-    setCurrentResourceLink();
+    window.addEventListener("hashchange", setResourceView);
+    setResourceView();
   }
 
   const scrollProgress = document.createElement("div");
