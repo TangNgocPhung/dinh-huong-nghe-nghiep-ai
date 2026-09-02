@@ -79,6 +79,62 @@
     setResourceView();
   }
 
+  const experienceCarousel = document.querySelector(".experience-carousel");
+  if (experienceCarousel) {
+    const carouselTrack = experienceCarousel.querySelector(".experience-showcase");
+    const carouselCards = Array.from(experienceCarousel.querySelectorAll(".experience-video-card"));
+    const carouselPrev = experienceCarousel.querySelector(".experience-carousel-prev");
+    const carouselNext = experienceCarousel.querySelector(".experience-carousel-next");
+    const carouselCounter = document.querySelector(".experience-carousel-counter");
+    const carouselProgress = document.querySelector(".experience-carousel-progress span");
+    const reduceCarouselMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let carouselIndex = 0;
+    let carouselTimer;
+    let carouselResizeTimer;
+
+    const carouselPerView = () => window.innerWidth <= 640 ? 1 : window.innerWidth <= 900 ? 2 : 3;
+    const carouselMaxIndex = () => Math.max(0, carouselCards.length - carouselPerView());
+    const renderCarousel = () => {
+      if (!carouselCards.length || !carouselCards[0].offsetWidth) return;
+      carouselIndex = Math.min(carouselIndex, carouselMaxIndex());
+      carouselTrack.style.transform = `translate3d(-${carouselCards[carouselIndex].offsetLeft}px, 0, 0)`;
+      const lastVisible = Math.min(carouselCards.length, carouselIndex + carouselPerView());
+      carouselCards.forEach((card, index) => card.classList.toggle("is-carousel-visible", index >= carouselIndex && index < lastVisible));
+      if (carouselCounter) carouselCounter.textContent = `${String(carouselIndex + 1).padStart(2, "0")}–${String(lastVisible).padStart(2, "0")} / ${carouselCards.length}`;
+      if (carouselProgress) carouselProgress.style.width = `${(lastVisible / carouselCards.length) * 100}%`;
+    };
+    const moveCarousel = (direction) => {
+      const step = carouselPerView();
+      const maxIndex = carouselMaxIndex();
+      carouselIndex = direction > 0
+        ? (carouselIndex >= maxIndex ? 0 : Math.min(maxIndex, carouselIndex + step))
+        : (carouselIndex <= 0 ? maxIndex : Math.max(0, carouselIndex - step));
+      renderCarousel();
+    };
+    const stopCarousel = () => window.clearInterval(carouselTimer);
+    const startCarousel = () => {
+      stopCarousel();
+      if (!reduceCarouselMotion && !document.hidden) carouselTimer = window.setInterval(() => moveCarousel(1), 5200);
+    };
+
+    carouselPrev?.addEventListener("click", () => { moveCarousel(-1); startCarousel(); });
+    carouselNext?.addEventListener("click", () => { moveCarousel(1); startCarousel(); });
+    experienceCarousel.addEventListener("pointerenter", stopCarousel);
+    experienceCarousel.addEventListener("pointerleave", startCarousel);
+    experienceCarousel.addEventListener("focusin", stopCarousel);
+    experienceCarousel.addEventListener("focusout", (event) => {
+      if (!experienceCarousel.contains(event.relatedTarget)) startCarousel();
+    });
+    document.addEventListener("visibilitychange", () => document.hidden ? stopCarousel() : startCarousel());
+    window.addEventListener("resize", () => {
+      window.clearTimeout(carouselResizeTimer);
+      carouselResizeTimer = window.setTimeout(renderCarousel, 120);
+    });
+    window.addEventListener("hashchange", () => window.requestAnimationFrame(renderCarousel));
+    renderCarousel();
+    startCarousel();
+  }
+
   const scrollProgress = document.createElement("div");
   scrollProgress.className = "scroll-progress";
   scrollProgress.setAttribute("aria-hidden", "true");
@@ -101,7 +157,7 @@
   window.addEventListener("scroll", updateScroll, { passive: true });
   updateScroll();
 
-  const revealTargets = document.querySelectorAll(".career-card, .about-panel, .pillar, .quiz-question, .overview-copy, .overview-tool, .overview-note, .theory-copy, .riasec-type, .mi-type, .mbti-axis, .mbti-code-pill, .disc-type, .motive-type, .guide-step, .document-card, .resource-video-card, .resource-article-card, .profile-panel, .profile-glance, .profile-result-card, .profile-download-panel, .external-assessment, section > h2");
+  const revealTargets = document.querySelectorAll(".career-card, .about-panel, .pillar, .quiz-question, .overview-copy, .overview-tool, .overview-note, .theory-copy, .riasec-type, .mi-type, .mbti-axis, .mbti-code-pill, .disc-type, .motive-type, .guide-step, .document-card, .resource-video-card, .resource-article-card, .experience-video-card, .profile-panel, .profile-glance, .profile-result-card, .profile-download-panel, .external-assessment, section > h2");
   if ("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
