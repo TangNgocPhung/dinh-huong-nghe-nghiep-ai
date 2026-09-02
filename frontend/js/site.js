@@ -48,7 +48,7 @@
   window.addEventListener("scroll", updateScroll, { passive: true });
   updateScroll();
 
-  const revealTargets = document.querySelectorAll(".card, .career-card, .about-panel, .pillar, .quiz-question, .overview-copy, .overview-tool, .overview-note, .theory-copy, .riasec-type, .mi-type, .mbti-axis, .mbti-code-pill, .disc-type, .motive-type, .guide-step, .riasec-guide-chip, .document-card, .resource-video-card, .resource-article-card, .profile-panel, .profile-glance, .profile-result-card, .profile-download-panel, .onet-embed-section, .external-assessment, section > h2");
+  const revealTargets = document.querySelectorAll(".career-card, .about-panel, .pillar, .quiz-question, .overview-copy, .overview-tool, .overview-note, .theory-copy, .riasec-type, .mi-type, .mbti-axis, .mbti-code-pill, .disc-type, .motive-type, .guide-step, .riasec-guide-chip, .document-card, .resource-video-card, .resource-article-card, .profile-panel, .profile-glance, .profile-result-card, .profile-download-panel, .onet-embed-section, .external-assessment, section > h2");
   if ("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
@@ -62,24 +62,6 @@
       element.classList.add("reveal");
       element.style.transitionDelay = `${Math.min(index % 4, 3) * 70}ms`;
       observer.observe(element);
-    });
-  }
-
-  const progressBox = document.getElementById("home-progress");
-  if (progressBox) {
-    const ids = ["holland", "mi", "mbti", "disc", "motivators"];
-    let manualResults = {};
-    try {
-      manualResults = JSON.parse(localStorage.getItem("dhnn_personal_profile_v1") || "{}").assessmentResults || {};
-    } catch {
-      manualResults = {};
-    }
-    const completed = ids.filter((id) => localStorage.getItem(`dhnn_result_${id}`) || String(manualResults[id] || "").trim()).length;
-    const progressText = progressBox.querySelector("[data-progress-text]");
-    const progressFill = progressBox.querySelector("[data-progress-fill]");
-    if (progressText) progressText.textContent = `${completed}/5 bài đã hoàn thành`;
-    requestAnimationFrame(() => {
-      if (progressFill) progressFill.style.width = `${completed * 20}%`;
     });
   }
 
