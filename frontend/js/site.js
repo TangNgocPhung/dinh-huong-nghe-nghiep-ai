@@ -26,6 +26,21 @@
     headerContainer.appendChild(themeButton);
   }
 
+  const navDropdowns = Array.from(document.querySelectorAll(".site-nav-dropdown"));
+  navDropdowns.forEach((dropdown) => {
+    dropdown.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => dropdown.removeAttribute("open"));
+    });
+  });
+  document.addEventListener("click", (event) => {
+    navDropdowns.forEach((dropdown) => {
+      if (dropdown.open && !dropdown.contains(event.target)) dropdown.removeAttribute("open");
+    });
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") navDropdowns.forEach((dropdown) => dropdown.removeAttribute("open"));
+  });
+
   const scrollProgress = document.createElement("div");
   scrollProgress.className = "scroll-progress";
   scrollProgress.setAttribute("aria-hidden", "true");
