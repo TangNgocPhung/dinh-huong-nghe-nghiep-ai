@@ -41,6 +41,23 @@
     if (event.key === "Escape") navDropdowns.forEach((dropdown) => dropdown.removeAttribute("open"));
   });
 
+  const careerViewSections = Array.from(document.querySelectorAll("[data-career-view]"));
+  if (careerViewSections.length) {
+    const setCareerView = () => {
+      const selectedView = window.location.hash === "#onet-online" ? "onet-online" : "career-documents";
+      careerViewSections.forEach((section) => {
+        section.hidden = section.dataset.careerView !== selectedView;
+      });
+      document.querySelectorAll(".site-nav-menu a[href*='careers.html#']").forEach((link) => {
+        const isCurrent = link.getAttribute("href").endsWith(`#${selectedView}`);
+        if (isCurrent) link.setAttribute("aria-current", "page");
+        else link.removeAttribute("aria-current");
+      });
+    };
+    window.addEventListener("hashchange", setCareerView);
+    setCareerView();
+  }
+
   const scrollProgress = document.createElement("div");
   scrollProgress.className = "scroll-progress";
   scrollProgress.setAttribute("aria-hidden", "true");
