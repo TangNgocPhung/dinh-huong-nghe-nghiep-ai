@@ -55,6 +55,8 @@ a:hover { text-decoration: underline; }
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: clamp(14px, 1.8vw, 28px);
+  max-width: 1440px;
   padding-top: 14px;
   padding-bottom: 14px;
 }
@@ -67,13 +69,14 @@ a:hover { text-decoration: underline; }
   color: var(--color-text);
   display: inline-flex;
   align-items: center;
+  flex: 0 0 auto;
   gap: 9px;
   white-space: nowrap;
 }
 .site-logo-mark { width: 31px; height: 31px; display: block; flex: 0 0 auto; padding: 1px; border: 1px solid rgba(57,157,55,.2); border-radius: 50%; background: #fff; object-fit: cover; box-shadow: 0 5px 13px rgba(25,75,40,.12); }
 .site-logo:hover { text-decoration: none; }
-.site-nav { display: flex; gap: 20px; flex-wrap: wrap; }
-.site-nav { align-items: center; }
+.site-nav { display: flex; flex: 1 1 auto; align-items: center; justify-content: flex-end; gap: clamp(12px, 1.25vw, 20px); min-width: 0; flex-wrap: nowrap; }
+.site-nav > a { white-space: nowrap; }
 .site-nav a { color: var(--color-text-muted); font-weight: 600; position: relative; padding: 7px 0; }
 .site-nav a::after { content: ""; position: absolute; left: 0; right: 100%; bottom: 0; height: 2px; border-radius: 2px; background: linear-gradient(90deg, var(--color-primary), var(--color-secondary)); transition: right 0.25s ease; }
 .site-nav a:hover, .site-nav a.active { color: var(--color-primary); text-decoration: none; }
@@ -708,7 +711,7 @@ input:focus, select:focus { outline: 3px solid rgba(91,76,240,.14); border-color
 
 @media (max-width: 640px) {
   .result-bar-row { grid-template-columns: 1fr; text-align: left; }
-  .site-header .container { align-items: flex-start; gap: 10px; }
+  .site-header .container { align-items: flex-start; flex-wrap: wrap; gap: 10px; }
   .site-nav { width: 100%; overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px; gap: 18px; }
   .site-nav a { white-space: nowrap; font-size: .88rem; }
   .site-nav:has(.site-nav-dropdown[open]) { overflow: visible; }
