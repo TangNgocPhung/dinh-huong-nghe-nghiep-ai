@@ -91,6 +91,8 @@ a:hover { text-decoration: underline; }
 .site-nav-dropdown[open] summary::after { rotate: 180deg; }
 .site-nav-menu { position: absolute; z-index: 80; top: calc(100% + 12px); left: 50%; width: min(390px, calc(100vw - 32px)); padding: 9px; border: 1px solid var(--color-border); border-radius: 16px; background: var(--color-surface); box-shadow: 0 22px 55px rgba(31,35,80,.2); translate: -50% 0; }
 .site-nav-menu::before { content: ""; position: absolute; top: -7px; left: 50%; width: 12px; height: 12px; border-top: 1px solid var(--color-border); border-left: 1px solid var(--color-border); background: var(--color-surface); transform: translateX(-50%) rotate(45deg); }
+.site-nav-dropdown:last-child .site-nav-menu { right: 0; left: auto; translate: 0 0; }
+.site-nav-dropdown:last-child .site-nav-menu::before { right: 28px; left: auto; transform: rotate(45deg); }
 .site-nav-menu a { display: flex; gap: 10px; align-items: center; padding: 12px 13px; border-radius: 11px; color: var(--color-text); font-size: .84rem; line-height: 1.4; }
 .site-nav-menu a::after { display: none; }
 .site-nav-menu a:hover, .site-nav-menu a[aria-current="page"] { color: var(--color-primary); background: rgba(91,76,240,.08); text-decoration: none; }

@@ -28,6 +28,9 @@
 
   const navDropdowns = Array.from(document.querySelectorAll(".site-nav-dropdown"));
   navDropdowns.forEach((dropdown) => {
+    dropdown.addEventListener("toggle", () => {
+      if (dropdown.open) navDropdowns.forEach((item) => item !== dropdown && item.removeAttribute("open"));
+    });
     dropdown.querySelectorAll("a").forEach((link) => {
       link.addEventListener("click", () => dropdown.removeAttribute("open"));
     });
@@ -56,6 +59,20 @@
     };
     window.addEventListener("hashchange", setCareerView);
     setCareerView();
+  }
+
+  const resourceLinks = document.querySelectorAll(".site-nav-menu a[href*='resources.html#']");
+  if (resourceLinks.length) {
+    const setCurrentResourceLink = () => {
+      const selectedResource = window.location.hash === "#career-experience" ? "career-experience" : "career-experts";
+      resourceLinks.forEach((link) => {
+        const isCurrent = link.getAttribute("href").endsWith(`#${selectedResource}`);
+        if (isCurrent && window.location.pathname.endsWith("resources.html")) link.setAttribute("aria-current", "page");
+        else link.removeAttribute("aria-current");
+      });
+    };
+    window.addEventListener("hashchange", setCurrentResourceLink);
+    setCurrentResourceLink();
   }
 
   const scrollProgress = document.createElement("div");
