@@ -157,7 +157,7 @@
   window.addEventListener("scroll", updateScroll, { passive: true });
   updateScroll();
 
-  const revealTargets = document.querySelectorAll(".career-card, .about-panel, .pillar, .quiz-question, .overview-copy, .overview-tool, .overview-note, .theory-copy, .riasec-type, .mi-type, .mbti-axis, .mbti-code-pill, .disc-type, .motive-type, .guide-step, .document-card, .resource-video-card, .resource-article-card, .experience-video-card, .profile-panel, .profile-glance, .profile-result-card, .profile-download-panel, .external-assessment, section > h2");
+  const revealTargets = document.querySelectorAll(".foreword-heading, .foreword-body > p, .foreword-closing, .foreword-next, .career-card, .about-panel, .pillar, .quiz-question, .overview-copy, .overview-tool, .overview-note, .theory-copy, .riasec-type, .mi-type, .mbti-axis, .mbti-code-pill, .disc-type, .motive-type, .guide-step, .document-card, .resource-video-card, .resource-article-card, .experience-video-card, .profile-panel, .profile-glance, .profile-result-card, .profile-download-panel, .external-assessment, section > h2");
   if ("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
