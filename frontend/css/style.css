@@ -688,9 +688,10 @@ main { padding: 34px 0 90px; position: relative; }
   line-height: 1.92;
   text-align: justify;
   text-wrap: pretty;
+  text-indent: 2em;
 }
 .foreword-body p:last-of-type { margin-bottom: 0; }
-.foreword-body .foreword-lead { color: var(--color-text); font-size: clamp(1.15rem, 2.2vw, 1.38rem); font-weight: 600; line-height: 1.65; text-align: center; }
+.foreword-body .foreword-lead { color: var(--color-text); font-size: clamp(1.15rem, 2.2vw, 1.38rem); font-weight: 600; line-height: 1.65; text-align: center; text-indent: 0; }
 .foreword-body em { color: var(--color-primary-dark); font-weight: 600; }
 .foreword-closing {
   position: relative;
