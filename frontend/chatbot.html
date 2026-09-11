@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Hỏi đáp AI | Định Hướng Nghề Nghiệp AI</title>
-  <link rel="stylesheet" href="css/style.css?v=20260902-3" />
+  <link rel="stylesheet" href="css/style.css?v=20260911-1" />
   <link rel="icon" type="image/png" href="assets/images/logo-thpt-nguyen-khuyen.png" />
 </head>
 <body>
@@ -37,7 +37,7 @@
   <main>
     <section class="hero container">
       <h1>Hỏi đáp cùng chatbot AI</h1>
-      <p>Hỏi về tổ hợp môn, ngành học hoặc gửi PDF “Hồ sơ của tôi” để nhận Top 10 nghề nên tiếp tục tra cứu.</p>
+      <p>Hỏi về tổ hợp môn, ngành học hoặc nhận Top 10 nghề nên tra cứu — chatbot tự đọc hồ sơ và kết quả trắc nghiệm bạn đã lưu.</p>
     </section>
 
     <section class="container chat-prompt-guide" aria-labelledby="chat-prompt-title">
@@ -52,15 +52,24 @@
             <span data-copy-label>Sao chép prompt</span>
           </button>
         </div>
-        <p class="chat-prompt-text" id="chat-prompt-text"><strong>Dựa trên Hồ sơ của tôi trong tệp đính kèm</strong> (học sinh cần đính kèm file), hãy đề xuất và <strong>xếp hạng 10 ngành học/nghề nghiệp phù hợp</strong>, nêu rõ cơ sở đề xuất.</p>
+        <p class="chat-prompt-text" id="chat-prompt-text"><strong>Dựa trên hồ sơ của tôi</strong>, hãy đề xuất và <strong>xếp hạng 10 ngành học/nghề nghiệp phù hợp</strong>, nêu rõ cơ sở đề xuất.</p>
         <span class="chat-copy-status" id="chat-copy-status" role="status" aria-live="polite"></span>
       </div>
-      <p class="chat-prompt-note"><em><strong>Lưu ý:</strong> Sau đó, học sinh có thể tiếp tục đặt bất kỳ câu hỏi nào liên quan đến ngành học, nghề nghiệp, trường đào tạo, hình thức tuyển sinh, học phí… hoặc định hướng tương lai để được tư vấn sâu hơn.</em></p>
+      <p class="chat-prompt-note"><em><strong>Lưu ý:</strong> Hồ sơ và kết quả trắc nghiệm đã lưu trên thiết bị này được gửi kèm tự động, bạn không cần đính kèm lại tệp. Sau đó, học sinh có thể tiếp tục đặt bất kỳ câu hỏi nào liên quan đến ngành học, nghề nghiệp, trường đào tạo, hình thức tuyển sinh, học phí… hoặc định hướng tương lai để được tư vấn sâu hơn.</em></p>
     </section>
 
     <section class="container">
       <div class="chat-window">
+        <div class="chat-toolbar">
+          <span class="chat-profile-chip is-empty" id="chat-profile-chip">
+            <span aria-hidden="true">🧩</span>
+            <span id="chat-profile-chip-text"></span>
+            <button type="button" id="chat-profile-toggle" class="chat-profile-toggle" hidden>Tắt</button>
+          </span>
+          <button type="button" class="chat-reset" id="chat-reset">＋ Cuộc trò chuyện mới</button>
+        </div>
         <div class="chat-messages" id="chat-messages" role="log" aria-live="polite"></div>
+        <div class="chat-quick-prompts" id="chat-quick-prompts" aria-label="Câu hỏi gợi ý"></div>
         <form class="chat-form" id="chat-form">
           <div class="chat-attachment-preview" id="chat-attachment-preview" hidden>
             <span class="chat-attachment-icon" aria-hidden="true">📄</span>
@@ -116,7 +125,7 @@
     <div class="container"><p class="footer-advisory"><span aria-hidden="true">💡</span><strong>Quyết định cuối cùng vẫn là ở bạn! Website chỉ đồng hành và cung cấp những gợi ý để bạn tham khảo.</strong></p></div>
   </footer>
 
-  <script src="js/chatbot.js"></script>
+  <script src="js/chatbot.js?v=20260911-1"></script>
   <script src="js/site.js?v=20260902-3"></script>
   <!-- Cloudflare Web Analytics -->
   <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"344c5684e8b34a9ea72977ca7bc9cadd"}'></script>

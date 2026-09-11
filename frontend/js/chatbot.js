@@ -1,7 +1,7 @@
 /*
- * Giao diện chatbot. Gửi câu hỏi tới backend FastAPI (/api/chat).
- * Nếu backend chưa chạy (ví dụ khi giáo viên/học sinh mới mở phần
- * frontend tĩnh), hiển thị thông báo hướng dẫn thay vì lỗi khó hiểu.
+ * Giao diện chatbot. Gửi câu hỏi tới backend FastAPI (/api/chat/stream, có
+ * dự phòng /api/chat). Hồ sơ và kết quả trắc nghiệm đã lưu trên trình duyệt
+ * được gửi kèm tự động để AI tư vấn sát với từng học sinh.
  */
 
 const IS_LOCAL_FRONTEND = ["localhost", "127.0.0.1"].includes(window.location.hostname)
@@ -13,7 +13,27 @@ const ALLOWED_EXTENSIONS = new Set([
   "jpg", "jpeg", "png", "webp", "gif", "pdf",
   "doc", "docx", "xls", "xlsx", "ppt", "pptx",
 ]);
-const PROFILE_ANALYSIS_PROMPT = "Dựa trên Hồ sơ của tôi trong tệp đính kèm (học sinh cần đính kèm file), hãy đề xuất và xếp hạng 10 ngành học/nghề nghiệp phù hợp, nêu rõ cơ sở đề xuất.";
+const PROFILE_ANALYSIS_PROMPT = "Dựa trên hồ sơ của tôi, hãy đề xuất và xếp hạng 10 ngành học/nghề nghiệp phù hợp, nêu rõ cơ sở đề xuất.";
+const WELCOME_MESSAGE = "Xin chào! Mình là trợ lý định hướng nghề nghiệp. Bạn có thể hỏi mình về tổ hợp môn, ngành học, hoặc cách chọn nghề phù hợp với bản thân.";
+
+const PROFILE_STORAGE_KEY = "dhnn_personal_profile_v1";
+const RESULT_PREFIX = "dhnn_result_";
+const SESSION_STORAGE_KEY = "dhnn_chat_session_v1";
+const PROFILE_OPT_OUT_KEY = "dhnn_chat_profile_off_v1";
+const MAX_HISTORY_MESSAGES = 20;
+const TEST_LABELS = {
+  holland: "Holland (RIASEC)",
+  mi: "Đa trí thông minh",
+  mbti: "MBTI",
+  disc: "DISC",
+  motivators: "Động lực",
+};
+const QUICK_PROMPTS = [
+  { label: "Top 10 nghề hợp với tôi", text: PROFILE_ANALYSIS_PROMPT },
+  { label: "Chọn tổ hợp môn nào?", text: "Dựa trên hồ sơ và điểm số của tôi, tôi nên chọn tổ hợp môn nào cho kỳ thi tốt nghiệp THPT? Giải thích lý do." },
+  { label: "Điểm mạnh của tôi", text: "Hãy phân tích điểm mạnh, điểm cần cải thiện của tôi dựa trên hồ sơ và kết quả trắc nghiệm đã lưu." },
+  { label: "Lộ trình 3 năm tới", text: "Hãy gợi ý lộ trình học tập và trải nghiệm trong 3 năm tới để tôi tiến gần hơn tới nghề nghiệp mong muốn." },
+];
 
 async function copyText(text) {
   if (navigator.clipboard && window.isSecureContext) {
@@ -103,6 +123,24 @@ function renderMarkdown(container, text) {
   }
 }
 
+function createCopyButton(getText) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "chat-copy-message";
+  button.title = "Sao chép câu trả lời";
+  button.textContent = "⧉ Sao chép";
+  button.addEventListener("click", async () => {
+    try {
+      await copyText(getText());
+      button.textContent = "✓ Đã chép";
+    } catch {
+      button.textContent = "Không chép được";
+    }
+    window.setTimeout(() => { button.textContent = "⧉ Sao chép"; }, 1800);
+  });
+  return button;
+}
+
 function appendMessage(container, role, text, attachmentName = "") {
   const msg = document.createElement("div");
   msg.className = `chat-msg chat-msg-${role}`;
@@ -114,16 +152,134 @@ function appendMessage(container, role, text, attachmentName = "") {
     fileChip.textContent = `📎 ${attachmentName}`;
     bubble.appendChild(fileChip);
   }
+  const messageText = document.createElement("div");
+  messageText.className = "chat-message-text";
   if (text) {
-    const messageText = document.createElement("div");
-    messageText.className = "chat-message-text";
     if (role === "bot") renderMarkdown(messageText, text);
     else messageText.textContent = text;
-    bubble.appendChild(messageText);
   }
+  bubble.appendChild(messageText);
   msg.appendChild(bubble);
+  if (role === "bot" && text) bubble.appendChild(createCopyButton(() => text));
   container.appendChild(msg);
   container.scrollTop = container.scrollHeight;
+  return { msg, bubble, messageText };
+}
+
+/* Bong bóng trả lời được cập nhật dần trong lúc AI đang gõ. */
+function createStreamingMessage(container) {
+  const { msg, bubble, messageText } = appendMessage(container, "bot", "");
+  bubble.classList.add("chat-bubble-streaming");
+  let raw = "";
+  let frame = 0;
+
+  function paint() {
+    frame = 0;
+    messageText.replaceChildren();
+    renderMarkdown(messageText, raw);
+    container.scrollTop = container.scrollHeight;
+  }
+
+  return {
+    push(delta) {
+      raw += delta;
+      if (!frame) frame = window.requestAnimationFrame(paint);
+    },
+    replace(text) {
+      raw = text;
+      paint();
+    },
+    get text() {
+      return raw;
+    },
+    finish() {
+      if (frame) window.cancelAnimationFrame(frame);
+      paint();
+      bubble.classList.remove("chat-bubble-streaming");
+      if (raw) bubble.appendChild(createCopyButton(() => raw));
+      return raw;
+    },
+    remove() {
+      if (frame) window.cancelAnimationFrame(frame);
+      msg.remove();
+    },
+  };
+}
+
+function readJson(key) {
+  try {
+    return JSON.parse(localStorage.getItem(key) || "null");
+  } catch {
+    return null;
+  }
+}
+
+function quizHighlights(payload) {
+  const result = payload?.result;
+  if (!result) return null;
+  if (Array.isArray(result.dimensions)) {
+    return {
+      code: "",
+      highlights: result.dimensions
+        .slice(0, 4)
+        .map((item) => `${item.name}: ${item.percent}%`),
+    };
+  }
+  if (result.code) {
+    return {
+      code: String(result.code),
+      highlights: Array.isArray(result.breakdown)
+        ? result.breakdown.map((item) => `${item.axis}: ${item.result}`)
+        : [],
+    };
+  }
+  return null;
+}
+
+/* Gom hồ sơ và kết quả trắc nghiệm đang lưu trên máy học sinh để gửi kèm câu hỏi. */
+function readStudentProfile() {
+  const saved = readJson(PROFILE_STORAGE_KEY);
+  const quizzes = [];
+  Object.keys(TEST_LABELS).forEach((testId) => {
+    const summary = quizHighlights(readJson(RESULT_PREFIX + testId));
+    if (!summary) return;
+    quizzes.push({ test: TEST_LABELS[testId], ...summary });
+  });
+
+  const subjects = Array.isArray(saved?.subjectPreferences)
+    ? saved.subjectPreferences
+      .filter((item) => String(item?.subject || "").trim())
+      .map((item) => ({ subject: String(item.subject).trim(), score: String(item.score ?? "").trim() }))
+    : [];
+
+  const profile = {
+    subjects,
+    talents: String(saved?.talents || "").trim(),
+    strengths: String(saved?.strengths || "").trim(),
+    interests: String(saved?.interests || "").trim(),
+    career_goal: String(saved?.careerGoal || "").trim(),
+    quizzes,
+  };
+
+  const filled = subjects.length
+    + quizzes.length
+    + [profile.talents, profile.strengths, profile.interests, profile.career_goal].filter(Boolean).length;
+  return filled ? { profile, quizCount: quizzes.length, fieldCount: filled } : null;
+}
+
+function loadSession() {
+  const saved = readJson(SESSION_STORAGE_KEY);
+  return Array.isArray(saved) ? saved.filter((item) => item?.role && typeof item.content === "string") : [];
+}
+
+function saveSession(history) {
+  try {
+    // Tệp đính kèm có thể rất nặng nên chỉ lưu phần chữ của cuộc trò chuyện.
+    const light = history.map(({ role, content }) => ({ role, content }));
+    localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(light));
+  } catch {
+    // Bộ nhớ trình duyệt đầy thì bỏ qua, cuộc trò chuyện vẫn chạy bình thường.
+  }
 }
 
 function formatFileSize(bytes) {
@@ -153,15 +309,55 @@ function fileToAttachment(file) {
   });
 }
 
-async function sendChatMessage(message, history, attachment) {
+async function sendChatMessage(payload) {
   const res = await fetch(`${BACKEND_URL}/api/chat`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message, history, attachment }),
+    body: JSON.stringify(payload),
   });
-  const payload = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(payload.detail || `Máy chủ trả về lỗi ${res.status}.`);
-  return payload;
+  const body = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(body.detail || `Máy chủ trả về lỗi ${res.status}.`);
+  return body.reply || "";
+}
+
+/* Đọc luồng SSE từ backend và báo lại từng đoạn chữ mới. */
+async function streamChatMessage(payload, handlers) {
+  const res = await fetch(`${BACKEND_URL}/api/chat/stream`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  if (res.status === 404 || res.status === 405) throw new Error("stream-unsupported");
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.detail || `Máy chủ trả về lỗi ${res.status}.`);
+  }
+  if (!res.body) throw new Error("stream-unsupported");
+
+  const reader = res.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = "";
+
+  for (;;) {
+    const { value, done } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+    const blocks = buffer.split("\n\n");
+    buffer = blocks.pop() || "";
+    for (const block of blocks) {
+      const line = block.split("\n").find((item) => item.startsWith("data:"));
+      if (!line) continue;
+      let event;
+      try {
+        event = JSON.parse(line.slice(5).trim());
+      } catch {
+        continue;
+      }
+      if (event.error) throw new Error(event.error);
+      if (event.delta) handlers.onDelta(event.delta);
+      if (event.replace) handlers.onReplace(event.replace);
+    }
+  }
 }
 
 function initChatbot() {
@@ -179,13 +375,59 @@ function initChatbot() {
   const copyPromptButton = document.getElementById("chat-copy-prompt");
   const copyPromptStatus = document.getElementById("chat-copy-status");
   const submitButton = document.getElementById("chat-submit");
-  const history = [];
+  const profileChip = document.getElementById("chat-profile-chip");
+  const profileChipText = document.getElementById("chat-profile-chip-text");
+  const profileToggle = document.getElementById("chat-profile-toggle");
+  const resetButton = document.getElementById("chat-reset");
+  const quickPromptsBar = document.getElementById("chat-quick-prompts");
+
+  const history = loadSession();
   let selectedFile = null;
+  let useProfile = localStorage.getItem(PROFILE_OPT_OUT_KEY) !== "1";
 
   function autoResizeInput() {
     input.style.height = "auto";
     input.style.height = Math.min(input.scrollHeight, 160) + "px";
   }
+
+  function refreshProfileChip() {
+    const found = readStudentProfile();
+    profileToggle.hidden = !found;
+    if (!found) {
+      profileChip.className = "chat-profile-chip is-empty";
+      profileChipText.innerHTML = 'Chưa có hồ sơ trên thiết bị này. <a href="profile.html">Điền hồ sơ của tôi</a> để AI tư vấn sát hơn.';
+      return;
+    }
+    profileChip.className = `chat-profile-chip${useProfile ? " is-on" : " is-off"}`;
+    profileChipText.textContent = useProfile
+      ? `Đang dùng hồ sơ của bạn · ${found.quizCount}/5 bài trắc nghiệm đã lưu`
+      : "Đang tạm tắt hồ sơ cá nhân — AI sẽ trả lời chung chung hơn.";
+    profileToggle.textContent = useProfile ? "Tắt" : "Bật";
+  }
+
+  function currentProfile() {
+    if (!useProfile) return null;
+    return readStudentProfile()?.profile || null;
+  }
+
+  profileToggle.addEventListener("click", () => {
+    useProfile = !useProfile;
+    localStorage.setItem(PROFILE_OPT_OUT_KEY, useProfile ? "0" : "1");
+    refreshProfileChip();
+  });
+
+  QUICK_PROMPTS.forEach((prompt) => {
+    const chip = document.createElement("button");
+    chip.type = "button";
+    chip.className = "chat-quick-prompt";
+    chip.textContent = prompt.label;
+    chip.addEventListener("click", () => {
+      input.value = prompt.text;
+      autoResizeInput();
+      form.requestSubmit();
+    });
+    quickPromptsBar.appendChild(chip);
+  });
 
   input.addEventListener("input", autoResizeInput);
   input.addEventListener("keydown", (e) => {
@@ -214,6 +456,15 @@ function initChatbot() {
   profilePromptButton.addEventListener("click", () => {
     input.value = PROFILE_ANALYSIS_PROMPT;
     autoResizeInput();
+    input.focus();
+  });
+  resetButton.addEventListener("click", () => {
+    if (history.length && !window.confirm("Xóa cuộc trò chuyện hiện tại và bắt đầu lại?")) return;
+    history.length = 0;
+    saveSession(history);
+    messages.replaceChildren();
+    clearSelectedFile();
+    appendMessage(messages, "bot", WELCOME_MESSAGE);
     input.focus();
   });
   copyPromptButton.addEventListener("click", async () => {
@@ -260,14 +511,16 @@ function initChatbot() {
     input.focus();
   });
 
-  appendMessage(
-    messages,
-    "bot",
-    "Xin chào! Mình là trợ lý định hướng nghề nghiệp. Bạn có thể hỏi mình về tổ hợp môn, ngành học, hoặc cách chọn nghề phù hợp với bản thân."
-  );
+  if (history.length) {
+    history.forEach((item) => appendMessage(messages, item.role === "assistant" ? "bot" : "user", item.content));
+  } else {
+    appendMessage(messages, "bot", WELCOME_MESSAGE);
+  }
+  refreshProfileChip();
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
+    if (submitButton.disabled) return;
     const text = input.value.trim();
     if (!text && !selectedFile) {
       input.focus();
@@ -286,21 +539,35 @@ function initChatbot() {
     attachButton.disabled = true;
     submitButton.disabled = true;
 
-    const typingEl = document.createElement("div");
-    typingEl.className = "chat-msg chat-msg-bot";
-    const typingBubble = document.createElement("div");
-    typingBubble.className = "chat-bubble chat-typing";
-    typingBubble.textContent = "Đang trả lời...";
-    typingEl.appendChild(typingBubble);
-    messages.appendChild(typingEl);
-    messages.scrollTop = messages.scrollHeight;
+    const stream = createStreamingMessage(messages);
+    let reply = "";
 
     try {
       const attachment = file ? await fileToAttachment(file) : null;
       clearSelectedFile();
-      const { reply } = await sendChatMessage(displayText, history, attachment);
-      typingEl.remove();
-      appendMessage(messages, "bot", reply);
+      const payload = {
+        message: displayText,
+        history: history.map(({ role, content, attachment: item }) => ({ role, content, attachment: item || null })),
+        attachment,
+        profile: currentProfile(),
+      };
+
+      try {
+        await streamChatMessage(payload, {
+          onDelta: (delta) => stream.push(delta),
+          onReplace: (full) => stream.replace(full),
+        });
+      } catch (streamError) {
+        if (streamError.message !== "stream-unsupported" || stream.text) throw streamError;
+        stream.replace(await sendChatMessage(payload));
+      }
+
+      reply = stream.finish();
+      if (!reply) {
+        stream.replace("Xin lỗi, AI chưa trả về nội dung. Bạn thử hỏi lại ngắn gọn hơn nhé.");
+        reply = stream.finish();
+      }
+
       if (attachment) {
         history.forEach((item) => {
           if (item.role === "user") delete item.attachment;
@@ -310,14 +577,19 @@ function initChatbot() {
         { role: "user", content: displayText, attachment },
         { role: "assistant", content: reply }
       );
-      while (history.length > 20) history.shift();
+      while (history.length > MAX_HISTORY_MESSAGES) history.shift();
+      saveSession(history);
     } catch (err) {
-      typingEl.remove();
-      appendMessage(
-        messages,
-        "bot",
-        err.message || "Chatbot đang tạm thời không phản hồi. Vui lòng đợi một chút rồi thử lại."
-      );
+      const message = err.message === "stream-unsupported"
+        ? "Chatbot đang tạm thời không phản hồi. Vui lòng đợi một chút rồi thử lại."
+        : (err.message || "Chatbot đang tạm thời không phản hồi. Vui lòng đợi một chút rồi thử lại.");
+      if (stream.text) {
+        stream.replace(`${stream.text}\n\n_(Câu trả lời bị gián đoạn: ${message})_`);
+        stream.finish();
+      } else {
+        stream.remove();
+        appendMessage(messages, "bot", message);
+      }
     } finally {
       input.disabled = false;
       attachButton.disabled = false;
