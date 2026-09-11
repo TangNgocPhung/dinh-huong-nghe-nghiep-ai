@@ -88,7 +88,7 @@ MAX_OUTPUT_TOKENS = max(8192, int(os.getenv("GEMINI_MAX_OUTPUT_TOKENS", "8192"))
 GEMINI_THINKING_BUDGET = int(os.getenv("GEMINI_THINKING_BUDGET", "2048"))
 GEMINI_DEEP_THINKING_BUDGET = int(os.getenv("GEMINI_DEEP_THINKING_BUDGET", "8192"))
 TOP_TEN_REQUEST_PATTERN = re.compile(r"\btop\s*10\b|\b10\s+(?:nhóm\s+)?nghề\b", re.IGNORECASE)
-NUMBERED_ITEM_PATTERN = re.compile(r"(?m)^\s*(?:#{1,6}\s*)?(10|[1-9])[.)]\s+")
+NUMBERED_ITEM_PATTERN = re.compile(r"(?m)^\s*(?:#{1,6}\s*)?(?:\*\*|__|\*)?\s*(10|[1-9])[.)]\s+")
 DEEP_REQUEST_PATTERN = re.compile(
     r"\btop\s*\d+\b|phân tích|đánh giá|so sánh|lộ trình|xếp hạng|hồ sơ của (?:tôi|em|mình)|tư vấn sâu",
     re.IGNORECASE,

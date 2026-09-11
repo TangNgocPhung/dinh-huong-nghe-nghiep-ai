@@ -12,6 +12,8 @@ services:
       - key: GEMINI_MODEL
         value: gemini-3.8-flash
       - key: GEMINI_DEEP_MODEL
-        value: gemini-3.1-pro-preview
+        value: gemini-3.8-flash
       - key: GEMINI_FALLBACK_MODELS
         value: gemini-3.5-flash,gemini-3.1-flash-lite
+      - key: GEMINI_ENABLE_SEARCH
+        value: "0"
